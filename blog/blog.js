@@ -17,44 +17,49 @@ function setLanguage(language) {
 }
 
 async function loadGlassScreens() {
-  const urls = Array.from({ length: 6 }, (_, index) => `/assets/blog/glass-ui-${index + 1}.txt?v=20260917-4`);
-  const data = await Promise.all(urls.map(async (url) => {
+  const urls = Array.from({ length: 6 }, (_, index) => `/assets/blog/glass-ui-${index + 1}.txt?v=20260917-5`);
+  return Promise.all(urls.map(async (url) => {
     const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Unable to load ${url}`);
     return `data:image/jpeg;base64,${(await response.text()).trim()}`;
   }));
-  return data;
 }
 
-async function insertMakotoGlassScreens() {
+async function replaceMakotoGlassScreens() {
   if (!location.pathname.startsWith('/blog/google-glass-too-early')) return;
 
   let screens;
   try {
     screens = await loadGlassScreens();
-  } catch (_) {
+  } catch (error) {
+    console.error(error);
     return;
   }
 
   const configs = [
     {
       selector: '.article-body > .lang-zh',
-      marker: '後來我才開始做 companion app',
+      heading: 'Makoto Glass 現在真的長什麼樣子',
       caption: 'Makoto Glass 實際運行畫面：Home、Now Playing、通知紀錄、Makoto Link、About 與 System Status。Google Glass Enterprise Edition 2 實機截圖。© MAKOTO LAB。'
     },
     {
       selector: '.article-body > .lang-en',
-      marker: 'I later began building',
+      heading: 'What Makoto Glass actually looks like',
       caption: 'Makoto Glass running on Google Glass Enterprise Edition 2: Home, Now Playing, notification history, Makoto Link, About and System Status. © MAKOTO LAB.'
     }
   ];
 
-  configs.forEach(({ selector, marker, caption }) => {
+  configs.forEach(({ selector, heading, caption }) => {
     const block = document.querySelector(selector);
-    if (!block || block.querySelector('.app-ui-figure')) return;
+    if (!block) return;
 
-    const markerParagraph = [...block.querySelectorAll('p')].find((p) => p.textContent.includes(marker));
-    if (!markerParagraph) return;
+    const targetHeading = [...block.querySelectorAll('h2')].find((h) => h.textContent.trim() === heading);
+    if (!targetHeading) return;
+
+    let existingFigure = targetHeading.nextElementSibling;
+    while (existingFigure && existingFigure.tagName !== 'FIGURE') {
+      existingFigure = existingFigure.nextElementSibling;
+    }
 
     const figure = document.createElement('figure');
     figure.className = 'article-figure app-ui-figure';
@@ -66,20 +71,24 @@ async function insertMakotoGlassScreens() {
       const img = document.createElement('img');
       img.src = src;
       img.alt = `Makoto Glass interface screenshot ${index + 1}`;
-      img.loading = 'lazy';
+      img.loading = 'eager';
       grid.appendChild(img);
     });
 
     const figcaption = document.createElement('figcaption');
     figcaption.textContent = caption;
-
     figure.append(grid, figcaption);
-    markerParagraph.before(figure);
+
+    if (existingFigure) {
+      existingFigure.replaceWith(figure);
+    } else {
+      targetHeading.insertAdjacentElement('afterend', figure);
+    }
   });
 }
 
 setLanguage(savedLanguage || browserLanguage);
-insertMakotoGlassScreens();
+replaceMakotoGlassScreens();
 
 if (languageButton) {
   languageButton.addEventListener('click', () => {
