@@ -80,6 +80,48 @@ if (archivePanel) {
   if (archiveProject) archiveProject.classList.add('no-side');
 }
 
+const labDemos = {
+  'RED FLAG DETECTOR': {
+    live: 'https://lancer1234.github.io/RED-FLAG-DETECTOR/',
+    repo: 'https://github.com/lancer1234/RED-FLAG-DETECTOR'
+  },
+  'P2P Chat': {
+    live: 'https://lancer1234.github.io/p2p-chat/',
+    repo: 'https://github.com/lancer1234/p2p-chat'
+  },
+  'Y2K Cam': {
+    live: 'https://lancer1234.github.io/y2k-cam/',
+    repo: 'https://github.com/lancer1234/y2k-cam'
+  },
+  'Online Warmer': {
+    live: 'https://lancer1234.github.io/online-warmer/',
+    repo: 'https://github.com/lancer1234/online-warmer'
+  }
+};
+
+document.querySelectorAll('#lab a.lab-card').forEach((card) => {
+  const title = card.querySelector('h3')?.textContent.trim();
+  const demo = labDemos[title];
+  if (!demo) return;
+
+  const replacement = document.createElement('article');
+  replacement.className = `${card.className} lab-card-demo`;
+  replacement.innerHTML = card.innerHTML;
+
+  const oldMeta = replacement.querySelector('small');
+  if (oldMeta) oldMeta.remove();
+
+  const actions = document.createElement('div');
+  actions.className = 'lab-actions';
+  actions.innerHTML = `
+    <a class="lab-live" href="${demo.live}" target="_blank" rel="noreferrer"><span class="lang-en">OPEN LIVE APP ↗</span><span class="lang-zh">開啟實際程式 ↗</span></a>
+    <a class="lab-source" href="${demo.repo}" target="_blank" rel="noreferrer"><span class="lang-en">SOURCE / GITHUB ↗</span><span class="lang-zh">原始碼 / GITHUB ↗</span></a>
+  `;
+
+  replacement.appendChild(actions);
+  card.replaceWith(replacement);
+});
+
 const profileQuote = document.querySelector('.profile .big-copy');
 if (profileQuote) {
   profileQuote.innerHTML = '<span class="lang-en">I believe data provides direction, while human insight and on-the-ground details bring warmth to strategy.</span><span class="lang-zh">我相信數據提供方向，而人性與現場細節讓策略更有溫度。</span>';
@@ -118,7 +160,7 @@ function updateExperienceLanguage(lang) {
   const currentRoleCompany = document.querySelector('.current-role b');
   if (currentRoleCompany) currentRoleCompany.textContent = isEnglish ? 'OCEAN CITY' : '洲際聯合有限公司';
   const currentFeatureCompany = document.querySelector('.current-grid h2');
-  if (currentFeatureCompany) currentFeatureCompany.textContent = '洲際聯合有限公司';
+  if (currentFeatureCompany) currentFeatureCompany.textContent = isEnglish ? 'OCEAN CITY' : '洲際聯合有限公司';
   const currentFeatureRole = document.querySelector('.role-title');
   if (currentFeatureRole) currentFeatureRole.textContent = isEnglish ? 'Assistant PR Manager' : '公關副理';
 
