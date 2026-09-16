@@ -5,6 +5,16 @@ const languageButton = document.querySelector('.lang-toggle');
 const savedLanguage = localStorage.getItem('portfolio-language');
 const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
 
+// Add the blog as a first-class item in the main navigation.
+const mainNav = document.querySelector('.topbar nav');
+if (mainNav && !mainNav.querySelector('a[href="/blog/"]')) {
+  const blogLink = document.createElement('a');
+  blogLink.href = '/blog/';
+  blogLink.innerHTML = '<span class="lang-en">BLOG</span><span class="lang-zh">文章</span>';
+  const contactLink = mainNav.querySelector('a[href="#contact"]');
+  mainNav.insertBefore(blogLink, contactLink || null);
+}
+
 // Correct Carrefour project scope: marketing activity/task planning, management and publishing.
 const carrefourDescription = document.querySelector('#work .project .project-main > p:nth-of-type(2)');
 if (carrefourDescription) {
@@ -34,7 +44,7 @@ if (languageButton) {
 }
 
 const sections = [...document.querySelectorAll('main section[id]')];
-const navLinks = [...document.querySelectorAll('.topbar nav a')];
+const navLinks = [...document.querySelectorAll('.topbar nav a[href^="#"]')];
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
