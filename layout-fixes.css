@@ -1,11 +1,14 @@
-/* Typography guardrails for Chinese text: avoid single-character orphan lines. */
 @media (min-width:901px){
   .current-grid{grid-template-columns:minmax(620px,1.16fr) minmax(0,.84fr);gap:64px}
   .current-grid h2{font-size:clamp(50px,5.15vw,80px);max-width:none;white-space:nowrap;word-break:keep-all;line-break:strict}
 }
 .current-copy dd,.current-copy>p,.role-title{word-break:keep-all;line-break:strict;overflow-wrap:normal}
 .current-copy dd{font-size:12.5px;line-height:1.55}
+.current-company-brand{display:flex;align-items:center;margin:0 0 30px;min-height:78px}
+.current-company-brand img{display:block;width:min(280px,72%);height:auto;object-fit:contain}
 @media (max-width:900px){
   .current-grid h2{white-space:normal;word-break:keep-all;line-break:strict}
   .current-copy dd,.current-copy>p{word-break:normal;overflow-wrap:anywhere}
+  .current-company-brand{margin-bottom:22px;min-height:0}
+  .current-company-brand img{width:min(240px,68vw)}
 }
