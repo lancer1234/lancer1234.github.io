@@ -5,14 +5,24 @@ const languageButton = document.querySelector('.lang-toggle');
 const savedLanguage = localStorage.getItem('portfolio-language');
 const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
 
-// Add the blog as a first-class item in the main navigation.
+// Add ABOUT and BLOG as first-class items in the main navigation.
 const mainNav = document.querySelector('.topbar nav');
-if (mainNav && !mainNav.querySelector('a[href="/blog/"]')) {
-  const blogLink = document.createElement('a');
-  blogLink.href = '/blog/';
-  blogLink.innerHTML = '<span class="lang-en">BLOG</span><span class="lang-zh">文章</span>';
+if (mainNav) {
   const contactLink = mainNav.querySelector('a[href="#contact"]');
-  mainNav.insertBefore(blogLink, contactLink || null);
+
+  if (!mainNav.querySelector('a[href="/about/"]')) {
+    const aboutLink = document.createElement('a');
+    aboutLink.href = '/about/';
+    aboutLink.innerHTML = '<span class="lang-en">ABOUT</span><span class="lang-zh">關於我</span>';
+    mainNav.insertBefore(aboutLink, contactLink || null);
+  }
+
+  if (!mainNav.querySelector('a[href="/blog/"]')) {
+    const blogLink = document.createElement('a');
+    blogLink.href = '/blog/';
+    blogLink.innerHTML = '<span class="lang-en">BLOG</span><span class="lang-zh">文章</span>';
+    mainNav.insertBefore(blogLink, contactLink || null);
+  }
 }
 
 // Correct Carrefour project scope: marketing activity/task planning, management and publishing.
@@ -53,6 +63,28 @@ if (archivePanel) {
   const archiveProject = archivePanel.closest('.project');
   archivePanel.remove();
   if (archiveProject) archiveProject.classList.add('no-side');
+}
+
+// Restore the user's original positioning statements in the profile section.
+const profileQuote = document.querySelector('.profile .big-copy');
+if (profileQuote) {
+  profileQuote.innerHTML = '<span class="lang-en">I believe data provides direction, while human insight and on-the-ground details bring warmth to strategy.</span><span class="lang-zh">我相信數據提供方向，而人性與現場細節讓策略更有溫度。</span>';
+}
+
+const profileCopy = document.querySelector('.profile .profile-copy');
+if (profileCopy && !profileCopy.querySelector('.profile-tagline')) {
+  const tagline = document.createElement('p');
+  tagline.className = 'profile-tagline';
+  tagline.innerHTML = '<span class="lang-en">“See the direction through data insight, and tell brand stories through on-the-ground detail and imagery.”</span><span class="lang-zh">「以數據洞察看清方向，用現場細節與影像說好品牌故事。」</span>';
+  profileCopy.insertBefore(tagline, profileCopy.firstChild);
+}
+
+if (profileCopy && !profileCopy.querySelector('a[href="/about/"]')) {
+  const aboutLink = document.createElement('a');
+  aboutLink.className = 'text-link profile-about-link';
+  aboutLink.href = '/about/';
+  aboutLink.innerHTML = '<span class="lang-en">READ FULL BIO ↗</span><span class="lang-zh">閱讀完整自傳 ↗</span>';
+  profileCopy.appendChild(aboutLink);
 }
 
 // Job titles are translated with the site language.
