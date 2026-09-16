@@ -39,7 +39,6 @@ document.querySelectorAll('a[href]').forEach((link) => {
   }
 });
 
-// Remove the now-empty link container from the Korea case study so no placeholder remains.
 const koreaProject = [...document.querySelectorAll('#work .project')].find((project) =>
   project.textContent.includes('Taiwan × Korea') || project.textContent.includes('台灣 × 韓國')
 );
@@ -49,11 +48,85 @@ if (koreaProject) {
   });
 }
 
+// Job titles are translated with the site language.
+// Company names only switch to English where an established/official English name is publicly documented.
+const experienceEntries = [
+  {
+    companyZh: '洲際聯合有限公司',
+    companyEn: '洲際聯合有限公司',
+    roleZh: '公關副理',
+    roleEn: 'Assistant PR Manager'
+  },
+  {
+    companyZh: 'One Rule_規則王股份有限公司',
+    companyEn: 'One Rule_規則王股份有限公司',
+    roleZh: '行銷企劃 / 專案合作',
+    roleEn: 'Marketing Planner / Project Contractor'
+  },
+  {
+    companyZh: '隔壁老王數位行銷有限公司',
+    companyEn: '隔壁老王數位行銷有限公司',
+    roleZh: '行銷企劃 / 專案執行',
+    roleEn: 'Marketing Planner / Project Specialist'
+  },
+  {
+    companyZh: '殿梵聲研有限公司',
+    companyEn: '殿梵聲研有限公司',
+    roleZh: '營運企劃 / 專案合作',
+    roleEn: 'Operations Planner / Project Collaboration'
+  },
+  {
+    companyZh: '社團法人台北市美僑協會',
+    companyEn: 'American Club Taipei',
+    roleZh: '調酒師',
+    roleEn: 'Bartender'
+  },
+  {
+    companyZh: '果子電影有限公司',
+    companyEn: 'ARS FILM PRODUCTIONS CO., LTD.',
+    roleZh: '製片助理 / 實習',
+    roleEn: 'Production Assistant / Intern'
+  },
+  {
+    companyZh: '積木影像',
+    companyEn: 'BIT Production Co., Ltd.',
+    roleZh: '攝影助理 / 實習',
+    roleEn: 'Camera Assistant / Intern'
+  }
+];
+
+function updateExperienceLanguage(lang) {
+  const isEnglish = lang === 'en';
+
+  const currentRoleTitle = document.querySelector('.current-role strong');
+  if (currentRoleTitle) currentRoleTitle.textContent = isEnglish ? 'Assistant PR Manager' : '公關副理';
+
+  const currentRoleCompany = document.querySelector('.current-role b');
+  if (currentRoleCompany) currentRoleCompany.textContent = '洲際聯合有限公司';
+
+  const currentFeatureCompany = document.querySelector('.current-grid h2');
+  if (currentFeatureCompany) currentFeatureCompany.textContent = '洲際聯合有限公司';
+
+  const currentFeatureRole = document.querySelector('.role-title');
+  if (currentFeatureRole) currentFeatureRole.textContent = isEnglish ? 'Assistant PR Manager' : '公關副理';
+
+  const rows = [...document.querySelectorAll('.exp-list .exp')];
+  rows.forEach((row, index) => {
+    const entry = experienceEntries[index];
+    if (!entry) return;
+    const company = row.querySelector('h3');
+    const role = row.querySelector('p');
+    if (company) company.textContent = isEnglish ? entry.companyEn : entry.companyZh;
+    if (role) role.textContent = isEnglish ? entry.roleEn : entry.roleZh;
+  });
+}
+
 function setLanguage(language) {
   const lang = language === 'en' ? 'en' : 'zh';
   root.dataset.lang = lang;
   root.lang = lang === 'zh' ? 'zh-Hant' : 'en';
   localStorage.setItem('portfolio-language', lang);
+  updateExperienceLanguage(lang);
   if (languageButton) {
     languageButton.setAttribute('aria-label', lang === 'zh' ? 'Switch to English' : '切換至中文');
     languageButton.setAttribute('title', lang === 'zh' ? 'English' : '中文');
