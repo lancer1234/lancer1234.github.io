@@ -47,6 +47,14 @@ if (koreaProject) {
   });
 }
 
+// The archive count block duplicated information already visible as direct project links.
+const archivePanel = document.querySelector('.archive-panel');
+if (archivePanel) {
+  const archiveProject = archivePanel.closest('.project');
+  archivePanel.remove();
+  if (archiveProject) archiveProject.classList.add('no-side');
+}
+
 // Job titles are translated with the site language.
 // Company names only switch to English where an established/official English name is publicly documented.
 const experienceEntries = [
@@ -86,13 +94,12 @@ function updateExperienceLanguage(lang) {
 }
 
 function updateEducationLanguage(lang) {
-  const education = [...document.querySelectorAll('.profile-copy p')].find((p) => p.textContent.includes('銘傳大學'));
+  const education = [...document.querySelectorAll('.profile-copy p')].find((p) => p.textContent.includes('銘傳大學') || p.textContent.includes('Ming Chuan University'));
   if (!education) return;
 
   const lineBreaks = education.querySelectorAll('br');
   if (!lineBreaks.length) return;
 
-  // Replace only the school/department text node between the first and second line breaks.
   let node = lineBreaks[0].nextSibling;
   while (node && node !== lineBreaks[1]) {
     const next = node.nextSibling;
