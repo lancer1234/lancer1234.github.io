@@ -25,7 +25,6 @@ if (carrefourDescription) {
 }
 
 // Privacy protection: do not expose source documents or folders for the Taiwan × Korea project.
-// Some internal materials contain personal identification information, so all public links are removed.
 const sensitiveKoreaTargets = [
   '1V8UKw-vjqHNS0yeq7G7Yl6dkprieC02l',
   '1cU_-ZEIBvKh9z_3mRYm-k2z0drFWeBAx',
@@ -51,48 +50,13 @@ if (koreaProject) {
 // Job titles are translated with the site language.
 // Company names only switch to English where an established/official English name is publicly documented.
 const experienceEntries = [
-  {
-    companyZh: '洲際聯合有限公司',
-    companyEn: '洲際聯合有限公司',
-    roleZh: '公關副理',
-    roleEn: 'Assistant PR Manager'
-  },
-  {
-    companyZh: 'One Rule_規則王股份有限公司',
-    companyEn: 'One Rule_規則王股份有限公司',
-    roleZh: '行銷企劃 / 專案合作',
-    roleEn: 'Marketing Planner / Project Contractor'
-  },
-  {
-    companyZh: '隔壁老王數位行銷有限公司',
-    companyEn: '隔壁老王數位行銷有限公司',
-    roleZh: '行銷企劃 / 專案執行',
-    roleEn: 'Marketing Planner / Project Specialist'
-  },
-  {
-    companyZh: '殿梵聲研有限公司',
-    companyEn: '殿梵聲研有限公司',
-    roleZh: '營運企劃 / 專案合作',
-    roleEn: 'Operations Planner / Project Collaboration'
-  },
-  {
-    companyZh: '社團法人台北市美僑協會',
-    companyEn: 'American Club Taipei',
-    roleZh: '調酒師',
-    roleEn: 'Bartender'
-  },
-  {
-    companyZh: '果子電影有限公司',
-    companyEn: 'ARS FILM PRODUCTIONS CO., LTD.',
-    roleZh: '製片助理 / 實習',
-    roleEn: 'Production Assistant / Intern'
-  },
-  {
-    companyZh: '積木影像',
-    companyEn: 'BIT Production Co., Ltd.',
-    roleZh: '攝影助理 / 實習',
-    roleEn: 'Camera Assistant / Intern'
-  }
+  { companyZh: '洲際聯合有限公司', companyEn: '洲際聯合有限公司', roleZh: '公關副理', roleEn: 'Assistant PR Manager' },
+  { companyZh: 'One Rule_規則王股份有限公司', companyEn: 'One Rule_規則王股份有限公司', roleZh: '行銷企劃 / 專案合作', roleEn: 'Marketing Planner / Project Contractor' },
+  { companyZh: '隔壁老王數位行銷有限公司', companyEn: '隔壁老王數位行銷有限公司', roleZh: '行銷企劃 / 專案執行', roleEn: 'Marketing Planner / Project Specialist' },
+  { companyZh: '殿梵聲研有限公司', companyEn: '殿梵聲研有限公司', roleZh: '營運企劃 / 專案合作', roleEn: 'Operations Planner / Project Collaboration' },
+  { companyZh: '社團法人台北市美僑協會', companyEn: 'American Club Taipei', roleZh: '調酒師', roleEn: 'Bartender' },
+  { companyZh: '果子電影有限公司', companyEn: 'ARS FILM PRODUCTIONS CO., LTD.', roleZh: '製片助理 / 實習', roleEn: 'Production Assistant / Intern' },
+  { companyZh: '積木影像', companyEn: 'BIT Production Co., Ltd.', roleZh: '攝影助理 / 實習', roleEn: 'Camera Assistant / Intern' }
 ];
 
 function updateExperienceLanguage(lang) {
@@ -121,12 +85,34 @@ function updateExperienceLanguage(lang) {
   });
 }
 
+function updateEducationLanguage(lang) {
+  const education = [...document.querySelectorAll('.profile-copy p')].find((p) => p.textContent.includes('銘傳大學'));
+  if (!education) return;
+
+  const lineBreaks = education.querySelectorAll('br');
+  if (!lineBreaks.length) return;
+
+  // Replace only the school/department text node between the first and second line breaks.
+  let node = lineBreaks[0].nextSibling;
+  while (node && node !== lineBreaks[1]) {
+    const next = node.nextSibling;
+    if (node.nodeType === Node.TEXT_NODE) node.remove();
+    node = next;
+  }
+  lineBreaks[0].after(document.createTextNode(
+    lang === 'en'
+      ? 'Ming Chuan University — Department of New Media and Communication Administration'
+      : '銘傳大學 新媒體暨傳播管理學系'
+  ));
+}
+
 function setLanguage(language) {
   const lang = language === 'en' ? 'en' : 'zh';
   root.dataset.lang = lang;
   root.lang = lang === 'zh' ? 'zh-Hant' : 'en';
   localStorage.setItem('portfolio-language', lang);
   updateExperienceLanguage(lang);
+  updateEducationLanguage(lang);
   if (languageButton) {
     languageButton.setAttribute('aria-label', lang === 'zh' ? 'Switch to English' : '切換至中文');
     languageButton.setAttribute('title', lang === 'zh' ? 'English' : '中文');
