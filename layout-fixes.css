@@ -6,9 +6,21 @@
 .current-copy dd{font-size:12.5px;line-height:1.55}
 .current-company-brand{display:flex;align-items:center;margin:0 0 30px;min-height:78px}
 .current-company-brand img{display:block;width:min(280px,72%);height:auto;object-fit:contain}
+.lab-card-demo{cursor:default}
+.lab-card-demo:hover{background:#fff;color:#0b0b0b}
+.lab-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto;padding-top:34px}
+.lab-actions a{display:flex;align-items:center;justify-content:space-between;min-height:42px;padding:10px 12px;border:1px solid rgba(255,255,255,.45);font-size:9px;font-weight:700;letter-spacing:.1em;transition:background .18s ease,color .18s ease,border-color .18s ease}
+.lab-card-demo:hover .lab-actions a{border-color:rgba(11,11,11,.42)}
+.lab-actions .lab-live{background:#fff;color:#0b0b0b;border-color:#fff}
+.lab-card-demo:hover .lab-actions .lab-live{background:#0b0b0b;color:#fff;border-color:#0b0b0b}
+.lab-actions .lab-source:hover{background:#fff;color:#0b0b0b}
+.lab-card-demo:hover .lab-actions .lab-source:hover{background:#0b0b0b;color:#fff;border-color:#0b0b0b}
 @media (max-width:900px){
   .current-grid h2{white-space:normal;word-break:keep-all;line-break:strict}
   .current-copy dd,.current-copy>p{word-break:normal;overflow-wrap:anywhere}
   .current-company-brand{margin-bottom:22px;min-height:0}
   .current-company-brand img{width:min(240px,68vw)}
+}
+@media (max-width:620px){
+  .lab-actions{grid-template-columns:1fr}
 }
