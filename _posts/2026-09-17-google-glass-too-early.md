@@ -4,10 +4,10 @@ permalink: /blog/google-glass-too-early/
 note: NOTE 002
 category: MAKOTO LAB
 location: Taipei
-title_zh: Google Glass 真的失敗了嗎？也許它只是生不逢時
-title_en: Did Google Glass Fail, or Was It Simply Too Early?
-description_zh: 從 2012 的 Project Glass、2019 的 Enterprise Edition 2，到我在 2025 買下 EE2 並開始做 Makoto Glass：一副比市場早到十年的眼鏡。
-description_en: From Project Glass in 2012 to Enterprise Edition 2 and the EE2 I bought in 2025: revisiting a wearable that may have arrived a decade before its moment.
+title_zh: Google Glass，生不逢時
+title_en: Google Glass, Born Too Early
+description_zh: 從穿戴式設備的今天重新看 Google Glass：2012 的未來、2019 的 EE2、2023 的退場，以及我在 2025 買下 EE2 後做出 Makoto Glass 的理由。
+description_en: Reconsidering Google Glass through today's wearables — from the 2012 vision and EE2 to the device I bought in 2025 and the Makoto Glass software I built for it.
 ---
 
 <div class="lang-zh" markdown="1">
@@ -16,156 +16,224 @@ description_en: From Project Glass in 2012 to Enterprise Edition 2 and the EE2 I
 
 如果把時間倒回十幾年前，Google Glass 看起來像是一個過度樂觀的未來。
 
-一副眼鏡，右眼前方懸著一塊透明顯示器；抬頭就能看到資訊、導航、通知，隨手拍下第一人稱畫面，再用語音完成操作。2012 年 Google 在 I/O 舞台上公開展示 Project Glass 時，甚至安排跳傘、BMX 和垂降，把影像直接從 Glass 傳回會場。那是一場非常 Google 的展示：先把未來做出來，再問世界準備好了沒有。
+一副眼鏡，右眼前方懸著一塊小型透明顯示器；抬頭就能看到通知、導航、拍照、錄影，用語音控制，再透過手機和網路取得資訊。
 
-今天重新看，最奇怪的地方反而不是 Glass 當年有多科幻，而是它想做的事情已經變得很普通。
+2012 年 Google 公開 Project Glass 時，這些功能看起來幾乎像科幻電影裡的道具。Google I/O 的展示甚至安排跳傘、BMX 與垂降，把第一人稱畫面直接從 Glass 傳回會場。那是一場非常 Google 的發表：先把未來做出來，再問世界準備好了沒有。
 
-我們習慣讓智慧手錶顯示訊息與導航，讓無線耳機處理通話與語音助理，也逐漸接受眼鏡可以拍照、錄影、理解眼前場景。2025 年 Google 再次公開 Android XR 智慧眼鏡原型時，官方描述的也是相機、麥克風、喇叭、與手機協同，以及可選的鏡片內顯示器，再把 Gemini 放進這個介面裡。
+今天再看，卻很難說它的方向真的錯了。
 
-於是我一直覺得，Google Glass 真正值得問的問題不是「它為什麼失敗」，而是：**它到底比市場早了多少年？**
+我們已經習慣讓 Apple Watch 顯示訊息與導航，習慣戴著 AirPods 接電話、叫語音助理，也逐漸接受 Meta Ray-Ban、AI Glasses 這類「眼鏡上有相機、有麥克風、能理解周遭環境」的產品。2025 年 Google 自己也再次公開 Android XR 智慧眼鏡原型：相機、麥克風、喇叭、與手機協同，以及可選的鏡片內顯示器，再把 Gemini 放進這個介面裡。
+
+於是問題反而變成了：
+
+**Google Glass 當年是真的失敗了，還是它只是比市場早了十年？**
 
 <figure class="article-figure article-figure-wide">
-  <img src="/assets/blog/wearable-ideas.svg" alt="Google Glass 的互動概念後來分散到智慧手錶、耳機、AI 眼鏡與 Android XR" loading="lazy">
-  <figcaption>Glass 當年的核心想法沒有消失，只是被拆散到不同穿戴式裝置上。圖：MAKOTO LAB 原創。</figcaption>
+  <img src="/assets/blog/wearable-ideas.svg" alt="Google Glass 的概念後來分散到智慧手錶、耳機、AI 眼鏡與 Android XR" loading="lazy">
+  <figcaption>Glass 當年的核心想法沒有消失，只是被拆散到不同穿戴式裝置上。圖：MAKOTO LAB。</figcaption>
 </figure>
 
-## 2012：一台不想讓你一直盯著螢幕的電腦
+## 一副在 2012 年出現的「未來眼鏡」
 
-Glass 最有趣的地方，從來不只是「把 Android 塞進眼鏡」。
+Google 在 2012 年公開 Project Glass，隔年開始讓開發者與早期使用者接觸 Explorer Edition。
 
-它真正提出的是另一種電腦使用方式：資訊不再固定存在一塊你必須拿出來看的螢幕上，而是在需要時短暫出現在視野旁邊。
+它真正特別的地方，不只是把 Android 塞進眼鏡裡，而是它對「電腦」這件事情的想像。
 
-Google 後來在 Enterprise Edition 的說明裡把這類互動稱作 **glanceable** assistance——可以快速瞄一眼、取得需要的東西，再把注意力放回現實世界。
+Glass 並不是要讓使用者一直盯著螢幕。
 
-這個想法到現在都沒有過時。
+它的核心其實更接近今天所說的 **glanceable computing**：資訊只在需要的時候短暫出現。天氣、訊息、導航、拍照、視訊、搜尋，都被壓縮成幾秒鐘就能完成的互動。Google 後來在 Enterprise Edition 的說明裡，也把這類互動描述成 glanceable assistance——快速瞄一眼、取得需要的資訊，再把注意力放回眼前的世界。
 
-但 2012 年的其他條件幾乎都還沒成熟。電池小、處理器效能與功耗有限、語音辨識離今天的生成式 AI 還很遠，行動網路、雲端運算與手機協同也沒有現在自然。更麻煩的是，社會根本還沒有準備好面對「別人臉上有一顆朝著自己的相機」。
+這個概念到今天仍然沒有過時。
 
-這不是單純的規格問題，而是技術、設計和社會規範同時落後於產品概念。
+問題是，當年的其他條件幾乎都還沒有跟上。
+
+電池容量有限、處理器發熱與功耗明顯、行動網路與雲端服務遠不如今天成熟；語音辨識雖然已經能用，但距離今天的大型語言模型與 AI Assistant 還有非常大的差距。
+
+更重要的是，社會根本還沒有準備好接受「別人臉上有一顆一直朝著你的相機」。
+
+Glass 最後甚至催生出「Glasshole」這個帶有嘲諷意味的詞。這不是單純的硬體問題，而是技術、設計與社會規範同時落後於產品概念。
 
 <figure class="article-figure">
   <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Google_Glass_Explorer_Edition.jpg" alt="Google Glass Explorer Edition" loading="lazy">
-  <figcaption>Google Glass Explorer Edition。攝影：Ted Eytan；來源：Wikimedia Commons；<a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noreferrer">CC BY-SA 2.0</a>。圖片未修改。<a href="https://commons.wikimedia.org/wiki/File:Google_Glass_Explorer_Edition.jpg" target="_blank" rel="noreferrer">原始檔與授權資訊 ↗</a></figcaption>
+  <figcaption>Google Glass Explorer Edition。攝影：Ted Eytan，Wikimedia Commons，CC BY-SA 2.0。<a href="https://commons.wikimedia.org/wiki/File:Google_Glass_Explorer_Edition.jpg" target="_blank" rel="noreferrer">來源 ↗</a></figcaption>
 </figure>
 
-2015 年 1 月，Explorer Program 結束，原版 Glass 的消費市場銷售也停止。這很容易被理解成「Google Glass 死了」，但實際上 Google 並沒有立即放棄這個方向。
+2015 年 1 月，Explorer Program 結束，原版 Glass 的消費市場銷售也停止。
 
-它只是換了一個比較適合當時技術的地方生存。
+如果故事停在這裡，它確實很像典型的 Google 墓園產品。
 
-## Glass 沒有消失，它躲進了工廠
+但 Glass 並沒有真正消失。
 
-對一般人來說，一副整天把通知掛在眼前的眼鏡也許沒有明確必要；但對正在維修設備、倉儲揀貨、醫療或現場服務的人來說，「雙手不用離開工作、眼前就能看到步驟」突然就非常合理。
+## Google Glass 沒有消失，只是躲進了工廠
 
-Google 因此把 Glass 從消費產品轉向企業用途。官方後來直接把它稱為 **assisted reality wearable**，強調讓現場工作者在不放下手上工作的情況下查看清單、指示、資料，或傳送第一人稱照片與影片。
+Google 後來把 Glass 的方向從消費市場轉向企業。
 
-2019 年 5 月，Google 推出 **Glass Enterprise Edition 2（EE2）**。
+這個轉變其實很合理。
 
-這一代對我來說才真正有趣。
+一個普通人可能不需要整天把工作郵件投影在眼前，但一個正在維修機械的技師，可能非常需要在雙手都被占用時看到操作步驟；倉儲揀貨、醫療、製造、遠端協作，也都比「一般消費者全天戴著」更容易說明 Glass 的價值。
 
-它採用 Qualcomm XR1、3GB LPDDR4、32GB eMMC，跑的是 Android Open Source Project 8.1 Oreo；有 Wi-Fi、Bluetooth 5.0、8MP 相機、觸控板、IMU、USB-C，以及 640 × 360 的透明顯示器。Google 也強調 EE2 更接近標準 Android 開發與部署方式。
+Google 後來把 Glass 定義為一種 **assisted reality wearable**，核心是讓工作人員能夠在雙手不中斷工作的情況下查看清單、指示與資訊，也能拍下第一人稱照片與影片。
 
-換句話說，它不是一件被完全封死的企業工具，而是一台長得非常奇怪、但仍然可以安裝 APK 的 Android 電腦。
+2019 年，Google 推出了 **Glass Enterprise Edition 2，EE2**。
+
+它和最早的 Explorer Edition 已經是完全不同世代的硬體。
+
+EE2 採用 Qualcomm Snapdragon XR1 平台，搭載 3GB LPDDR4、32GB eMMC，執行 Android 8.1 AOSP；有 Wi-Fi、Bluetooth 5.0、8MP 相機、觸控板、IMU、USB-C，以及 640 × 360 的透明顯示器。
+
+這點很重要。
+
+因為它代表 EE2 並不是一件只能執行企業專用程式的封閉古董。它本質上依然是一台很特殊的 Android 電腦，而且可以透過熟悉的 Android 開發方式安裝 APK。
 
 <figure class="article-figure article-figure-wide">
   <img src="/assets/blog/google-glass-timeline.svg" alt="Google Glass 從 2012 Project Glass 到 2025 Android XR 的時間線" loading="lazy">
-  <figcaption>從 Project Glass 到 EE2，再到 Android XR。圖：MAKOTO LAB 原創；年份依 Google 官方資料與 2015 Explorer Program 公開紀錄整理。</figcaption>
+  <figcaption>Project Glass、Enterprise Edition 2、官方退場，再到 Android XR。圖：MAKOTO LAB。</figcaption>
 </figure>
 
-## 2023：硬體還在，官方生態先離場
+## 2023，Google 再一次結束 Glass
 
-Google 在 2023 年 3 月 15 日停止販售 Glass Enterprise Edition，並在同年 9 月 15 日結束官方支援。
+2023 年 3 月 15 日，Google 正式停止販售 Glass Enterprise Edition，並在同年 9 月 15 日停止官方支援。
 
-一個很奇怪的階段就此開始：**設備並沒有突然壞掉，但它失去了原廠替它定義用途的能力。**
+至此，從 2012 年公開概念算起，Google Glass 走過了超過十年。
 
-這種停產硬體對我一直很有吸引力。
+但這種產品最有趣的地方，往往也是從原廠不再支援的時間點開始。
 
-因為當原廠不再告訴你「這台機器應該做什麼」，它反而重新變成一塊可以被解釋的硬體。
+因為設備並沒有突然壞掉。
 
-## 2025，我買了一台 EE2
+它只是失去了原廠替它定義用途的能力。
+
+當原廠不再告訴你「這台設備應該拿來做什麼」，它反而重新變成一塊可以被重新定義的硬體。
+
+## 2025，我買了一台 Glass EE2
 
 我是在 2025 年買下現在這台 Google Glass Enterprise Edition 2。
 
-一開始沒有什麼宏大的理由。我只是一直對這種「失敗的未來產品」很有興趣，而 Glass 特別有意思，因為它不像很多十年前的科技產品，一拿到手就只剩懷舊價值。
+一開始其實沒有什麼宏大的理由。
 
-EE2 戴在頭上仍然很輕，資訊固定在右眼視野上方，不需要低頭，也不會把整個現實世界蓋掉。右側觸控板的滑動與點擊邏輯，甚至放到現在也沒有特別過時。
+我只是一直對這種「失敗的未來產品」很有興趣，尤其是 Glass。
 
-真正讓我感覺到年代差距的，不是硬體，而是**手機整合已經斷掉了**。
+因為它不像很多十年前的科技產品那樣，一拿到手就明顯只剩年代感。EE2 戴在頭上時仍然非常輕，右眼前方的資訊不需要低頭，不會完全擋住視線；右側觸控板的滑動與點擊邏輯，即使放到現在也依然直覺。
 
-官方支援與原本的 Glass 生態早已停止。硬體可以開機、可以連 Wi-Fi、可以裝 APK，但如果它不能自然地和我每天使用的 iPhone 一起工作，它就很難成為一副我真的會戴出門的穿戴裝置。
+真正讓我感受到年代的，不是硬體，而是軟體。
 
-對今天的 wearable 來說，我覺得最基本的兩件事情其實很簡單：
+Glass 本身還能運作。它可以開機、連 Wi-Fi、連 Bluetooth、裝 APK、拍照、跑 Android App。
+
+但它原本依賴的生態系已經逐漸消失。
+
+尤其對我來說，最大的問題是 **iPhone 整合**。
+
+對一個今天的穿戴式裝置來說，如果它無法自然地接收手機通知，也無法控制手機正在播放的音樂，那它就很難真正成為每天會戴著的東西。
+
+我覺得最基本的事情其實只有兩個：
 
 1. 手機來通知時，我不用掏手機。
 2. 音樂正在播放時，我可以直接看到與控制它。
 
-這也是 **Makoto Glass** 開始的地方。
+這也是我開始做 **Makoto Glass** 的原因。
 
-## 我真正想補上的，不是另一個 Launcher
+## 我真正想補上的，其實不是 Launcher
 
-Makoto Glass 從外表看很容易被理解成「Google Glass 的自製 Launcher」。
+Makoto Glass 最開始看起來可能像是一個 Google Glass 的自製 Launcher。
 
-但對我來說，真正重要的部分一直是 **ANCS** 和 **AMS**。
+但對我來說，它真正重要的部分一直不是 Launcher。
 
-**ANCS（Apple Notification Center Service）** 是 Apple 提供給 Bluetooth Low Energy 配件使用的通知服務。我希望 EE2 可以直接從 iPhone 收到支援的通知資訊、保留通知紀錄，並處理可用的通知動作與來電。
+而是 **ANCS 和 AMS**。
 
-**AMS（Apple Media Service）** 則負責 Now Playing 資訊和媒體控制，讓 Glass 可以看到目前播放內容，並執行播放、暫停、上一首、下一首等操作。
+**ANCS（Apple Notification Center Service）** 是 Apple 提供給 Bluetooth Low Energy 配件使用的通知服務。
 
-這兩個協定本來就是為穿戴裝置和 Bluetooth 配件準備的，而 Glass 從產品概念上，本來就應該是這類裝置。
+換句話說，我希望 Glass 可以直接從 iPhone 接收通知：訊息、App 通知、來電，以及對應的通知操作。
+
+**AMS（Apple Media Service）** 則能讓外部 Bluetooth 裝置取得目前播放的歌曲資訊，並執行播放、暫停、上一首、下一首等控制。
+
+這兩個協定本來就是設計給穿戴裝置與 Bluetooth 配件使用的，而這正好也是 Glass 本來應該扮演的角色。
+
+於是我開始把它們整合進 EE2。
 
 <figure class="article-figure article-figure-wide">
-  <img src="/assets/blog/makoto-glass-bridge.svg" alt="Makoto Glass 透過 Apple ANCS 與 AMS 直接連接 iPhone 的架構" loading="lazy">
-  <figcaption>Makoto Glass 的核心不是把手機畫面搬到眼鏡，而是讓 EE2 直接成為 iPhone 的 Bluetooth wearable。圖：MAKOTO LAB 原創。</figcaption>
+  <img src="/assets/blog/makoto-glass-bridge.svg" alt="Makoto Glass 透過 ANCS 與 AMS 直接連接 iPhone 的架構" loading="lazy">
+  <figcaption>Makoto Glass 的核心不是把手機畫面搬到眼鏡，而是讓 EE2 重新成為一個現代 iPhone wearable。圖：MAKOTO LAB。</figcaption>
 </figure>
 
-目前的 Makoto Glass Public Beta 已經能在我實際測試的 EE2 / Android 8.1 環境上提供：
+現在的 Makoto Glass 可以直接和 iPhone 透過 Bluetooth 連線，在 Glass 上顯示 iPhone 通知、通知紀錄、來電，以及 Now Playing 和媒體控制。
+
+這些核心功能不需要 root，也不需要 jailbreak。
+
+甚至在 ANCS 與 AMS 這一層，並不需要我另外開發的 iPhone App。Glass 可以直接和 iPhone 使用 Apple 原生的 Bluetooth 服務。
+
+後來我才逐步把其他東西補上去：Launcher、Camera、照片、Tilt Wake、自動亮度、System Status、Bluetooth reconnect，以及我正在開發中的 iPhone companion app —— **Makoto Link**。
+
+Makoto Link 未來會負責 GPS / Location Bridge、Remote、Find Glass，以及更多需要 iPhone 主動傳送資料的功能。
+
+但這些其實都是後面的事情。
+
+最初真正讓我想做這個專案的問題只有一個：
+
+> **如果 Glass 今天還活著，它至少應該能自然地和手機一起工作。**
+
+## Makoto Glass 現在真的長什麼樣子
+
+下面不是 mockup，而是我目前在 **Google Glass Enterprise Edition 2 / Android 8.1** 上實際跑 Makoto Glass 的畫面。
+
+<figure class="article-figure article-figure-wide app-ui-figure">
+  <img src="/assets/blog/makoto-glass-ui.svg" alt="Makoto Glass 實際介面：Home、AMS Now Playing、ANCS 通知、Makoto Link、About 與 System Status" loading="lazy">
+  <figcaption>Makoto Glass 實機畫面：Home、AMS Now Playing、ANCS 通知紀錄、Makoto Link 連線狀態、About 與 System Status。© MAKOTO LAB。</figcaption>
+</figure>
+
+目前 Public Beta 的核心功能包括：
 
 - 自製 Glass Launcher
-- Apple ANCS
-- iPhone 通知顯示、紀錄與支援的通知操作
-- 來電處理
-- Apple AMS
+- Apple Notification Center Service（ANCS）
+- iPhone 通知顯示與通知紀錄
+- 支援的通知操作與來電處理
+- Apple Media Service（AMS）
 - Now Playing 與媒體控制
 - Camera / Photo Viewer
+- Application Launcher
 - Tilt Wake
 - 自動亮度
 - System Status
 - Bluetooth reconnect 與 recovery
 
-這些核心 ANCS / AMS 功能**不需要 root、不需要 jailbreak，也不需要額外的 iPhone App**。Glass 可以直接使用 Apple 原生 Bluetooth 服務。
-
-後來我才開始做 companion app —— **Makoto Link**。它會負責 GPS / Location Bridge、Remote、Find Glass 和其他需要 iPhone 主動提供資料的功能。但那是下一層；最初讓我開始做這個專案的問題只有一個：
-
-> **如果 Glass 今天還活著，它至少應該能自然地和手機一起工作。**
+目前 EE2 是唯一完整測試過的 Glass 型號；更早期的 Enterprise Edition 1 與 Explorer Edition 是否相容，仍需要更多測試。
 
 [Makoto Glass — Public Beta / GitHub ↗](https://github.com/lancer1234/MakotoGlass-Beta)
 
-## 所以，Google 到底走得太早了嗎？
+## 回頭看，Google Glass 到底錯在哪裡？
 
-現在回頭看，我很難說 Google 當年的方向是錯的。
+現在再看 Glass，我很難說 Google 當年的技術方向是錯的。
 
-Glass 想做的幾件事——glanceable information、第一人稱相機、語音操作、抬頭顯示、手機協同——沒有一項真正消失。它們只是被市場拆開來，分別在智慧手錶、耳機、相機眼鏡和 AI wearable 上成熟。
+相反地，它提出的很多概念後來都成為主流。
 
-最有意思的是 Google 自己也回來了。
+手腕上的通知變成了智慧手錶。
 
-2025 年的 Android XR 眼鏡展示裡，Google 再次描述了可以看見使用者所見、聽見使用者所聽、與手機協同、在需要時把資訊顯示在鏡片中的眼鏡。只是這一次，多了更成熟的硬體、更普及的行動網路，以及 Gemini 這種 2012 年根本不存在的 AI 能力。
+耳邊的語音助理進入了無線耳機。
 
-這並不代表 2012 年的 Glass 如果今天原封不動重新上市就會成功。它的設計、電池、相機倫理與使用方式都有很多屬於那個年代的問題。
+第一人稱相機重新出現在智慧眼鏡。
 
-但我越使用 EE2，越覺得 Glass 的核心問題並不是「想錯了未來」。
+AI 開始成為穿戴裝置最重要的介面之一。
 
-它比較像是**太早抵達了正確的方向**。
+甚至「不要一直拿手機出來，而是讓電腦在需要時出現在視野或耳邊」這個核心想法，也正在重新成為科技公司追逐的方向。
 
-當年的市場還沒有準備好回答：眼鏡上的相機應該有什麼社會規範？穿戴式裝置該怎麼和手機分工？語音介面什麼時候才真的比觸控方便？一個全天候 wearable 的電池、重量與外型要做到什麼程度，人們才願意戴？
+Google Glass 真正的問題，也許不是它不知道未來在哪裡。
 
-十多年後，我們才慢慢有能力回答這些問題。
+而是它在 2012 年就到了那個未來。
 
-所以我到現在還會戴著 EE2、繼續替它寫軟體。
+當時的電池還不夠好，SoC 還不夠省電，AI 還不夠聰明，使用者還沒習慣隨身攝影機，整個社會也還沒有建立起智慧穿戴設備應該遵守的禮儀。
 
-不是因為它是一件古董。
+所以市場最後拒絕的，也許不是「智慧眼鏡」本身。
 
-而是因為每次把它戴上去，我都還是會感覺到一件很奇妙的事：
+而是 **2012 年版本的智慧眼鏡**。
 
-**這個產品的未來感沒有真的消失。只是整個世界花了比 Google 預期更久，才慢慢追上它。**
+這也是我現在還會對 EE2 感興趣的原因。
+
+它不是一台功能最強的 wearable。
+
+甚至從很多規格來看，它已經非常老了。
+
+但戴上它之後，仍然會讓人感覺到一件很奇妙的事情：
+
+**這個產品的未來感，並沒有真的消失。**
+
+只是整個世界花了比 Google 預期更久的時間，才慢慢追上它。
 
 ---
 
@@ -178,115 +246,124 @@ Glass 想做的幾件事——glanceable information、第一人稱相機、語�
 - [Google — Android XR glasses at I/O 2025](https://blog.google/products-and-platforms/platforms/android/android-xr-gemini-glasses-headsets/)
 - [TechCrunch — Explorer Edition sales ended January 19, 2015](https://techcrunch.com/2015/01/19/today-is-the-last-day-to-buy-google-glass/)
 
-### 圖片授權
-
-本文沒有使用 Google 官方產品宣傳照，以避免把「可公開瀏覽」誤當成「可自由再利用」。歷史實拍照使用 Wikimedia Commons 上 Ted Eytan 的 Google Glass Explorer Edition 照片，授權為 **CC BY-SA 2.0**，並在圖片下方完整標示作者、來源與授權；其餘時間線與示意圖皆為 **MAKOTO LAB 原創圖像**。
-
 </div>
 
 <div class="lang-en" markdown="1">
 
 > **Google Glass did not fail too early. It was born too early.**
 
-Looking back more than a decade later, Google Glass feels less like a wrong prediction and more like a future that arrived before the surrounding world was ready for it.
+If you rewind to 2012, Google Glass looks almost excessively optimistic: a transparent display at the edge of your vision, navigation, notifications, first-person photos and video, voice control, and information pulled from a phone and the cloud.
 
-In 2012, Google showed Project Glass as a computer that could sit at the edge of your vision: directions, information, first-person capture and voice interaction without constantly pulling out a phone. At Google I/O, the company famously demonstrated the idea with skydivers, BMX riders and rappellers streaming their point of view back to the stage.
+At the time it looked like science fiction. Today, many of those ideas have simply been redistributed across Apple Watch, wireless earbuds, camera glasses, AI wearables and the new wave of Android XR devices.
 
-Today, many of those ideas feel ordinary. Smartwatches handle glanceable notifications and navigation. Wireless earbuds have become an interface for calls and assistants. AI glasses capture what the wearer sees and use that context for software. In 2025, Google itself returned to the idea with Android XR glasses that combine cameras, microphones, speakers, phone integration, an optional in-lens display and Gemini.
-
-So the more interesting question is no longer whether Glass “failed.” It is **how many years ahead of its environment it really was.**
+That makes the more interesting question not “Why did Glass fail?” but **how many years ahead of its environment it really was.**
 
 <figure class="article-figure article-figure-wide">
   <img src="/assets/blog/wearable-ideas.svg" alt="Google Glass ideas distributed across smartwatches, earbuds, AI glasses and Android XR" loading="lazy">
-  <figcaption>The interaction model did not disappear; it was distributed across an ecosystem. Graphic: MAKOTO LAB.</figcaption>
+  <figcaption>The core interaction ideas survived; they were distributed across an ecosystem. Graphic: MAKOTO LAB.</figcaption>
 </figure>
 
-## 2012: a computer that did not want your full attention
+## A future computer that appeared in 2012
 
-The important idea behind Glass was not simply putting Android on your face. It was a different relationship with computing: information appears briefly when needed, then gets out of the way.
+The important thing about Glass was never simply that Google put Android on a pair of glasses. It proposed a different relationship with computing: information appears briefly when needed, then gets out of the way.
 
-Google later described its enterprise direction as **glanceable** assistance. That concept still feels current. The problem was that almost everything around it was immature in 2012: battery technology, thermal efficiency, mobile connectivity, voice interfaces, cloud services and, perhaps most importantly, social norms around a camera worn on someone’s face.
+That idea — glanceable computing — still feels current. But almost everything around it was immature in 2012: batteries, thermal efficiency, mobile connectivity, voice interfaces, cloud services and social expectations around a camera worn on someone's face.
 
 <figure class="article-figure">
   <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Google_Glass_Explorer_Edition.jpg" alt="Google Glass Explorer Edition" loading="lazy">
-  <figcaption>Google Glass Explorer Edition. Photo by Ted Eytan via Wikimedia Commons, licensed under <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noreferrer">CC BY-SA 2.0</a>. Unmodified. <a href="https://commons.wikimedia.org/wiki/File:Google_Glass_Explorer_Edition.jpg" target="_blank" rel="noreferrer">Source and license ↗</a></figcaption>
+  <figcaption>Google Glass Explorer Edition. Photo: Ted Eytan, Wikimedia Commons, CC BY-SA 2.0. <a href="https://commons.wikimedia.org/wiki/File:Google_Glass_Explorer_Edition.jpg" target="_blank" rel="noreferrer">Source ↗</a></figcaption>
 </figure>
 
-Consumer sales of the Explorer Edition ended in January 2015, but Glass did not immediately disappear. It moved somewhere the technology made more sense: enterprise work.
+Consumer sales ended in 2015, but Glass did not immediately disappear. Google moved it into enterprise work, where hands-free information made more immediate sense.
 
-## Glass disappeared into factories instead
+## It disappeared into factories instead
 
-For a warehouse worker, technician, clinician or field engineer, hands-free information has a much clearer purpose than it does for a casual consumer. Google repositioned Glass as an **assisted reality wearable** for tasks such as checklists, instructions, first-person photos and video, and hands-free access to work information.
+For technicians, warehouse workers, clinicians and field teams, a small display that can show instructions without occupying the hands has an obvious purpose. Google repositioned Glass as an assisted-reality wearable and in 2019 introduced **Glass Enterprise Edition 2**.
 
-In May 2019, Google introduced **Glass Enterprise Edition 2**.
+EE2 uses Qualcomm's XR1 platform, 3GB of LPDDR4 memory, 32GB of storage and Android 8.1 AOSP. It includes Wi-Fi, Bluetooth 5.0, an 8MP camera, touchpad, motion sensors, USB-C and a 640 × 360 transparent display.
 
-EE2 is the version that still interests me most. It uses Qualcomm's XR1 platform, 3GB of LPDDR4 memory, 32GB of storage and Android Open Source Project 8.1 Oreo. It includes Wi-Fi, Bluetooth 5.0, an 8MP camera, touchpad, motion sensors, USB-C and a 640 × 360 transparent display. Google also made it easier to develop and deploy using familiar Android tooling.
-
-In other words, underneath the unusual form factor, it is still an Android computer that can run APKs.
+Under the unusual form factor, it is still an Android computer that can run APKs.
 
 <figure class="article-figure article-figure-wide">
   <img src="/assets/blog/google-glass-timeline.svg" alt="Google Glass timeline from Project Glass to Android XR" loading="lazy">
-  <figcaption>From Project Glass to Enterprise Edition 2 and back toward glasses with Android XR. Graphic: MAKOTO LAB.</figcaption>
+  <figcaption>From Project Glass to EE2, official retirement, and Google's return to smart glasses with Android XR. Graphic: MAKOTO LAB.</figcaption>
 </figure>
 
 ## 2023: the ecosystem left before the hardware did
 
-Google stopped selling Glass Enterprise Edition on March 15, 2023 and ended official support on September 15 of the same year.
+Google stopped selling Glass Enterprise Edition on March 15, 2023 and ended official support on September 15.
 
-That creates an interesting state for old hardware: the device still works, but the company that made it no longer defines what it should become next.
+The hardware did not suddenly stop working. What disappeared was the ecosystem that told users what the device was supposed to be.
 
-I have always found that moment interesting. A discontinued platform can become less useful commercially and more interesting experimentally at the same time.
+That is exactly the point where discontinued hardware becomes interesting to me: once the manufacturer stops defining the future of a device, the hardware becomes open to reinterpretation.
 
 ## In 2025, I bought an EE2
 
 I bought the Glass Enterprise Edition 2 I use today in 2025.
 
-There was no grand plan at first. I have always been interested in “failed futures,” and Glass is unusual because the hardware does not feel purely nostalgic. EE2 is light, its display stays outside the center of vision, and the touchpad interaction still feels surprisingly natural.
+There was no grand plan. I have always been interested in failed futures, and Glass is unusual because the hardware does not feel purely nostalgic. EE2 is still light, the display sits outside the center of vision, and the touchpad interaction remains surprisingly natural.
 
-What felt old was the software ecosystem.
+What felt old was the software ecosystem — especially phone integration.
 
-Official support was gone, and the original phone integration was no longer a modern, dependable experience. The device could still boot, connect to Wi-Fi and install APKs, but if it could not naturally work with the iPhone I actually carry every day, it was difficult to treat it as a real wearable.
+For a modern wearable, two things matter immediately: I should be able to see a notification without taking out my phone, and I should be able to see and control what is currently playing.
 
 That became the starting point for **Makoto Glass**.
 
-## The part I wanted to restore was not just the launcher
+## What I wanted to restore was not just the launcher
 
-Makoto Glass can look like a custom Google Glass launcher from the outside, but the part that matters most to me is **ANCS** and **AMS**.
+From the outside, Makoto Glass can look like a custom Google Glass launcher. The part that matters most to me, however, is **ANCS** and **AMS**.
 
-Apple Notification Center Service lets supported Bluetooth Low Energy accessories receive notification information from an iPhone. Apple Media Service exposes Now Playing information and media controls.
+Apple Notification Center Service lets supported Bluetooth Low Energy accessories receive notification information from an iPhone. Apple Media Service exposes Now Playing metadata and media controls.
 
-Those services are made for accessories and wearables — exactly the role I wanted Glass to play again.
+Those services are intended for accessories and wearables — exactly the role I wanted Glass to play again.
 
 <figure class="article-figure article-figure-wide">
   <img src="/assets/blog/makoto-glass-bridge.svg" alt="Makoto Glass connecting directly to iPhone through ANCS and AMS" loading="lazy">
-  <figcaption>The core idea: make EE2 behave like a modern iPhone wearable again. Graphic: MAKOTO LAB.</figcaption>
+  <figcaption>The goal is not to mirror a phone screen, but to make EE2 behave like a modern iPhone wearable again. Graphic: MAKOTO LAB.</figcaption>
 </figure>
 
-The current Makoto Glass Public Beta, tested on my EE2 running Android 8.1, includes a custom launcher, ANCS notifications and history, supported notification actions and incoming-call handling, AMS Now Playing and media controls, camera and photo viewing, Tilt Wake, automatic brightness, system status, and Bluetooth reconnect/recovery.
+The current Makoto Glass build can receive supported iPhone notifications, retain notification history, handle supported notification actions and incoming calls, show Now Playing information and control media playback.
 
-The core ANCS and AMS features do **not** require root, jailbreak, or a custom iPhone application. Glass talks directly to Apple's native Bluetooth services.
+The core ANCS and AMS features do not require root, jailbreak or a custom iPhone app. Glass talks directly to Apple's native Bluetooth services.
 
-I later began building **Makoto Link**, an iPhone companion for features such as GPS / Location Bridge, Remote, Find Glass and device management. But that came later. The original question was much simpler:
+I later added the launcher, camera and photo viewer, Tilt Wake, automatic brightness, system status, Bluetooth reconnect/recovery, and began working on **Makoto Link**, an iPhone companion for GPS / Location Bridge, Remote, Find Glass and other features that require the phone to actively send data.
 
 > **If Glass were still alive today, it should at least be able to work naturally with the phone in my pocket.**
+
+## What Makoto Glass actually looks like
+
+These are real captures from the current build running on **Google Glass Enterprise Edition 2 / Android 8.1**, not mockups.
+
+<figure class="article-figure article-figure-wide app-ui-figure">
+  <img src="/assets/blog/makoto-glass-ui.svg" alt="Makoto Glass interface showing Home, AMS Now Playing, ANCS notifications, Makoto Link, About and System Status" loading="lazy">
+  <figcaption>Current Makoto Glass UI: Home, AMS Now Playing, ANCS notification history, Makoto Link status, About and System Status. © MAKOTO LAB.</figcaption>
+</figure>
+
+The current Public Beta includes a custom Glass launcher, ANCS notification integration, AMS media controls, camera and photo viewing, application launching, Tilt Wake, automatic brightness, system status, and Bluetooth recovery.
 
 [Makoto Glass — Public Beta / GitHub ↗](https://github.com/lancer1234/MakotoGlass-Beta)
 
 ## So was Google simply too early?
 
-I do not think the Glass concept was fundamentally wrong. Its main ideas — glanceable information, first-person capture, voice interaction, a heads-up display and phone companionship — all survived. They simply matured across different categories of wearables.
+Looking back, it is difficult for me to say that Google's direction was wrong.
 
-The most telling part is that Google itself came back to glasses. Its 2025 Android XR demonstrations describe glasses that can see and hear what the wearer experiences, work with a phone, provide hands-free assistance and optionally place private information in the user's line of sight — now with Gemini providing an AI layer that simply did not exist in 2012.
+The ideas Glass introduced — glanceable information, first-person capture, voice interaction, a heads-up display and phone companionship — did not disappear. They matured elsewhere.
 
-That does not mean the original Glass would succeed unchanged today. Its battery, design, camera etiquette and interaction model all carried the limits of its era.
+Notifications moved to watches. Voice moved into earbuds. First-person cameras returned in smart glasses. AI became one of the most important interfaces for wearable computing. Even the broader idea of not constantly pulling out a phone is now being pursued again by major technology companies.
 
-But using EE2 makes me think Glass did not misunderstand the future. It **arrived at the right direction before the rest of the system was ready for it.**
+Google's mistake may not have been failing to understand the future.
 
-That is why I still wear one and keep writing software for it.
+It may have been arriving there in 2012.
 
-Not because it is an antique, but because its sense of the future never completely went away.
+The battery technology was not ready. The processors were not efficient enough. AI was not capable enough. Society had not established etiquette around wearable cameras, and users had not yet learned what role a wearable computer should play beside a smartphone.
 
-The world simply took longer than Google expected to catch up.
+So perhaps the market did not reject smart glasses.
+
+It rejected **the 2012 version of smart glasses**.
+
+That is why I still find EE2 interesting. It is old by specification, but putting it on still produces a strange feeling: the future it was designed for never completely disappeared.
+
+The rest of the world simply took longer than Google expected to catch up.
 
 ---
 
@@ -298,9 +375,5 @@ The world simply took longer than Google expected to catch up.
 - [Google Support — End of Glass Enterprise Edition sales and support](https://support.google.com/glass-enterprise/customer/answer/10012550?hl=en)
 - [Google — Android XR glasses at I/O 2025](https://blog.google/products-and-platforms/platforms/android/android-xr-gemini-glasses-headsets/)
 - [TechCrunch — Explorer Edition sales ended January 19, 2015](https://techcrunch.com/2015/01/19/today-is-the-last-day-to-buy-google-glass/)
-
-### Image licensing
-
-This article intentionally does not reuse Google's official product photography because publicly viewable promotional images are not automatically licensed for redistribution. The historical Explorer Edition photograph is by Ted Eytan via Wikimedia Commons under **CC BY-SA 2.0**, with attribution and license information shown directly below the image. All remaining diagrams are original graphics created for **MAKOTO LAB**.
 
 </div>
