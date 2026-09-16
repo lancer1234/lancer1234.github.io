@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{ page.description_zh | default: page.description_en | escape }}" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>{{ page.title_zh | default: page.title_en }} — Danny Wang</title>
+  <link rel="stylesheet" href="/blog/blog.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="nameplate" href="/">DANNY WANG</a>
+  <div class="topbar-right">
+    <nav>
+      <a href="/blog/"><span class="lang-en">ALL NOTES</span><span class="lang-zh">所有文章</span></a>
+      <a href="/#lab">MAKOTO LAB</a>
+    </nav>
+    <button class="lang-toggle" type="button" aria-label="Switch language"><span class="lang-zh">EN</span><span class="lang-en">中文</span></button>
+  </div>
+</header>
+<main class="article">
+  <div class="article-top">
+    <div class="meta-line"><span>{{ page.note | default: 'NOTE' }} / {{ page.category | upcase }}</span><span>{{ page.date | date: '%Y.%m.%d' }}{% if page.location %} / {{ page.location | upcase }}{% endif %}</span></div>
+    <h1><span class="lang-en">{{ page.title_en }}</span><span class="lang-zh">{{ page.title_zh }}</span></h1>
+    {% if page.description_en or page.description_zh %}<p class="dek"><span class="lang-en">{{ page.description_en }}</span><span class="lang-zh">{{ page.description_zh }}</span></p>{% endif %}
+  </div>
+  <article class="article-body">{{ content }}</article>
+  <a class="back" href="/blog/"><span class="lang-en">← BACK TO NOTES</span><span class="lang-zh">← 回到文章列表</span></a>
+</main>
+<footer class="wrap"><span>© <span id="year"></span> DANNY WANG</span><span>NOTES / BLOG</span></footer>
+<script src="/blog/blog.js"></script>
+</body>
+</html>
