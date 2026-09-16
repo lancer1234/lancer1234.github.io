@@ -5,6 +5,15 @@ const languageButton = document.querySelector('.lang-toggle');
 const savedLanguage = localStorage.getItem('portfolio-language');
 const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
 
+// Correct Carrefour project scope: marketing activity/task planning, management and publishing.
+const carrefourDescription = document.querySelector('#work .project .project-main > p:nth-of-type(2)');
+if (carrefourDescription) {
+  const en = carrefourDescription.querySelector('.lang-en');
+  const zh = carrefourDescription.querySelector('.lang-zh');
+  if (en) en.textContent = 'Owned the marketing campaign and task mechanics behind the event website, including campaign flow, mission design, project management, content publishing, and launch execution.';
+  if (zh) zh.textContent = '負責活動網站背後的行銷活動與任務機制規劃，包含活動流程、任務設計、專案管理與內容上架，並統籌整體上線執行。';
+}
+
 function setLanguage(language) {
   const lang = language === 'en' ? 'en' : 'zh';
   root.dataset.lang = lang;
