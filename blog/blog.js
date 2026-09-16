@@ -23,36 +23,26 @@ function insertMakotoGlassScreens() {
     {
       selector: '.article-body > .lang-zh',
       marker: '後來我才開始做 companion app',
-      caption: 'Makoto Glass 實際運行畫面：Home、AMS Now Playing、ANCS 通知紀錄、Makoto Link 連線狀態、About 與 System Status。截圖來自我目前在 Google Glass Enterprise Edition 2 上測試的版本。© MAKOTO LAB。',
-      licensingHeading: '圖片授權',
-      licensingNote: '本文中的 Makoto Glass 介面截圖則為我實際開發版本的畫面，© MAKOTO LAB。'
+      caption: 'Makoto Glass 實際運行畫面：Home、Now Playing、通知紀錄、Makoto Link、About 與 System Status。Google Glass Enterprise Edition 2 實機截圖。© MAKOTO LAB。'
     },
     {
       selector: '.article-body > .lang-en',
       marker: 'I later began building',
-      caption: 'Actual Makoto Glass interface captures: Home, AMS Now Playing, ANCS notification history, Makoto Link connection status, About, and System Status. Captured from the build I currently test on Google Glass Enterprise Edition 2. © MAKOTO LAB.',
-      licensingHeading: 'Image licensing',
-      licensingNote: 'The Makoto Glass interface captures are screenshots of my own current build and are © MAKOTO LAB.'
+      caption: 'Makoto Glass running on Google Glass Enterprise Edition 2: Home, Now Playing, notification history, Makoto Link, About and System Status. © MAKOTO LAB.'
     }
   ];
 
-  configs.forEach(({ selector, marker, caption, licensingHeading, licensingNote }) => {
+  configs.forEach(({ selector, marker, caption }) => {
     const block = document.querySelector(selector);
     if (!block || block.querySelector('.app-ui-figure')) return;
 
     const markerParagraph = [...block.querySelectorAll('p')].find((p) => p.textContent.includes(marker));
-    if (markerParagraph) {
-      const figure = document.createElement('figure');
-      figure.className = 'article-figure article-figure-wide app-ui-figure';
-      figure.innerHTML = `<img src="/assets/blog/makoto-glass-ui.svg" alt="Makoto Glass interface screenshots on Google Glass Enterprise Edition 2" loading="lazy"><figcaption>${caption}</figcaption>`;
-      markerParagraph.before(figure);
-    }
+    if (!markerParagraph) return;
 
-    const heading = [...block.querySelectorAll('h3')].find((h) => h.textContent.trim() === licensingHeading);
-    const licensingParagraph = heading && heading.nextElementSibling;
-    if (licensingParagraph && !licensingParagraph.textContent.includes('© MAKOTO LAB')) {
-      licensingParagraph.append(` ${licensingNote}`);
-    }
+    const figure = document.createElement('figure');
+    figure.className = 'article-figure article-figure-wide app-ui-figure';
+    figure.innerHTML = `<img src="/assets/blog/makoto-glass-ui.svg?v=20260917-2" alt="Makoto Glass interface screenshots on Google Glass Enterprise Edition 2" loading="eager"><figcaption>${caption}</figcaption>`;
+    markerParagraph.before(figure);
   });
 }
 
