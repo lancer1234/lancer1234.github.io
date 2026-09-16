@@ -32,6 +32,19 @@ if (mainNav) {
   }
 }
 
+const currentFeaturePrimary = document.querySelector('.current-grid > div:first-child');
+if (currentFeaturePrimary && !currentFeaturePrimary.querySelector('.current-company-brand')) {
+  const brand = document.createElement('div');
+  brand.className = 'current-company-brand';
+  const logo = document.createElement('img');
+  logo.src = '/assets/ocean-city-logo.webp';
+  logo.alt = 'OCEAN CITY';
+  logo.width = 280;
+  logo.height = 90;
+  brand.appendChild(logo);
+  currentFeaturePrimary.insertBefore(brand, currentFeaturePrimary.firstChild);
+}
+
 const carrefourDescription = document.querySelector('#work .project .project-main > p:nth-of-type(2)');
 if (carrefourDescription) {
   const en = carrefourDescription.querySelector('.lang-en');
@@ -89,7 +102,7 @@ if (profileCopy && !profileCopy.querySelector('a[href="/about/"]')) {
 }
 
 const experienceEntries = [
-  { companyZh: '洲際聯合有限公司', companyEn: '洲際聯合有限公司', roleZh: '公關副理', roleEn: 'Assistant PR Manager' },
+  { companyZh: '洲際聯合有限公司', companyEn: 'OCEAN CITY', roleZh: '公關副理', roleEn: 'Assistant PR Manager' },
   { companyZh: 'One Rule_規則王股份有限公司', companyEn: 'One Rule_規則王股份有限公司', roleZh: '行銷企劃 / 專案合作', roleEn: 'Marketing Planner / Project Contractor' },
   { companyZh: '隔壁老王數位行銷有限公司', companyEn: '隔壁老王數位行銷有限公司', roleZh: '行銷企劃 / 專案執行', roleEn: 'Marketing Planner / Project Specialist' },
   { companyZh: '殿梵聲研有限公司', companyEn: '殿梵聲研有限公司', roleZh: '營運企劃 / 專案合作', roleEn: 'Operations Planner / Project Collaboration' },
@@ -103,7 +116,7 @@ function updateExperienceLanguage(lang) {
   const currentRoleTitle = document.querySelector('.current-role strong');
   if (currentRoleTitle) currentRoleTitle.textContent = isEnglish ? 'Assistant PR Manager' : '公關副理';
   const currentRoleCompany = document.querySelector('.current-role b');
-  if (currentRoleCompany) currentRoleCompany.textContent = '洲際聯合有限公司';
+  if (currentRoleCompany) currentRoleCompany.textContent = isEnglish ? 'OCEAN CITY' : '洲際聯合有限公司';
   const currentFeatureCompany = document.querySelector('.current-grid h2');
   if (currentFeatureCompany) currentFeatureCompany.textContent = '洲際聯合有限公司';
   const currentFeatureRole = document.querySelector('.role-title');
