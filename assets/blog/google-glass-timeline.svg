@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 640" role="img" aria-labelledby="title desc">
+  <title id="title">Google Glass timeline</title>
+  <desc id="desc">A timeline from Project Glass in 2012 through Enterprise Edition 2, the end of official support, and Android XR.</desc>
+  <rect width="1400" height="640" fill="#0b0b0b"/>
+  <text x="76" y="92" fill="#f5f5f2" font-family="Arial, Helvetica, sans-serif" font-size="24" letter-spacing="4">GOOGLE GLASS / TIMELINE</text>
+  <line x1="110" y1="330" x2="1290" y2="330" stroke="#666" stroke-width="2"/>
+  <g fill="#f5f5f2" font-family="Georgia, 'Times New Roman', serif">
+    <text x="110" y="250" font-size="72">2012</text>
+    <text x="385" y="250" font-size="72">2015</text>
+    <text x="655" y="250" font-size="72">2019</text>
+    <text x="925" y="250" font-size="72">2023</text>
+    <text x="1185" y="250" font-size="72">2025</text>
+  </g>
+  <g fill="#f5f5f2"><circle cx="135" cy="330" r="7"/><circle cx="410" cy="330" r="7"/><circle cx="680" cy="330" r="7"/><circle cx="950" cy="330" r="7"/><circle cx="1210" cy="330" r="7"/></g>
+  <g fill="#f5f5f2" font-family="Arial, Helvetica, sans-serif" font-size="23">
+    <text x="110" y="390">PROJECT GLASS</text><text x="110" y="426" fill="#9b9b97" font-size="17">PUBLIC DEMO</text>
+    <text x="385" y="390">EXPLORER</text><text x="385" y="426" fill="#9b9b97" font-size="17">CONSUMER SALES END</text>
+    <text x="655" y="390">EE2</text><text x="655" y="426" fill="#9b9b97" font-size="17">ENTERPRISE EDITION 2</text>
+    <text x="925" y="390">SUPPORT ENDS</text><text x="925" y="426" fill="#9b9b97" font-size="17">SEPTEMBER 15</text>
+    <text x="1185" y="390">ANDROID XR</text><text x="1185" y="426" fill="#9b9b97" font-size="17">GLASSES RETURN</text>
+  </g>
+  <text x="76" y="570" fill="#777" font-family="Arial, Helvetica, sans-serif" font-size="16" letter-spacing="2">MAKOTO LAB / ORIGINAL GRAPHIC · 2026</text>
+</svg>
