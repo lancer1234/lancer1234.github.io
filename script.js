@@ -24,6 +24,31 @@ if (carrefourDescription) {
   if (zh) zh.textContent = '負責活動網站背後的行銷活動與任務機制規劃，包含活動流程、任務設計、專案管理與內容上架，並統籌整體上線執行。';
 }
 
+// Privacy protection: do not expose source documents or folders for the Taiwan × Korea project.
+// Some internal materials contain personal identification information, so all public links are removed.
+const sensitiveKoreaTargets = [
+  '1V8UKw-vjqHNS0yeq7G7Yl6dkprieC02l',
+  '1cU_-ZEIBvKh9z_3mRYm-k2z0drFWeBAx',
+  '1gCuCDqdClG4xFRYhRos6FYoN2CRYNjMZ',
+  '1kSMHrxPC-flfDBlpjtT3tWWM8Z9P0XCq'
+];
+
+document.querySelectorAll('a[href]').forEach((link) => {
+  if (sensitiveKoreaTargets.some((id) => link.href.includes(id))) {
+    link.remove();
+  }
+});
+
+// Remove the now-empty link container from the Korea case study so no placeholder remains.
+const koreaProject = [...document.querySelectorAll('#work .project')].find((project) =>
+  project.textContent.includes('Taiwan × Korea') || project.textContent.includes('台灣 × 韓國')
+);
+if (koreaProject) {
+  koreaProject.querySelectorAll('.inline-links').forEach((container) => {
+    if (!container.querySelector('a')) container.remove();
+  });
+}
+
 function setLanguage(language) {
   const lang = language === 'en' ? 'en' : 'zh';
   root.dataset.lang = lang;
