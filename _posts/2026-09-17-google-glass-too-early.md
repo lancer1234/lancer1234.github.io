@@ -173,8 +173,15 @@ Makoto Link 未來會負責 GPS / Location Bridge、Remote、Find Glass，以及
 
 下面不是 mockup，而是我目前在 **Google Glass Enterprise Edition 2 / Android 8.1** 上實際跑 Makoto Glass 的畫面。
 
-<figure class="article-figure article-figure-wide app-ui-figure">
-  <img src="/assets/blog/makoto-glass-ui.svg" alt="Makoto Glass 實際介面：Home、AMS Now Playing、ANCS 通知、Makoto Link、About 與 System Status" loading="lazy">
+<figure class="article-figure app-ui-figure">
+  <div class="app-ui-grid">
+    <img src="/assets/blog/glass-ui-1.png" alt="Makoto Glass Home：時間與電量" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-2.png" alt="Makoto Glass Now Playing：歌曲資訊與播放控制" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-3.png" alt="Makoto Glass ANCS 通知紀錄" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-4.png" alt="Makoto Link：iPhone 連線狀態" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-5.png" alt="Makoto Glass About：Version 1.0" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-6.png" alt="Makoto Glass System Status：電池、iPhone、Wi-Fi 與儲存空間" width="640" height="360" loading="lazy">
+  </div>
   <figcaption>Makoto Glass 實機畫面：Home、AMS Now Playing、ANCS 通知紀錄、Makoto Link 連線狀態、About 與 System Status。© MAKOTO LAB。</figcaption>
 </figure>
 
@@ -334,8 +341,15 @@ I later added the launcher, camera and photo viewer, Tilt Wake, automatic bright
 
 These are real captures from the current build running on **Google Glass Enterprise Edition 2 / Android 8.1**, not mockups.
 
-<figure class="article-figure article-figure-wide app-ui-figure">
-  <img src="/assets/blog/makoto-glass-ui.svg" alt="Makoto Glass interface showing Home, AMS Now Playing, ANCS notifications, Makoto Link, About and System Status" loading="lazy">
+<figure class="article-figure app-ui-figure">
+  <div class="app-ui-grid">
+    <img src="/assets/blog/glass-ui-1.png" alt="Makoto Glass Home showing the time and battery level" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-2.png" alt="Makoto Glass Now Playing with track information and media controls" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-3.png" alt="Makoto Glass ANCS notification history" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-4.png" alt="Makoto Link iPhone connection status" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-5.png" alt="Makoto Glass About screen showing Version 1.0" width="640" height="360" loading="lazy">
+    <img src="/assets/blog/glass-ui-6.png" alt="Makoto Glass System Status showing battery, iPhone, Wi-Fi and storage" width="640" height="360" loading="lazy">
+  </div>
   <figcaption>Current Makoto Glass UI: Home, AMS Now Playing, ANCS notification history, Makoto Link status, About and System Status. © MAKOTO LAB.</figcaption>
 </figure>
 
