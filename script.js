@@ -1,5 +1,12 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
+if (!document.querySelector('link[href="/layout-fixes.css"]')) {
+  const layoutFixes = document.createElement('link');
+  layoutFixes.rel = 'stylesheet';
+  layoutFixes.href = '/layout-fixes.css';
+  document.head.appendChild(layoutFixes);
+}
+
 const root = document.documentElement;
 const languageButton = document.querySelector('.lang-toggle');
 const savedLanguage = localStorage.getItem('portfolio-language');
@@ -25,7 +32,6 @@ if (mainNav) {
   }
 }
 
-// Correct Carrefour project scope: marketing activity/task planning, management and publishing.
 const carrefourDescription = document.querySelector('#work .project .project-main > p:nth-of-type(2)');
 if (carrefourDescription) {
   const en = carrefourDescription.querySelector('.lang-en');
@@ -34,7 +40,6 @@ if (carrefourDescription) {
   if (zh) zh.textContent = '負責活動網站背後的行銷活動與任務機制規劃，包含活動流程、任務設計、專案管理與內容上架，並統籌整體上線執行。';
 }
 
-// Privacy protection: do not expose source documents or folders for the Taiwan × Korea project.
 const sensitiveKoreaTargets = [
   '1V8UKw-vjqHNS0yeq7G7Yl6dkprieC02l',
   '1cU_-ZEIBvKh9z_3mRYm-k2z0drFWeBAx',
@@ -43,9 +48,7 @@ const sensitiveKoreaTargets = [
 ];
 
 document.querySelectorAll('a[href]').forEach((link) => {
-  if (sensitiveKoreaTargets.some((id) => link.href.includes(id))) {
-    link.remove();
-  }
+  if (sensitiveKoreaTargets.some((id) => link.href.includes(id))) link.remove();
 });
 
 const koreaProject = [...document.querySelectorAll('#work .project')].find((project) =>
@@ -57,7 +60,6 @@ if (koreaProject) {
   });
 }
 
-// The archive count block duplicated information already visible as direct project links.
 const archivePanel = document.querySelector('.archive-panel');
 if (archivePanel) {
   const archiveProject = archivePanel.closest('.project');
@@ -65,7 +67,6 @@ if (archivePanel) {
   if (archiveProject) archiveProject.classList.add('no-side');
 }
 
-// Restore the user's original positioning statements in the profile section.
 const profileQuote = document.querySelector('.profile .big-copy');
 if (profileQuote) {
   profileQuote.innerHTML = '<span class="lang-en">I believe data provides direction, while human insight and on-the-ground details bring warmth to strategy.</span><span class="lang-zh">我相信數據提供方向，而人性與現場細節讓策略更有溫度。</span>';
@@ -87,8 +88,6 @@ if (profileCopy && !profileCopy.querySelector('a[href="/about/"]')) {
   profileCopy.appendChild(aboutLink);
 }
 
-// Job titles are translated with the site language.
-// Company names only switch to English where an established/official English name is publicly documented.
 const experienceEntries = [
   { companyZh: '洲際聯合有限公司', companyEn: '洲際聯合有限公司', roleZh: '公關副理', roleEn: 'Assistant PR Manager' },
   { companyZh: 'One Rule_規則王股份有限公司', companyEn: 'One Rule_規則王股份有限公司', roleZh: '行銷企劃 / 專案合作', roleEn: 'Marketing Planner / Project Contractor' },
@@ -101,21 +100,16 @@ const experienceEntries = [
 
 function updateExperienceLanguage(lang) {
   const isEnglish = lang === 'en';
-
   const currentRoleTitle = document.querySelector('.current-role strong');
   if (currentRoleTitle) currentRoleTitle.textContent = isEnglish ? 'Assistant PR Manager' : '公關副理';
-
   const currentRoleCompany = document.querySelector('.current-role b');
   if (currentRoleCompany) currentRoleCompany.textContent = '洲際聯合有限公司';
-
   const currentFeatureCompany = document.querySelector('.current-grid h2');
   if (currentFeatureCompany) currentFeatureCompany.textContent = '洲際聯合有限公司';
-
   const currentFeatureRole = document.querySelector('.role-title');
   if (currentFeatureRole) currentFeatureRole.textContent = isEnglish ? 'Assistant PR Manager' : '公關副理';
 
-  const rows = [...document.querySelectorAll('.exp-list .exp')];
-  rows.forEach((row, index) => {
+  [...document.querySelectorAll('.exp-list .exp')].forEach((row, index) => {
     const entry = experienceEntries[index];
     if (!entry) return;
     const company = row.querySelector('h3');
@@ -128,7 +122,6 @@ function updateExperienceLanguage(lang) {
 function updateEducationLanguage(lang) {
   const education = [...document.querySelectorAll('.profile-copy p')].find((p) => p.textContent.includes('銘傳大學') || p.textContent.includes('Ming Chuan University'));
   if (!education) return;
-
   const lineBreaks = education.querySelectorAll('br');
   if (!lineBreaks.length) return;
 
@@ -159,24 +152,18 @@ function setLanguage(language) {
 }
 
 setLanguage(savedLanguage || browserLanguage);
-
 if (languageButton) {
-  languageButton.addEventListener('click', () => {
-    setLanguage(root.dataset.lang === 'zh' ? 'en' : 'zh');
-  });
+  languageButton.addEventListener('click', () => setLanguage(root.dataset.lang === 'zh' ? 'en' : 'zh'));
 }
 
 const sections = [...document.querySelectorAll('main section[id]')];
 const navLinks = [...document.querySelectorAll('.topbar nav a[href^="#"]')];
-
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     navLinks.forEach((link) => {
-      const active = link.getAttribute('href') === `#${entry.target.id}`;
-      link.style.opacity = active ? '1' : '.62';
+      link.style.opacity = link.getAttribute('href') === `#${entry.target.id}` ? '1' : '.62';
     });
   });
 }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
-
 sections.forEach((section) => observer.observe(section));
