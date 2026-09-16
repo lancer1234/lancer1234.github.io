@@ -17,7 +17,7 @@ function setLanguage(language) {
 }
 
 async function loadGlassScreens() {
-  const urls = Array.from({ length: 6 }, (_, index) => `/assets/blog/glass-ui-${index + 1}.txt?v=20260917-5`);
+  const urls = Array.from({ length: 6 }, (_, index) => `/assets/blog/glass-ui-${index + 1}.txt?v=20260917-6`);
   return Promise.all(urls.map(async (url) => {
     const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Unable to load ${url}`);
@@ -72,6 +72,7 @@ async function replaceMakotoGlassScreens() {
       img.src = src;
       img.alt = `Makoto Glass interface screenshot ${index + 1}`;
       img.loading = 'eager';
+      img.decoding = 'async';
       grid.appendChild(img);
     });
 
