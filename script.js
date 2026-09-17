@@ -12,7 +12,6 @@ const languageButton = document.querySelector('.lang-toggle');
 const savedLanguage = localStorage.getItem('portfolio-language');
 const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
 
-// Add ABOUT and BLOG as first-class items in the main navigation.
 const mainNav = document.querySelector('.topbar nav');
 if (mainNav) {
   const contactLink = mainNav.querySelector('a[href="#contact"]');
@@ -60,6 +59,18 @@ if (carrefourDescription) {
   const zh = carrefourDescription.querySelector('.lang-zh');
   if (en) en.textContent = 'Owned the marketing campaign and task mechanics behind the event website, including campaign flow, mission design, project management, content publishing, and launch execution.';
   if (zh) zh.textContent = '負責活動網站背後的行銷活動與任務機制規劃，包含活動流程、任務設計、專案管理與內容上架，並統籌整體上線執行。';
+}
+
+const tianmuProject = document.querySelector('#work .project-numbers');
+if (tianmuProject) {
+  const stats = tianmuProject.querySelectorAll('.number-stack > div');
+  if (stats[1]) {
+    const number = stats[1].querySelector('strong');
+    const label = stats[1].querySelector('span');
+    if (number) number.textContent = 'TOP 10';
+    if (label) label.textContent = 'LOCAL GOOGLE MAPS';
+  }
+  if (stats[2]) stats[2].remove();
 }
 
 const sensitiveKoreaTargets = [
