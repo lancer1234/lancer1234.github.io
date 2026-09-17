@@ -45,7 +45,7 @@ layout: null
         <h2><span class="lang-en">{{ post.title_en | default: post.title }}</span><span class="lang-zh">{{ post.title_zh | default: post.title }}</span></h2>
         <p><span class="lang-en">{{ post.description_en | default: post.excerpt | strip_html | truncate: 150 }}</span><span class="lang-zh">{{ post.description_zh | default: post.excerpt | strip_html | truncate: 90 }}</span></p>
       </div>
-      <div class="post-arrow">↗</div>
+      <div class="post-arrow">&#8599;&#65038;</div>
     </a>
     {% endfor %}
   </section>
