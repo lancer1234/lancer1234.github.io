@@ -1,3 +1,6 @@
+body{-webkit-text-size-adjust:100%}
+.hero h1,.current-role strong,.current-grid h2,.project-index,.project-main h2,.number-stack strong,.editorial-panel span,.editorial-panel i,.lab-head h2,.lab-card h3,.big-copy,.contact h2{font-family:"Times New Roman","Songti TC","Songti SC",STSong,"Noto Serif CJK TC",serif}
+
 @media (min-width:901px){
   .current-grid{grid-template-columns:minmax(620px,1.16fr) minmax(0,.84fr);gap:64px}
   .current-grid h2{font-size:clamp(50px,5.15vw,80px);max-width:none;white-space:nowrap;word-break:keep-all;line-break:strict}
@@ -15,12 +18,69 @@
 .lab-card-demo:hover .lab-actions .lab-live{background:#0b0b0b;color:#fff;border-color:#0b0b0b}
 .lab-actions .lab-source:hover{background:#fff;color:#0b0b0b}
 .lab-card-demo:hover .lab-actions .lab-source:hover{background:#0b0b0b;color:#fff;border-color:#0b0b0b}
+
 @media (max-width:900px){
   .current-grid h2{white-space:normal;word-break:keep-all;line-break:strict}
-  .current-copy dd,.current-copy>p{word-break:normal;overflow-wrap:anywhere}
+  .current-copy dd,.current-copy>p{word-break:normal;overflow-wrap:normal}
   .current-company-brand{margin-bottom:22px;min-height:0}
   .current-company-brand img{width:min(240px,68vw)}
 }
+
 @media (max-width:620px){
-  .lab-actions{grid-template-columns:1fr}
+  .wrap{width:calc(100% - 40px)}
+  .topbar{padding:15px 20px}
+  .topbar-right{gap:14px}
+  .nameplate{font-size:12px}
+  .lang-toggle{padding:8px 11px;font-size:10px}
+  .topbar nav a[href="#lab"]{font-size:10px;letter-spacing:.07em}
+
+  .current-feature{padding-bottom:58px}
+  .current-grid{padding-top:28px;gap:28px}
+  .current-company-brand{margin-bottom:18px}
+  .current-company-brand img{width:min(190px,56vw)}
+  .current-grid h2{font-size:clamp(40px,11.5vw,50px);line-height:.96;letter-spacing:-.035em}
+  .role-title{margin:10px 0 0;font-size:13px}
+  .current-copy>p{font-size:16px;line-height:1.55;margin-bottom:24px}
+  .current-copy dl{grid-template-columns:72px minmax(0,1fr);gap:12px;padding-top:13px;margin-bottom:20px}
+  .current-copy dt{font-size:9px}
+  .current-copy dd{font-size:12px;line-height:1.65}
+  .document-link{margin-top:18px;padding:14px 0}
+  .document-link b{font-size:12px}
+  .document-link small,.document-link i{font-size:8px}
+
+  .section-kicker{padding:12px 0}
+  .work{padding-bottom:70px}
+  .project,.project-wide,.project-numbers,.split-visual,.project.no-side{display:block;padding:30px 0 46px}
+  .project-index{margin:0 0 14px;font-size:16px;line-height:1}
+  .project-meta{margin:0 0 12px;font-size:9px;line-height:1.45}
+  .project-main h2{font-size:clamp(34px,10.5vw,45px);line-height:.98;letter-spacing:-.03em;margin-bottom:20px;word-break:keep-all;line-break:strict}
+  .project-main>p:not(.project-meta){font-size:15px;line-height:1.6}
+  .project-image,.project-side,.editorial-panel{display:block;width:100%;margin:28px 0 0}
+  .project-image img{width:100%;max-height:none}
+  .project-side{display:flex}
+  .inline-links{margin-top:22px;gap:12px}
+  .text-link,.inline-links a{font-size:10px}
+  .number-stack{margin-top:4px}
+  .number-stack>div{padding:12px 0 14px}
+  .number-stack strong{font-size:42px}
+  .number-stack span{font-size:9px}
+
+  .lab-section{padding-bottom:64px}
+  .lab-head{padding:34px 0 40px;gap:24px}
+  .lab-head h2{font-size:48px;line-height:.9}
+  .lab-head>p{font-size:16px;line-height:1.55}
+  .lab-card{min-height:230px;padding:20px}
+  .lab-card h3{font-size:34px;margin:32px 0 16px}
+  .lab-card p{font-size:13px;line-height:1.55}
+  .lab-actions{grid-template-columns:1fr;padding-top:26px}
+
+  .experience{padding:66px 0 78px}
+  .exp{padding:18px 0}
+  .exp h3{font-size:18px}
+  .profile{padding-bottom:76px}
+  .profile-grid{padding-top:30px;gap:34px}
+  .big-copy{font-size:36px;line-height:1.08}
+  .profile-copy p{font-size:13px;line-height:1.6;margin-bottom:22px}
+  .contact{padding:62px 0 38px}
+  .contact h2{font-size:48px;line-height:.92;margin:22px 0 34px}
 }
