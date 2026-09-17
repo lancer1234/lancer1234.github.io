@@ -31,12 +31,12 @@ a{font-variant-emoji:text}
 @media (max-width:620px){
   .wrap{width:calc(100% - 40px)}
   .topbar{padding:15px 20px}
-  .topbar-right{gap:12px}
+  .topbar-right{gap:10px;min-width:0}
   .nameplate{font-size:12px;white-space:nowrap}
   .lang-toggle{padding:8px 10px;font-size:10px;flex:0 0 auto}
-  .topbar nav{display:flex;align-items:center;gap:10px;white-space:nowrap}
-  .topbar nav a{display:none!important;font-size:9px;letter-spacing:.06em}
-  .topbar nav a[href="#lab"],.topbar nav a[href="/blog/"]{display:block!important}
+  .topbar nav{display:flex;align-items:center;gap:9px;white-space:nowrap;min-width:0}
+  .topbar nav a{display:none!important;font-size:9px;letter-spacing:.05em}
+  .topbar nav a[href="/about/"],.topbar nav a[href="/blog/"]{display:block!important}
 
   .current-feature{padding-bottom:58px}
   .current-grid{padding-top:28px;gap:28px}
