@@ -1,5 +1,7 @@
 body{-webkit-text-size-adjust:100%}
 .hero h1,.current-role strong,.current-grid h2,.project-index,.project-main h2,.number-stack strong,.editorial-panel span,.editorial-panel i,.lab-head h2,.lab-card h3,.big-copy,.contact h2{font-family:"Times New Roman","Songti TC","Songti SC",STSong,"Noto Serif CJK TC",serif}
+html[data-lang="zh"] .current-role strong,html[data-lang="zh"] .current-grid h2,html[data-lang="zh"] .project-main h2,html[data-lang="zh"] .lab-head h2,html[data-lang="zh"] .lab-card h3,html[data-lang="zh"] .big-copy,html[data-lang="zh"] .contact h2{font-family:"Songti TC","STSong","Songti SC",serif!important;font-synthesis:none}
+a{font-variant-emoji:text}
 
 @media (min-width:901px){
   .current-grid{grid-template-columns:minmax(620px,1.16fr) minmax(0,.84fr);gap:64px}
@@ -29,10 +31,12 @@ body{-webkit-text-size-adjust:100%}
 @media (max-width:620px){
   .wrap{width:calc(100% - 40px)}
   .topbar{padding:15px 20px}
-  .topbar-right{gap:14px}
-  .nameplate{font-size:12px}
-  .lang-toggle{padding:8px 11px;font-size:10px}
-  .topbar nav a[href="#lab"]{font-size:10px;letter-spacing:.07em}
+  .topbar-right{gap:12px}
+  .nameplate{font-size:12px;white-space:nowrap}
+  .lang-toggle{padding:8px 10px;font-size:10px;flex:0 0 auto}
+  .topbar nav{display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .topbar nav a{display:none!important;font-size:9px;letter-spacing:.06em}
+  .topbar nav a[href="#lab"],.topbar nav a[href="/blog/"]{display:block!important}
 
   .current-feature{padding-bottom:58px}
   .current-grid{padding-top:28px;gap:28px}
