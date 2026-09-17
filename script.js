@@ -102,19 +102,19 @@ if (archivePanel) {
 
 const labDemos = {
   'RED FLAG DETECTOR': {
-    live: 'https://lancer1234.github.io/RED-FLAG-DETECTOR/',
+    live: 'https://makotolab.tw/RED-FLAG-DETECTOR/',
     repo: 'https://github.com/lancer1234/RED-FLAG-DETECTOR'
   },
   'P2P Chat': {
-    live: 'https://lancer1234.github.io/p2p-chat/',
+    live: 'https://makotolab.tw/p2p-chat/',
     repo: 'https://github.com/lancer1234/p2p-chat'
   },
   'Y2K Cam': {
-    live: 'https://lancer1234.github.io/y2k-cam/',
+    live: 'https://makotolab.tw/y2k-cam/',
     repo: 'https://github.com/lancer1234/y2k-cam'
   },
   'Online Warmer': {
-    live: 'https://lancer1234.github.io/online-warmer/',
+    live: 'https://makotolab.tw/online-warmer/',
     repo: 'https://github.com/lancer1234/online-warmer'
   }
 };

@@ -10,7 +10,7 @@ Marketing · Public Relations · Experiential Campaigns · Visual Production
 
 Once GitHub Pages is enabled for the `main` branch, the site will be available at:
 
-**https://lancer1234.github.io**
+**https://makotolab.tw**
 
 ## Structure
 
