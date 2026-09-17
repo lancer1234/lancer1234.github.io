@@ -50,8 +50,8 @@ if (carrefourProject) {
   const title = carrefourProject.querySelector('h2');
   const titleEn = title?.querySelector('.lang-en');
   const titleZh = title?.querySelector('.lang-zh');
-  if (titleEn) titleEn.textContent = 'Carrefour Cheer Squad / KOL Coordination';
-  if (titleZh) titleZh.textContent = '家樂福應援團 KOL 對接管理';
+  if (titleEn) titleEn.innerHTML = 'Carrefour Cheer Squad<br>KOL Coordination';
+  if (titleZh) titleZh.innerHTML = '家樂福應援團<br>KOL 對接管理';
 }
 
 const carrefourDescription = document.querySelector('#work .project .project-main > p:nth-of-type(2)');
