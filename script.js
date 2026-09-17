@@ -45,6 +45,15 @@ if (currentFeaturePrimary && !currentFeaturePrimary.querySelector('.current-comp
   currentFeaturePrimary.insertBefore(brand, currentFeaturePrimary.firstChild);
 }
 
+const carrefourProject = document.querySelector('#work .project');
+if (carrefourProject) {
+  const title = carrefourProject.querySelector('h2');
+  const titleEn = title?.querySelector('.lang-en');
+  const titleZh = title?.querySelector('.lang-zh');
+  if (titleEn) titleEn.textContent = 'Carrefour Cheer Squad / KOL Coordination';
+  if (titleZh) titleZh.textContent = '家樂福應援團 KOL 對接管理';
+}
+
 const carrefourDescription = document.querySelector('#work .project .project-main > p:nth-of-type(2)');
 if (carrefourDescription) {
   const en = carrefourDescription.querySelector('.lang-en');
