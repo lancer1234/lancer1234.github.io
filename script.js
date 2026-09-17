@@ -231,6 +231,15 @@ if (languageButton) {
   languageButton.addEventListener('click', () => setLanguage(root.dataset.lang === 'zh' ? 'en' : 'zh'));
 }
 
+document.querySelectorAll('a').forEach((link) => {
+  const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach((node) => {
+    if (node.nodeValue.includes('↗')) node.nodeValue = node.nodeValue.replaceAll('↗', '↗︎');
+  });
+});
+
 const sections = [...document.querySelectorAll('main section[id]')];
 const navLinks = [...document.querySelectorAll('.topbar nav a[href^="#"]')];
 const observer = new IntersectionObserver((entries) => {
