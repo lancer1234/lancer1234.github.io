@@ -3,3 +3,18 @@
 .lab-project-warm {
   background: #0b0b0b;
 }
+
+.lab-project-glass {
+  grid-column: auto;
+  min-height: 325px;
+}
+
+.lab-project-glass h2 {
+  font-size: clamp(38px, 4vw, 62px);
+}
+
+@media (max-width: 760px) {
+  .lab-project-glass {
+    min-height: 280px;
+  }
+}
