@@ -1,37 +1,34 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-lang="zh">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="MAKOTO LAB — Independent studio for interactive software and experimental interfaces." />
-  <meta name="theme-color" content="#ffffff" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="MAKOTO LAB — Independent studio for interactive software and experimental interfaces." /><meta name="theme-color" content="#0b0b0b" />
   <title>MAKOTO LAB — Independent Studio</title>
-  <link rel="stylesheet" href="../site-pages.css" />
+  <link rel="stylesheet" href="../site-pages.css" /><link rel="stylesheet" href="../site-pages-redesign.css" /><link rel="stylesheet" href="../lab-quotes.css" /><link rel="stylesheet" href="../lab-language.css" />
 </head>
-<body>
-  <header class="page-bar"><a href="../">DANNY WANG</a><a href="../privacy/">PRIVACY POLICY ↗</a></header>
-  <main class="page">
-    <p class="eyebrow">MAKOTO LAB / PERSONAL STUDIO</p>
-    <h1>MAKOTO<br>LAB</h1>
-    <div class="studio-grid">
-      <div>
-        <p class="lede">一間獨立的軟體與互動實驗工作室，專注將有趣的硬體、即時資料與不按牌理的介面，做成真正可使用的產品。</p>
-        <p>MAKOTO LAB 是 Danny Wang 在工作之外自主發起的設計與工程實驗。從 Google Glass、iPhone 連線工具到駕駛性能紀錄，我們偏好小而完整、直接、可被實際使用的軟體。</p>
-      </div>
-      <aside class="contact-card" id="contact">
-        <h2>Contact</h2>
-        <p>產品合作、媒體詢問、技術交流或 Miles 支援，歡迎聯絡。</p>
-        <a href="mailto:danny950811@gmail.com">danny950811@gmail.com ↗</a>
-        <a href="https://www.instagram.com/d.wang___" target="_blank" rel="noreferrer">INSTAGRAM / @d.wang___ ↗</a>
-        <a href="https://github.com/lancer1234" target="_blank" rel="noreferrer">GITHUB / lancer1234 ↗</a>
-      </aside>
-    </div>
-    <section class="project-list" aria-label="Projects">
-      <article><small>01 / iOS</small><div><h3>Miles</h3><p>以 iPhone GPS 與動作感測資料紀錄直線加速、400 m、G 值曲線與簡約路線；支援汽車、機車模式及使用者私人 iCloud 備份。</p></div></article>
-      <article><small>02 / WEARABLE</small><div><h3>Makoto Glass</h3><p>為 Google Glass 打造的系統介面實驗，透過 Apple ANCS 與 AMS 將 iPhone 通知與媒體控制帶到穿戴裝置。</p></div></article>
-      <article><small>03 / WEB</small><div><h3>Interface Experiments</h3><p>小型、完整、可直接開啟使用的互動工具與非典型運算實驗。</p></div></article>
+<body class="lab-page">
+  <header class="page-bar page-bar-dark"><a href="../">DANNY WANG</a><div class="page-actions"><a href="../privacy/"><span class="lang-en">PRIVACY POLICY ↗</span><span class="lang-zh">隱私權政策 ↗</span></a><button class="lang-toggle" type="button" aria-label="Switch to English"><span class="lang-zh">EN</span><span class="lang-en">中文</span></button></div></header>
+  <main>
+    <section class="lab-hero lab-shell">
+      <div class="lab-hero-meta"><span>TAIPEI / INDEPENDENT STUDIO</span><span><span class="lang-en">SOFTWARE · WEARABLE · INTERFACE</span><span class="lang-zh">軟體 · 穿戴裝置 · 互動介面</span></span></div>
+      <p class="eyebrow">MAKOTO LAB / <span class="lang-en">PERSONAL STUDIO</span><span class="lang-zh">個人工作室</span></p>
+      <h1>MAKOTO<br>LAB</h1>
+      <div class="lab-hero-foot"><p><span class="lang-en">An independent studio for turning curious hardware, real-time data, and unconventional interfaces into products people can actually use.</span><span class="lang-zh">一間獨立的軟體與互動實驗工作室，專注將有趣的硬體、即時資料與不按牌理的介面，做成真正可使用的產品。</span></p><p class="lab-statement"><span class="lang-en">Independently created by Danny Wang. From Google Glass and iPhone connection tools to performance logging, the work favors small, complete, direct software built for real use.</span><span class="lang-zh">由 Danny Wang 自主發起。從 Google Glass、iPhone 連線工具到駕駛性能紀錄，偏好小而完整、直接、可被實際使用的軟體。</span></p></div>
     </section>
+    <section class="lab-work lab-shell" aria-labelledby="projects-title">
+      <div class="lab-section-head"><p class="eyebrow" id="projects-title"><span class="lang-en">SELECTED PROJECTS / 06</span><span class="lang-zh">精選專案 / 06</span></p><p><span class="lang-en">Every project starts with a concrete question: how to make old hardware useful again, make data easier to understand, or turn an absurd idea into an interactive experiment.</span><span class="lang-zh">每個專案都從一個具體問題出發：讓舊硬體重新有用、讓資料更容易理解，或把一個荒謬的想法做成可互動的實驗。</span></p></div>
+      <div class="lab-project-grid">
+        <article class="lab-project lab-project-miles"><div class="lab-project-top"><span>01 / iOS</span><span><span class="lang-en">PRIVATE BETA</span><span class="lang-zh">私人測試版</span></span></div><div><h2>Miles</h2><p><span class="lang-en">An iPhone performance logger for acceleration, 400 m runs, G-force curves, and minimal route records using GPS and motion data. Supports car and motorcycle modes with private iCloud backup.</span><span class="lang-zh">以 iPhone GPS 與動作感測資料紀錄直線加速、400 m、G 值曲線與簡約路線；支援汽車、機車模式及使用者私人 iCloud 備份。</span></p></div><div class="lab-tags"><span>GPS</span><span>CORE MOTION</span><span>ICLOUD</span></div></article>
+        <a class="lab-project lab-project-glass" href="https://github.com/lancer1234/MakotoGlass-Beta" target="_blank" rel="noreferrer"><div class="lab-project-top"><span>02 / <span class="lang-en">WEARABLE</span><span class="lang-zh">穿戴裝置</span></span><span><span class="lang-en">PUBLIC BETA ↗</span><span class="lang-zh">公開測試版 ↗</span></span></div><div><h2>Makoto<br>Glass</h2><p><span class="lang-en">A Google Glass system shell that brings iPhone notifications, Now Playing, and media controls to Glass through Apple ANCS and AMS.</span><span class="lang-zh">為 Google Glass 打造的系統介面，透過 Apple ANCS 與 AMS 將 iPhone 通知、Now Playing 與媒體控制帶到 Glass。</span></p></div><div class="lab-tags"><span>GOOGLE GLASS</span><span>ANCS</span><span>AMS</span><span>ANDROID</span></div></a>
+        <a class="lab-project" href="https://makotolab.tw/p2p-chat/" target="_blank" rel="noreferrer"><div class="lab-project-top"><span>03 / <span class="lang-en">COMMUNICATION</span><span class="lang-zh">通訊</span></span><span><span class="lang-en">OPEN APP ↗</span><span class="lang-zh">開啟 App ↗</span></span></div><div><h2>P2P Chat</h2><p><span class="lang-en">A one-to-one browser chat tool that favors direct P2P connections, with encrypted relay fallback when needed.</span><span class="lang-zh">瀏覽器端一對一聊天工具，優先建立 Direct P2P 連線，必要時可切換加密 Relay。</span></p></div><div class="lab-tags"><span>WEBRTC</span><span>P2P</span><span>LOCAL-FIRST</span></div></a>
+        <a class="lab-project" href="https://makotolab.tw/RED-FLAG-DETECTOR/" target="_blank" rel="noreferrer"><div class="lab-project-top"><span>04 / <span class="lang-en">GAME</span><span class="lang-zh">遊戲</span></span><span><span class="lang-en">OPEN APP ↗</span><span class="lang-zh">開啟 App ↗</span></span></div><div><h2>Red Flag<br>Detector</h2><p><span class="lang-en">An interactive relationship-scenario game with branching events, character responses, persistent state, and multiple behavioral dimensions.</span><span class="lang-zh">戀愛情境選擇遊戲，結合連續事件、角色回應、狀態記憶與多維數值系統。</span></p></div><div class="lab-tags"><span>INTERACTIVE</span><span>WEB</span><span>STORY SYSTEM</span></div></a>
+        <a class="lab-project" href="https://makotolab.tw/y2k-cam/" target="_blank" rel="noreferrer"><div class="lab-project-top"><span>05 / <span class="lang-en">CAMERA</span><span class="lang-zh">相機</span></span><span><span class="lang-en">OPEN APP ↗</span><span class="lang-zh">開啟 App ↗</span></span></div><div><h2>Y2K Cam</h2><p><span class="lang-en">A retro browser camera with real-time ASCII art and GameBoy-inspired 8-bit pixel filters.</span><span class="lang-zh">復古網頁相機，包含即時 ASCII Art 與 GameBoy 風格 8-bit 像素濾鏡。</span></p></div><div class="lab-tags"><span>CAMERA</span><span>REAL-TIME</span><span>WEB</span></div></a>
+        <a class="lab-project lab-project-warm" href="https://makotolab.tw/online-warmer/" target="_blank" rel="noreferrer"><div class="lab-project-top"><span>06 / <span class="lang-en">WEB EXPERIMENT</span><span class="lang-zh">網頁實驗</span></span><span><span class="lang-en">OPEN APP ↗</span><span class="lang-zh">開啟 App ↗</span></span></div><div><h2>Online<br>Warmer</h2><p><span class="lang-en">A deliberately absurd experiment that turns CPU, GPU, memory, and media work into device heat, with thermal and battery safeguards.</span><span class="lang-zh">一個故意很荒謬的網頁實驗：讓 CPU、GPU、記憶體與媒體編碼提高負載，把耗電轉成熱。</span></p></div><div class="lab-tags"><span>WEBGL</span><span>WORKERS</span><span>PERFORMANCE</span></div></a>
+      </div>
+    </section>
+    <section class="lab-contact lab-shell" id="contact"><p class="eyebrow"><span class="lang-en">THOUGHTS / CONTACT</span><span class="lang-zh">想法 / 聯絡</span></p><blockquote><span class="lang-en">“The future is already here —<br>it’s just not evenly distributed.”</span><span class="lang-zh">「未來早已在這裡，<br>只是分布得還不平均。」</span><cite>William Gibson</cite></blockquote><div><p class="lab-quote-note"><span class="lang-en">“Any sufficiently advanced technology is indistinguishable from magic.”</span><span class="lang-zh">「任何足夠先進的科技，都與魔法無異。」</span><br><span>Arthur C. Clarke</span></p><p><span class="lang-en">For product collaboration, media inquiries, technical exchange, or Miles support, get in touch.</span><span class="lang-zh">產品合作、媒體詢問、技術交流或 Miles 支援，歡迎聯絡。</span></p><a href="mailto:danny950811@gmail.com">danny950811@gmail.com ↗</a><a href="https://www.instagram.com/d.wang___" target="_blank" rel="noreferrer">INSTAGRAM / @d.wang___ ↗</a><a href="https://github.com/lancer1234" target="_blank" rel="noreferrer">GITHUB / lancer1234 ↗</a></div></section>
   </main>
-  <footer class="page-footer"><span>© 2026 MAKOTO LAB</span><span><a href="../">Portfolio</a> · <a href="../privacy/">Privacy</a></span></footer>
+  <footer class="page-footer page-footer-dark"><span>© 2026 MAKOTO LAB</span><span><a href="../"><span class="lang-en">Portfolio</span><span class="lang-zh">作品集</span></a> · <a href="../privacy/"><span class="lang-en">Privacy</span><span class="lang-zh">隱私權政策</span></a></span></footer>
+  <script src="../lab-language.js"></script>
 </body>
 </html>
