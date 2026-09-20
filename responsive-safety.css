@@ -1,0 +1,94 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+a,
+.post-arrow,
+.back {
+  font-variant-emoji: text;
+}
+
+@media (max-width: 780px) {
+  .topbar,
+  .topbar-right,
+  .page-bar,
+  .page-actions,
+  .article,
+  .article-top,
+  .article-body,
+  .project-main,
+  .lab-project,
+  .privacy-shell,
+  .privacy-copy,
+  .about-copy {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .blog-hero h1,
+  .blog-hero h1 .lang-en,
+  .blog-hero h1 .lang-zh,
+  .article h1,
+  .article h1 .lang-en,
+  .article h1 .lang-zh,
+  .article .dek,
+  .article-body,
+  .article-body p,
+  .article-body h2,
+  .article-body h3,
+  .privacy-copy p,
+  .privacy-copy li,
+  .about-copy p,
+  .page h1,
+  .page h2,
+  .lab-project h2,
+  .lab-project p {
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+    word-break: normal;
+    line-break: loose;
+    overflow-wrap: anywhere;
+  }
+
+  .blog-hero h1,
+  .blog-hero h1 .lang-en,
+  .blog-hero h1 .lang-zh,
+  .article h1,
+  .article h1 .lang-en,
+  .article h1 .lang-zh {
+    font-size: clamp(38px, 10.5vw, 48px);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .blog-hero h1,
+  .blog-hero h1 .lang-en,
+  .blog-hero h1 .lang-zh {
+    font-size: clamp(42px, 12vw, 54px);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+  }
+
+  .page-bar,
+  .page-actions {
+    gap: 10px;
+  }
+
+  .page-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
