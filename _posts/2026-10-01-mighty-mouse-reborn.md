@@ -100,11 +100,7 @@ MightyScroll 是我做的 macOS 選單列 App，開發與實機測試使用的�
 
 目前 MightyScroll 專注在捲動手感，尚未提供中鍵或側邊擠壓按鍵的重新配置。
 
-但做成日常能用的工具，還有一些不會出現在功能標題裡的細節。
-
-例如捲動還在延續時，游標也可能正在移動。如果輸出的捲動事件一直帶著舊座標，就會讓游標被拉回去。MightyScroll 會在輸出時採用當下游標位置，讓捲動與游標移動能一起發生。
-
-藍牙斷線再連上，也要重新辨識裝置、恢復設定；登入時自動啟動，則讓我不用每次開機再手動打開它。我想要的是，每天坐回桌前，它就能用熟悉的方式繼續工作。
+登入時自動啟動，讓我不用每次開機再手動打開它。每天坐回桌前，就能用熟悉的方式繼續工作。
 
 <figure class="article-figure" style="max-width:580px;margin-left:auto;margin-right:auto">
   <img src="/assets/blog/mightyscroll-settings.png" alt="MightyScroll 實際設定畫面：快速連滾加速、連滾慣性、上下左右反轉方向與登入時啟動" width="1184" height="1728" loading="lazy">
@@ -217,11 +213,7 @@ MightyScroll is my macOS menu bar app, developed and tested with the A1197. It p
 
 MightyScroll currently focuses on scrolling; it does not yet remap the middle button or side squeeze.
 
-Making it usable every day also meant handling the less visible details.
-
-When momentum continues, the pointer may be moving too. Reusing an old coordinate in generated scroll events can pull the pointer back. MightyScroll samples the current pointer location when it emits those events.
-
-It also recovers device recognition after a Bluetooth reconnection and offers launch at login. I want it to be ready with the same familiar behavior whenever I sit down at my desk.
+Launch at login means I do not have to open it manually after starting my Mac. It is ready with the same familiar behavior whenever I sit down at my desk.
 
 <figure class="article-figure" style="max-width:580px;margin-left:auto;margin-right:auto">
   <img src="/assets/blog/mightyscroll-settings.png" alt="Actual MightyScroll settings in Traditional Chinese, showing acceleration, momentum, vertical and horizontal reversal, and launch at login" width="1184" height="1728" loading="lazy">
