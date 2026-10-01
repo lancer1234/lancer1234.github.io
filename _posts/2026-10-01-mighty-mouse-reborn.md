@@ -20,7 +20,13 @@ description_en: An A1197, a tiny scroll ball, and MightyScroll — the software 
 
 我想買的，其實就是這種不同的操作方式。
 
-拿到實物後，最吸引我的仍然是那種乾淨的外形。看起來沒有太多按鍵，但握住它、按下上蓋、再碰到小滾球，才會發現功能被藏在手指能自然接觸的位置。
+拿到實物後，我最先注意到的是它那片光滑、完整的白色上蓋。圓潤的輪廓像一顆被仔細打磨過的白色卵石，沒有左右按鍵的分割線，也沒有一排搶著被看見的功能鍵；中央那顆小滾球，反而成了整個外形最有辨識度的細節。
+
+把它放回二十年前的桌面，這樣的設計在我眼裡，簡直像是來自未來的物件。更有趣的是，拿到今天，它依舊不顯得過時。那種未來感沒有靠誇張的線條或裝飾撐起來，而是來自乾淨的比例、連續的曲面，以及把功能藏得恰到好處的克制。
+
+**二十年過去，它看起來仍然像一隻可以在今天重新推出的滑鼠。**
+
+直到握住它、按下上蓋、再碰到小滾球，才會發現，這個安靜的外形裡其實藏著比第一眼更多的操作。
 
 它讓我重新想了一次：滑鼠的進步，一定要把所有實體操作都換成觸控嗎？
 
@@ -31,21 +37,19 @@ description_en: An A1197, a tiny scroll ball, and MightyScroll — the software 
 
 ## 把功能藏進一個簡單的外形
 
-Mighty Mouse 的起點是 [2005 年 8 月 2 日推出的有線版](https://www.apple.com/newsroom/2005/08/02Apple-Introduces-Mighty-Mouse/)。[2006 年 7 月 25 日，Apple 再推出無線版](https://www.apple.com/newsroom/2006/07/25Apple-Debuts-Wireless-Mighty-Mouse/)，加入 Bluetooth 2.0 與雷射追蹤；我買的 A1197，就是這一代無線型號，型號也能在 [Apple 原廠手冊](https://usermanual.wiki/Apple/MightyMouse.1854576287.pdf)的認證資料中確認。
+Mighty Mouse 的起點是 2005 年 8 月 2 日推出的有線版。2006 年 7 月 25 日，Apple 再推出無線版，加入 Bluetooth 2.0 與雷射追蹤；我買的 A1197，就是這一代無線型號。
 
-談它的設計背景，很難不想到 **Jony Ive 與當時的 Apple 工業設計團隊**。[Apple 對 Ive 的官方回顧](https://www.apple.com/newsroom/2019/06/jony-ive-to-form-independent-design-company-with-apple-as-client/)強調了他與團隊建立的設計文化。不過，Mighty Mouse 的發表資料並未列出一位獨立主設計師；這裡更適合把它放在 Ive 時代的團隊脈絡中理解。
+談它的設計背景，很難不想到 **Jony Ive 與當時的 Apple 工業設計團隊**。Mighty Mouse 並沒有在發表資料中被歸功於一位獨立主設計師，但把它放在 Ive 時代的團隊脈絡裡看，就能感受到那種熟悉的設計語言：乾淨的表面、克制的線條，以及藏在簡單外形裡的功能。
 
-Apple 當年的產品理念很清楚：增加多鍵功能，同時保留單鍵滑鼠的簡單感。完整上蓋透過觸碰感測辨識左右點擊，小滾球能多方向捲動與按下，側邊則能擠壓操作。這些功能由 [原始發表資料](https://www.apple.com/newsroom/2005/08/02Apple-Introduces-Mighty-Mouse/)說明；我的理解是，它把複雜度藏進介面，而不是直接堆在外形上。
+Apple 當年的產品理念很清楚：增加多鍵功能，同時保留單鍵滑鼠的簡單感。完整上蓋透過觸碰感測辨識左右點擊，小滾球能多方向捲動與按下，側邊則能擠壓操作。在我看來，這種設計最迷人的地方，是手指可以慢慢發現它的功能，外形卻始終維持完整。
 
 這也是我覺得有趣的地方。
 
 側邊擠壓讓「握住滑鼠」本身成為一種輸入，不過是否順手，還是很看握法；小滾球則是我最喜歡的部分，尤其是手指能明確感覺到自己正在滾動一個實體物件。
 
-需要分清楚的是：那些是硬體原本的設計。MightyScroll 目前處理捲動，**沒有提供中鍵或側邊擠壓的重新配置**。
-
 ## 和 Magic Mouse 相比，我還是偏愛那顆球
 
-[現代 Magic Mouse](https://support.apple.com/en-us/121931) 的 Multi-Touch 表面很俐落，能捲動文件、用手勢切換網頁。手指在表面滑過去，就像在一塊縮小的觸控板上操作。
+現代 Magic Mouse 的 Multi-Touch 表面很俐落，能捲動文件、用手勢切換網頁。手指在表面滑過去，就像在一塊縮小的觸控板上操作。
 
 Mighty Mouse 的小滾球，給我的感覺比較具體。
 
@@ -53,13 +57,13 @@ Mighty Mouse 的小滾球，給我的感覺比較具體。
 
 這不是規格上的勝負，而是我偏好的手感。
 
-另外一個讓我喜歡 A1197 的地方，是 **可更換 AA 電池**。Apple 的 [無線版發表資料](https://www.apple.com/newsroom/2006/07/25Apple-Debuts-Wireless-Mighty-Mouse/)確認它能用一顆或兩顆 AA 電池；沒電就換電池，充電電池也能輪替使用。
+另外一個讓我喜歡 A1197 的地方，是 **可更換 AA 電池**。它能用一顆或兩顆 AA 電池；沒電就換電池，充電電池也能輪替使用。
 
 反過來看現在的 Magic Mouse，我還是很難忍住吐槽：**滑鼠反過來充電，到底是什麼反人類設計？**
 
-這個批評有具體的原因。[Apple 官方支援文件](https://support.apple.com/en-gb/102292)確認充電孔在底部，充電時無法使用；2024 年改成 USB-C，也沒有改掉這個使用限制。續航再長，工作做到一半遇到沒電，仍然得暫停滑鼠操作。對我來說，換顆 AA 電池更乾脆。
+充電孔放在底部，代表充電時無法使用；2024 年改成 USB-C，也沒有改掉這個使用限制。續航再長，工作做到一半遇到沒電，仍然得暫停滑鼠操作。對我來說，換顆 AA 電池更乾脆。
 
-當然，老硬體也有代價。[原廠手冊](https://usermanual.wiki/Apple/MightyMouse.1854576287.pdf)特別說明了滾球清潔：捲動變粗糙或失效時，要清除累積的髒污。二手滑鼠還得考慮機構磨耗、電池接點與藍牙連線狀況。軟體能調整手感，不能修好一顆已經卡住的球。
+當然，老硬體也有代價。小滾球需要清潔：捲動變粗糙或失效時，要清除累積的髒污。二手滑鼠還得考慮機構磨耗、電池接點與藍牙連線狀況。軟體能調整手感，不能修好一顆已經卡住的球。
 
 ## 在現代 Mac 上，真正讓我卡住的是捲動
 
@@ -67,7 +71,7 @@ Mighty Mouse 的小滾球，給我的感覺比較具體。
 
 第一個痛點是 **滑鼠和觸控板的捲動方向**。
 
-我希望觸控板維持自然捲動，滑鼠則保留自己熟悉的方向。macOS 雖然有滑鼠和觸控板各自的設定頁面，自然捲動設定卻會連動，無法直接各選一種。這也是 [Scroll Reverser](https://pilotmoon.com/scrollreverser/) 這類工具處理的問題。
+我希望觸控板維持自然捲動，滑鼠則保留自己熟悉的方向。macOS 雖然有滑鼠和觸控板各自的設定頁面，自然捲動設定卻會連動，無法直接各選一種。這也是 Scroll Reverser 這類工具處理的問題。
 
 第二個痛點是速度和慣性。
 
@@ -94,11 +98,13 @@ MightyScroll 是我做的 macOS 選單列 App，開發與實機測試使用的�
 - **上下、左右都能用。** 兩個方向分別設定反轉與基本捲動量。
 - **觸控板保留原本習慣。** 把滑鼠的方向獨立調整。
 
+目前 MightyScroll 專注在捲動手感，尚未提供中鍵或側邊擠壓按鍵的重新配置。
+
 但做成日常能用的工具，還有一些不會出現在功能標題裡的細節。
 
 例如捲動還在延續時，游標也可能正在移動。如果輸出的捲動事件一直帶著舊座標，就會讓游標被拉回去。MightyScroll 會在輸出時採用當下游標位置，讓捲動與游標移動能一起發生。
 
-藍牙斷線再連上，也要重新辨識裝置、恢復設定；登入時自動啟動，則讓我不用每次開機再手動打開它。這些行為與相容性細節都整理在 [專案的開發說明](https://github.com/lancer1234/MightyScroll/blob/main/docs/DEVELOPMENT.md)。
+藍牙斷線再連上，也要重新辨識裝置、恢復設定；登入時自動啟動，則讓我不用每次開機再手動打開它。我想要的是，每天坐回桌前，它就能用熟悉的方式繼續工作。
 
 <figure class="article-figure" style="max-width:580px;margin-left:auto;margin-right:auto">
   <img src="/assets/blog/mightyscroll-settings.png" alt="MightyScroll 實際設定畫面：快速連滾加速、連滾慣性、上下左右反轉方向與登入時啟動" width="1184" height="1728" loading="lazy">
@@ -145,7 +151,13 @@ Recently, I bought an **A1197 wireless Mighty Mouse**.
 
 What caught my attention was the tiny scroll ball. When most mice use either a wheel or a touch surface, this one puts a ball in the middle of a clean white shell. That different way of interacting was what I wanted to try.
 
-Holding it, I was drawn to how little visual clutter there is. The controls reveal themselves through touch: press the shell, roll the ball, squeeze the sides. It made me wonder whether replacing physical controls with touch is always progress.
+Holding it, I first noticed the smooth, uninterrupted white shell. Its rounded shape feels like a carefully polished pebble. There is no dividing line between left and right buttons, no cluster of keys competing for attention. The tiny ball at the center becomes its most distinctive detail.
+
+On a desk twenty years ago, this would have looked to me like an object from the future. What surprises me is how current it still looks today. Its futuristic quality comes from the proportions, the continuous curves and the restraint with which the controls are integrated.
+
+**Twenty years later, it still looks like a mouse that could be introduced today.**
+
+Only when I hold it, press the shell and roll the ball do the interactions reveal themselves. It makes me wonder whether replacing physical controls with touch is always progress.
 
 <figure class="article-figure">
   <img src="/assets/blog/mighty-mouse-wireless.jpg" alt="Wireless Mighty Mouse with its seamless white shell, scroll ball and side controls" width="5184" height="3456" loading="lazy">
@@ -154,37 +166,35 @@ Holding it, I was drawn to how little visual clutter there is. The controls reve
 
 ## More functionality, a simple shape
 
-Apple introduced the [wired Mighty Mouse on August 2, 2005](https://www.apple.com/newsroom/2005/08/02Apple-Introduces-Mighty-Mouse/), followed by the [wireless model on July 25, 2006](https://www.apple.com/newsroom/2006/07/25Apple-Debuts-Wireless-Mighty-Mouse/). The wireless version added Bluetooth 2.0 and laser tracking. Apple's [original manual](https://usermanual.wiki/Apple/MightyMouse.1854576287.pdf) identifies the A1197 model.
+Apple introduced the wired Mighty Mouse on August 2, 2005, followed by the wireless model on July 25, 2006. The wireless version added Bluetooth 2.0 and laser tracking.
 
-The industrial-design context is **Jony Ive and Apple's design team of that era**. Apple's [official retrospective](https://www.apple.com/newsroom/2019/06/jony-ive-to-form-independent-design-company-with-apple-as-client/) emphasizes the team and culture he helped build. The Mighty Mouse announcements do not name a sole lead designer, so I would place it in that team context rather than give one person exclusive credit.
+The industrial-design context is **Jony Ive and Apple's design team of that era**. The Mighty Mouse announcements do not name a sole lead designer. Viewed in the context of the Ive-era team, though, it has a familiar design language: clean surfaces, restrained lines and functionality integrated into a simple shape.
 
-The [2005 announcement](https://www.apple.com/newsroom/2005/08/02Apple-Introduces-Mighty-Mouse/) describes the goal: add multiple controls while keeping single-button simplicity. Touch sensors distinguish left and right clicks beneath a seamless shell; the ball scrolls in multiple directions and clicks, while the sides can be squeezed.
+Apple's goal at the time was to add multiple controls while keeping single-button simplicity. Touch sensors distinguish left and right clicks beneath a seamless shell; the ball scrolls in multiple directions and clicks, while the sides can be squeezed.
 
-My interpretation is that the complexity lives in the interaction rather than the silhouette. The squeeze control is an interesting idea, though its comfort depends on grip. The ball is the part I most enjoy: my finger has an actual object to move.
-
-These are hardware features. **MightyScroll does not currently remap the middle button or side squeeze.**
+What I find appealing is how the controls can reveal themselves through use while the shape remains uninterrupted. The squeeze control is an interesting idea, though its comfort depends on grip. The ball is the part I most enjoy: my finger has an actual object to move.
 
 ## Why I prefer the ball to Magic Mouse's surface
 
-The [modern Magic Mouse](https://support.apple.com/en-us/121931) uses a Multi-Touch surface for scrolling and gestures such as swiping between web pages. I understand the appeal of that smooth, compact touch interface.
+The modern Magic Mouse uses a Multi-Touch surface for scrolling and gestures such as swiping between web pages. I understand the appeal of that smooth, compact touch interface.
 
 But I prefer the more tangible action of rolling a ball. Small movements should help me find a line; repeated fast rolls should carry me through a long page. Horizontal scrolling is part of the same physical interaction.
 
 This is a preference about feel, not a specification contest.
 
-The A1197 also has **replaceable AA batteries**. Apple's [wireless announcement](https://www.apple.com/newsroom/2006/07/25Apple-Debuts-Wireless-Mighty-Mouse/) confirms it works with one or two. I can swap batteries, including rechargeable AAs, and get back to work.
+The A1197 also has **replaceable AA batteries**. It works with one or two. I can swap batteries, including rechargeable AAs, and get back to work.
 
 Which brings me to the modern Magic Mouse: **why should a mouse have to lie upside down to charge?**
 
-[Apple's support document](https://support.apple.com/en-gb/102292) confirms both the underside port and the inability to use the mouse while charging. The 2024 USB-C model retains that limitation. Long battery life helps, but swapping an AA feels more practical to me when power runs out mid-task.
+The charging port is on the underside, and the mouse cannot be used while charging. The 2024 USB-C model retains that limitation. Long battery life helps, but swapping an AA feels more practical to me when power runs out mid-task.
 
-Old hardware has its own costs. The [original manual](https://usermanual.wiki/Apple/MightyMouse.1854576287.pdf) includes specific scroll-ball cleaning advice for rough or failed scrolling. A used mouse can also have worn mechanisms, battery contacts or connection issues. Software cannot repair a jammed ball.
+Old hardware has its own costs. The scroll ball needs cleaning when dirt makes scrolling rough or stops it from working. A used mouse can also have worn mechanisms, battery contacts or connection issues. Software cannot repair a jammed ball.
 
 ## The problem on a modern Mac was scrolling
 
 Liking the hardware did not mean its default scrolling suited me.
 
-I want natural scrolling on my trackpad and my familiar direction on the mouse. macOS exposes settings in separate panes, but the natural-scrolling setting is linked. Independent direction control is also the problem addressed by tools such as [Scroll Reverser](https://pilotmoon.com/scrollreverser/).
+I want natural scrolling on my trackpad and my familiar direction on the mouse. macOS exposes settings in separate panes, but the natural-scrolling setting is linked. Independent direction control is also the problem addressed by tools such as Scroll Reverser.
 
 Speed and momentum were the other part. I do not want every movement to become faster. I want precise slow scrolling, acceleration only when I roll quickly and repeatedly, and momentum that connects those inputs smoothly.
 
@@ -205,11 +215,13 @@ MightyScroll is my macOS menu bar app, developed and tested with the A1197. It p
 - Separate vertical and horizontal direction and amount settings.
 - Independent mouse direction while preserving the trackpad's behavior.
 
+MightyScroll currently focuses on scrolling; it does not yet remap the middle button or side squeeze.
+
 Making it usable every day also meant handling the less visible details.
 
 When momentum continues, the pointer may be moving too. Reusing an old coordinate in generated scroll events can pull the pointer back. MightyScroll samples the current pointer location when it emits those events.
 
-It also recovers device recognition after a Bluetooth reconnection and offers launch at login. The implementation and compatibility details are documented in the [developer notes](https://github.com/lancer1234/MightyScroll/blob/main/docs/DEVELOPMENT.md).
+It also recovers device recognition after a Bluetooth reconnection and offers launch at login. I want it to be ready with the same familiar behavior whenever I sit down at my desk.
 
 <figure class="article-figure" style="max-width:580px;margin-left:auto;margin-right:auto">
   <img src="/assets/blog/mightyscroll-settings.png" alt="Actual MightyScroll settings in Traditional Chinese, showing acceleration, momentum, vertical and horizontal reversal, and launch at login" width="1184" height="1728" loading="lazy">
