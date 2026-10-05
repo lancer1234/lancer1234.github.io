@@ -1,0 +1,9 @@
+.page-bar { gap: 16px; }
+.page-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; }
+.page-bar > a { flex-shrink: 0; }
+@media (max-width: 760px) {
+  .page-bar { align-items: flex-start; flex-wrap: wrap; padding: 20px; }
+  .page-actions { width: 100%; gap: 16px; }
+  .page-actions a, .page-actions button { font-size: 12px; }
+  .page-actions .lang-toggle { margin-left: auto; }
+}
