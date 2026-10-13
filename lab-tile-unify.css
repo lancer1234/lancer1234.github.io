@@ -13,6 +13,24 @@
   font-size: clamp(38px, 4vw, 62px);
 }
 
+.lab-project-glyphcheck h2 { overflow-wrap: anywhere; }
+.lab-project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: 18px;
+}
+.lab-project-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  font-size: 13px;
+  border-bottom: 1px solid currentColor;
+  text-decoration: none;
+}
+.lab-project-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+
 @media (max-width: 760px) {
   .lab-project-glass {
     min-height: 280px;

@@ -37,6 +37,8 @@ body { background: var(--paper); }
 .lab-grid .lab-card:nth-child(odd) { border-left: 1px solid rgba(255,255,255,.5); }
 .lab-grid .lab-card:hover { background: #fff; }
 .lab-grid .lab-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.lab-project-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 18px; }
+.lab-project-links a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; font-size: 13px; border-bottom: 1px solid currentColor; }
 .current-feature { padding-top: 75px; }
 .current-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
 .current-grid h2 { white-space: normal; font-size: clamp(35px,4vw,55px); line-height: 1.25; }
