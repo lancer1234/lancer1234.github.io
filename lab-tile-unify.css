@@ -14,6 +14,7 @@
 }
 
 .lab-project-glyphcheck h2 { overflow-wrap: anywhere; }
+.lab-project-glyphcheck:hover p { color: inherit; }
 .lab-project-links {
   display: flex;
   flex-wrap: wrap;
