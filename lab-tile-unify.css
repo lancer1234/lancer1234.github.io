@@ -1,3 +1,4 @@
+.lab-project,
 .lab-project-miles,
 .lab-project-glass,
 .lab-project-warm {
@@ -31,8 +32,11 @@
   text-decoration: none;
 }
 .lab-project-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.lab-project-top .lab-project-links { margin-top: 0; gap: 14px; }
+.lab-project-top .lab-project-links a { min-height: 0; font-size: 9px; letter-spacing: .08em; border-bottom: 0; }
 
 @media (max-width: 760px) {
+  .lab-project-top .lab-project-links a { min-height: 44px; margin-block: -14px; }
   .lab-project-glass {
     min-height: 280px;
   }
