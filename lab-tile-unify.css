@@ -34,6 +34,8 @@
 .lab-project-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 .lab-project-top .lab-project-links { margin-top: 0; gap: 14px; }
 .lab-project-top .lab-project-links a { min-height: 0; font-size: 9px; letter-spacing: .08em; border-bottom: 0; }
+.glyphcheck-credit { font-size: 12px; line-height: 1.6; opacity: .65; margin: 18px 0 0; }
+.glyphcheck-credit a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 
 @media (max-width: 760px) {
   .lab-project-top .lab-project-links a { min-height: 44px; margin-block: -14px; }
