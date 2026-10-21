@@ -22,15 +22,15 @@
 <section class="install"><h3>如何安裝</h3><ol><li>在 Android TV 或手機開啟此頁面，點擊上方按鈕下載 APK。</li><li>在電視上下載並開啟 APK 檔案，若系統提示請允許安裝來自此來源的應用。</li><li>開啟「AirSonic TV」，在右側選擇你的 HomePod 或 Apple TV，按 OK 鍵直接開始投送！</li></ol></section>
 <details><summary>檔案校驗</summary><p>SHA-256</p><code>c77856f84c89a1b5386d07b373385afb10d9696ce4440b806110e02b440ba93b</code><p><a href="/app/downloads/AirSonic-TV-1.0.0-20261020.apk.sha256" download>下載校驗檔</a></p></details>
 </article>
-<article class="release" aria-labelledby="carplay-test17-title">
-<div class="release-top"><span class="eyebrow">NEW / CARPLAY</span><span class="badge">test.17 · 整併測試版</span></div>
-<h2 id="carplay-test17-title">CarPlay · test.17</h2>
-<p class="description">整併上游 0.2.21，改善麥克風恢復、USB 與無線啟動、音樂緩衝及解碼相容性，保留繁體中文與原本的影片代理。</p>
-<dl class="metadata"><div><dt>版本</dt><dd>0.2.21-carplay-test.17</dd></div><div><dt>系統</dt><dd>Android 8.1 以上</dd></div><div><dt>大小</dt><dd>29.6 MB</dd></div><div><dt>更新</dt><dd>2026.10.21</dd></div></dl>
-<a class="download" href="/app/downloads/CarPlay-0.2.21-test.17-20261021.apk" download>下載 CarPlay test.17 APK <span aria-hidden="true">↓</span></a>
-<p class="caption">直接更新原本的 CarPlay 測試版，保留既有設定。整併前 test.13 仍在下方提供下載；回復較舊 APK 通常需要先解除安裝，設定可能清除。</p>
-<div class="notes"><section><h3>這個版本</h3><ul><li>新增 16 kHz 麥克風封包時序與收音恢復；保留一般麥克風來源、音量控制及優先使用原生 Opus，並強化原生 JNI 編碼狀態重置與錯誤回報。</li><li>整併 USB 啟動、逾時與重試修正，保留 Android 8.1 的分段收送與縮小區塊重試。</li><li>改善藍牙與熱點辨識，顯示更明確的啟動失敗原因；包含音樂時鐘與通話後恢復修正。</li><li>新增 HEVC 硬體能力回退、可選的低延遲與直接輸出；CarPlay 選單的安全區域設定可開啟直角顯示，並同步設定畫面與投影畫面間的狀態與麥克風權限詢問。</li><li>設定備份包含橫向限制、麥克風及影片偏好；修正大字體按鈕換行截字。</li><li>保留影片網路代理、HLS 相容處理、影片音量與原本的連線設定，並強化 TLS-PSK 憑證並行保護、連線重用與播放器 singleTop 防重入。</li></ul></section><section><h3>驗證與相容性</h3><p>3,199 項自動測試通過，一項既有測試略過。三項 Android 9 實機測試涵蓋四種影片素材及兩種位元率的原生 Opus 編碼、獨立解碼。</p><p>Android 8.0／8.1 的 USB 上限、重組、縮小重試與通用設定有自動化驗證。各車機無線連線、真實 Siri 辨識及通話品質仍需實測；實驗性選項預設關閉。</p><p>Apple TV 受保護正片與 YouTube 只有聲音的問題尚未確認修復；影片素材測試通過不代表新增 FairPlay 支援。</p></section></div>
-<details><summary>檔案校驗與程式碼</summary><p>SHA-256</p><code>b9f6cda7fc6a5007fc356ef539ae122c0abcf0698cdce7804b29c0d76ec53b33</code><p><a href="/app/downloads/CarPlay-0.2.21-test.17-20261021.apk.sha256" download>下載校驗檔</a> · <a href="/app/downloads/CarPlay-test.17-source.zip" download>下載 test.17 開源程式碼</a></p></details>
+<article class="release" aria-labelledby="carplay-test18-title">
+<div class="release-top"><span class="eyebrow">NEW / CARPLAY</span><span class="badge">test.18 · 音量修正版</span></div>
+<h2 id="carplay-test18-title">CarPlay · test.18</h2>
+<p class="description">延續上游 0.2.21 整併與接收端修正，新增手機音量鍵相容處理，影片「強力」改由播放器直接放大音訊，保留繁體中文、影片網路代理及原有設定。</p>
+<dl class="metadata"><div><dt>版本</dt><dd>0.2.21-carplay-test.18</dd></div><div><dt>系統</dt><dd>Android 8.1 以上</dd></div><div><dt>大小</dt><dd>27.5 MB</dd></div><div><dt>更新</dt><dd>2026.10.21</dd></div></dl>
+<a class="download" href="/app/downloads/CarPlay-0.2.21-test.18-20261021.apk" download>下載 CarPlay test.18 APK <span aria-hidden="true">↓</span></a>
+<p class="caption">可直接更新原本的 CarPlay 測試版，保留既有設定。整併前 test.13 仍在下方提供下載；回復較舊 APK 通常需要先解除安裝，設定可能清除。</p>
+<div class="notes"><section><h3>這個版本</h3><ul><li>主畫面與設定頁依音樂輸出指定音量鍵控制目標；主畫面、設定與影片畫面收到音量鍵時，主動調整系統音量並要求顯示音量條，長按持續調整，放開不重複調整。</li><li>影片增益改為播放器內的 PCM 音訊處理，不再依賴設備的 LoudnessEnhancer 音效。增強約為 2 倍；強力為 +24 dB、約 16 倍的小訊號振幅增益，峰值使用軟限制避免溢位。</li><li>保留原始／增強／強力的既有選擇，可在播放中切換；影片音訊經解碼後處理，避免直通與 offload 略過增益。</li><li>沿用麥克風恢復與原生 Opus JNI、USB／無線相容修正、音樂緩衝、解碼回退、直角顯示及設定同步。</li><li>保留影片代理的 TLS-PSK 並行保護、連線重用、HLS 相容處理、播放器 singleTop 防重入，以及方向限制與繁體中文。</li></ul></section><section><h3>驗證與相容性</h3><p>3,226 項自動測試通過，一項既有測試略過，編譯與 lint 通過。新增 27 項音量測試涵蓋 Android 8.1／9／15 的按鍵分派、長按與放開、增益倍率、峰值及聲道順序。</p><p>本次音量修正尚未實機重播確認。若其他 App 的音量鍵也沒有反應，仍需檢查設備的系統或實體按鍵；App 只能處理系統有送達的按鍵事件。</p><p>各設備的無線連線、真實 Siri 辨識、通話品質與影片主觀音量仍需實測。Apple TV 受保護正片與 YouTube 只有聲音的問題尚未確認修復，本版沒有新增 FairPlay 支援。</p></section></div>
+<details><summary>檔案校驗與程式碼</summary><p>SHA-256</p><code>0c4dbcf7d54621546a1ccba72454f52eb5f987016bd5442d6d2a724ba4e996f9</code><p><a href="/app/downloads/CarPlay-0.2.21-test.18-20261021.apk.sha256" download>下載校驗檔</a> · <a href="/app/downloads/CarPlay-test.18-source.zip" download>下載 test.18 開源程式碼</a></p></details>
 </article>
 <article class="release" aria-labelledby="app-title">
 <div class="release-top"><span class="eyebrow">01 / ANDROID</span><span class="badge">整併前版本 · 保留下載</span></div>
