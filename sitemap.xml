@@ -1,10 +1,13 @@
+---
+layout: null
+---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://makotolab.tw/</loc><priority>1.0</priority></url>
   <url><loc>https://makotolab.tw/privacy/</loc><priority>0.5</priority></url>
-  <url><loc>https://makotolab.tw/blog/</loc><priority>0.7</priority></url>
-  <url><loc>https://makotolab.tw/blog/hello/</loc><priority>0.6</priority></url>
-  <url><loc>https://makotolab.tw/blog/google-glass-too-early/</loc><priority>0.8</priority></url>
-  <url><loc>https://makotolab.tw/blog/mighty-mouse-reborn/</loc><priority>0.8</priority></url>
+  <url><loc>https://makotolab.tw/blog/</loc><lastmod>2026-10-30</lastmod><priority>0.7</priority></url>
+  {% for post in site.posts %}{% unless post.noindex or post.sitemap == false %}
+  <url><loc>{{ post.url | prepend: site.url | xml_escape }}</loc><lastmod>{{ post.date_modified | default: post.date | date: '%Y-%m-%d' }}</lastmod><priority>{% if post.note == 'NOTE 001' %}0.6{% else %}0.8{% endif %}</priority></url>
+  {% endunless %}{% endfor %}
   <url><loc>https://makotolab.tw/projects/bopo-mac-fo/</loc><lastmod>2026-10-30</lastmod><priority>0.8</priority></url>
 </urlset>

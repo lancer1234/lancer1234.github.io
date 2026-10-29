@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">AirPulse / synchronization versus latency</title>
+  <desc id="desc">Conceptual timelines. A player can delay video to align it with late audio. An external audio bridge cannot move video, but can reduce waiting in its audio path. A remaining offset is shown. Bar lengths are illustrative, not measurements.</desc>
+  <rect width="1200" height="900" fill="#f5f5f2"/>
+  <g font-family="Arial, Helvetica, 'PingFang TC', sans-serif" fill="#0b0b0b">
+    <text x="62" y="74" font-size="22" letter-spacing="3">AIRPULSE / TWO DIFFERENT CONTROLS</text>
+    <text x="62" y="144" font-size="43">In sync doesn't necessarily mean faster.</text>
+    <text x="62" y="191" font-size="28" fill="#555">An audio bridge has a different set of controls.</text>
+    <path d="M62 228H1138" stroke="#aaa"/>
+    <text x="62" y="287" font-size="28" font-weight="700">01 / LET VIDEO WAIT FOR AUDIO</text>
+    <text x="62" y="325" font-size="25" fill="#555">A player can delay video to align the outputs.</text>
+    <g stroke="#ccc" stroke-width="2">
+      <path d="M280 386H1110M280 454H1110"/>
+    </g>
+    <text x="62" y="397" font-size="27">VIDEO</text>
+    <text x="62" y="465" font-size="27">AUDIO</text>
+    <rect x="280" y="371" width="540" height="30" fill="#ddd"/>
+    <path d="M280 386H810M796 377L810 386L796 395" fill="none" stroke="#777" stroke-width="2"/>
+    <rect x="820" y="365" width="242" height="42" fill="#0b0b0b"/>
+    <rect x="820" y="433" width="242" height="42" fill="#0b0b0b"/>
+    <path d="M820 350V490" stroke="#0b0b0b" stroke-width="2" stroke-dasharray="5 6"/>
+    <text x="487" y="425" text-anchor="middle" font-size="22" fill="#555">WAIT</text>
+    <path d="M62 523H1138" stroke="#aaa"/>
+    <text x="62" y="582" font-size="28" font-weight="700">02 / SHORTEN THE AUDIO PATH</text>
+    <text x="62" y="620" font-size="25" fill="#555">An audio bridge cannot postpone another app's video.</text>
+    <g stroke="#ccc" stroke-width="2">
+      <path d="M280 681H1110M280 749H1110"/>
+    </g>
+    <text x="62" y="692" font-size="27">VIDEO</text>
+    <text x="62" y="760" font-size="27">AUDIO</text>
+    <rect x="280" y="660" width="242" height="42" fill="#0b0b0b"/>
+    <rect x="410" y="728" width="242" height="42" fill="#0b0b0b"/>
+    <rect x="820" y="728" width="242" height="42" fill="none" stroke="#aaa" stroke-width="2" stroke-dasharray="6 6"/>
+    <path d="M800 749H675M689 740L675 749L689 758" fill="none" stroke="#555" stroke-width="2"/>
+    <path d="M280 641V786" stroke="#0b0b0b" stroke-width="2" stroke-dasharray="5 6"/>
+    <path d="M62 816H1138" stroke="#aaa"/>
+    <text x="62" y="862" font-size="20" fill="#666" letter-spacing="1">MAKOTO LAB / CONCEPT ONLY · NOT MEASURED DATA · 2026</text>
+  </g>
+</svg>

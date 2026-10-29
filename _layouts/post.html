@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="{{ page.description_zh | default: page.description_en | escape }}" />
+  <meta name="description" content="{{ page.seo_description_zh | default: page.description_zh | default: page.description_en | escape }}" />
   <meta name="theme-color" content="#ffffff" />
-  <title>{{ page.title_zh | default: page.title_en }} — MAKOTO LAB</title>
+  <title>{{ page.seo_title_zh | default: page.title_zh | default: page.title_en }} — MAKOTO LAB</title>
+  {% if page.seo %}{% include post-seo.html %}{% endif %}
   <link rel="stylesheet" href="/blog/blog.css" />
   <link rel="stylesheet" href="/responsive-safety.css" />
+  {% if page.post_stylesheet %}<link rel="stylesheet" href="{{ page.post_stylesheet | escape }}" />{% endif %}
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -26,6 +28,7 @@
     <div class="meta-line"><span>{{ page.note | default: 'NOTE' }} / {{ page.category | upcase }}</span><span>{{ page.date | date: '%Y.%m.%d' }}{% if page.location %} / {{ page.location | upcase }}{% endif %}</span></div>
     <h1><span class="lang-en">{{ page.title_en }}</span><span class="lang-zh">{{ page.title_zh }}</span></h1>
     {% if page.description_en or page.description_zh %}<p class="dek"><span class="lang-en">{{ page.description_en }}</span><span class="lang-zh">{{ page.description_zh }}</span></p>{% endif %}
+    {% if page.author_name %}<p class="post-byline">{{ page.author_name | escape }} / MAKOTO LAB</p>{% endif %}
   </div>
   <article class="article-body">{{ content }}</article>
   <a class="back" href="/blog/"><span class="lang-en">← BACK TO NOTES</span><span class="lang-zh">← 回到文章列表</span></a>
