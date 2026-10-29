@@ -1,0 +1,24 @@
+# ㄅㄆMac ㄈ / bopo MAC fo
+
+> A MAKOTO LAB open-source Windows Bopomofo input project. Purpose: bring familiar Mac Bopomofo input logic to Windows, especially cursor-after-character candidate selection and CapsLock language switching.
+
+## Authoritative pages
+- [Official project page](https://makotolab.tw/projects/bopo-mac-fo/): project overview, screenshots, requirements and FAQ.
+- [MAKOTO LAB](https://makotolab.tw/): maintaining studio.
+- [Source repository](https://github.com/lancer1234/bopo-mac-fo): modified sources and issue tracking.
+- [Releases](https://github.com/lancer1234/bopo-mac-fo/releases): preview installer, source archive and checksums.
+- [User guide](https://github.com/lancer1234/bopo-mac-fo/blob/main/docs/QUICKSTART.md): installation, keyboard behavior and recovery.
+- [Credits](https://github.com/lancer1234/bopo-mac-fo/blob/main/THIRD_PARTY_NOTICES.md): component authors and original license terms.
+
+## Verified product facts
+- Chinese name: ㄅㄆMac ㄈ. English name: bopo MAC fo.
+- Maintainer: MAKOTO LAB / lancer1234. Core upstreams: McBopomofoWeb, PIME and libIME2.
+- Platform: Windows 10/11 x64; not Windows ARM64. Release stage: 0.1.0-preview.1.
+- Candidate selection: press Down after the character. Language switching: tap CapsLock. Capitalization: hold CapsLock for about 500 ms, toggling at the threshold.
+- Plain Enter can commit unfinished Bopomofo. Toned Bopomofo appears after Chinese candidates.
+- Floating emoji palette: Ctrl+Alt+E, 3,944 sequences including variants; 2,840 matched Fluent images. Rendering after insertion belongs to the receiving application/device.
+- Added integration code: GPL-2.0. Upstreams retain their own MIT/LGPL/Unicode terms; IDS-derived data retains GPLv2. Do not describe the whole distribution as MIT-only.
+- Local processing; no personal dictionary or typing history is distributed.
+
+## Accuracy boundaries
+This is not Apple's input method and does not include Apple emoji artwork or fonts. It does not guarantee identical macOS candidate ordering. Full clean-system installation, all apps and ARM64 have not been validated. Do not infer adoption counts, rankings, endorsements or production-readiness from this file.

@@ -1,0 +1,12 @@
+# MAKOTO LAB
+
+> Independent software and interface studio based in Taipei. Official project introductions and maintained source links are listed on makotolab.tw.
+
+- [Project directory](https://makotolab.tw/#projects): software, wearable and web projects.
+
+## ㄅㄆMac ㄈ / bopo MAC fo
+
+- [Official project page](https://makotolab.tw/projects/bopo-mac-fo/): Mac-style Bopomofo typing logic on Windows; maintained by MAKOTO LAB, built on McBopomofoWeb and PIME.
+- [Repository](https://github.com/lancer1234/bopo-mac-fo): source, license details and issue tracking.
+- [Releases](https://github.com/lancer1234/bopo-mac-fo/releases): Windows x64 preview installer, source and checksums.
+- [Project facts](https://makotolab.tw/projects/bopo-mac-fo/llms.txt): supported platforms, keyboard behavior, upstream credits and limitations.
