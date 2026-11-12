@@ -9,8 +9,8 @@ permalink: /404.html
   <meta name="robots" content="noindex, follow">
   <meta name="theme-color" content="#000000">
   <title>404 · Lost Signal — MAKOTO LAB</title>
-  <link rel="stylesheet" href="/assets/404-game.css?v=4">
-  <script src="/assets/404-game.js?v=4" defer></script>
+  <link rel="stylesheet" href="/assets/404-game.css?v=9">
+  <script src="/assets/404-game.js?v=9" defer></script>
 </head>
 <body data-phase="error">
   <main>
@@ -34,35 +34,74 @@ permalink: /404.html
         </nav>
       </div>
     </div>
+    <div id="act-card" class="intro act-card" aria-live="polite" hidden>
+      <div class="act-card-inner">
+        <p id="act-eyebrow" class="act-eyebrow"></p>
+        <h2 id="act-title" class="act-title"></h2>
+        <p id="act-sub" class="act-sub"></p>
+      </div>
+    </div>
     <section id="adventure" aria-labelledby="location" hidden>
       <header>
-        <a href="/">MAKOTO LAB</a>
+        <div class="brand-group">
+          <a href="/" class="brand-link">MAKOTO LAB</a>
+          <span class="brand-divider" aria-hidden="true">/</span>
+          <span class="brand-sub" data-zh="404 · 失落訊號" data-en="404 · LOST SIGNAL">404 · 失落訊號</span>
+        </div>
         <div class="header-actions">
+          <button id="sound" type="button" aria-pressed="true" data-zh="聲音 · 開" data-en="SOUND · ON">聲音 · 開</button>
           <button id="language" type="button">EN</button>
-          <a href="/" data-zh="返回首頁" data-en="Return home">返回首頁</a>
+          <a href="/" class="header-home" data-zh="返回首頁 ↗" data-en="Return home ↗">返回首頁 ↗</a>
         </div>
       </header>
       <div class="game">
-        <div class="scene">
-          <canvas id="view" width="320" height="180" role="img"></canvas>
-          <div class="eyelid top" aria-hidden="true"></div>
-          <div class="eyelid bottom" aria-hidden="true"></div>
+        <div class="scene-shell">
+          <div class="scene-hud">
+            <span id="chapter-hud">ACT I · STILL PLATFORM</span>
+            <span id="status-hud">POWER · OFFLINE</span>
+          </div>
+          <div class="scene">
+            <canvas id="view" width="640" height="360" role="img"></canvas>
+            <div id="scene-caption" class="scene-caption" hidden></div>
+            <div class="eyelid top" aria-hidden="true"></div>
+            <div class="eyelid bottom" aria-hidden="true"></div>
+          </div>
         </div>
         <div class="story">
-          <div class="location">
-            <h2 id="location" tabindex="-1"></h2>
-            <p id="inventory"></p>
+          <aside class="location">
+            <div class="location-head">
+              <p id="room-code" class="eyebrow">01 / PLATFORM</p>
+              <h2 id="location" tabindex="-1"></h2>
+            </div>
+            <div class="sidebar-section">
+              <p id="inventory" class="sidebar-label"></p>
+              <div id="inventory-items" class="inventory-items" role="list"></div>
+            </div>
+            <div class="sidebar-section">
+              <div class="progress-head">
+                <span data-zh="探索進度" data-en="PROGRESS">探索進度</span>
+                <span id="progress-text">0%</span>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <div id="progress-fill" class="progress-fill"></div>
+              </div>
+            </div>
+          </aside>
+          <div class="main-column">
+            <div class="narrative" aria-live="polite">
+              <p id="description"></p>
+              <p id="feedback" tabindex="-1"></p>
+              <div id="sequence"></div>
+              <details id="notebook" hidden>
+                <summary>
+                  <span class="notebook-title" data-zh="線索筆記" data-en="Clue notebook">線索筆記</span>
+                  <span id="note-count" class="note-count"></span>
+                </summary>
+                <ul id="notes"></ul>
+              </details>
+            </div>
+            <div id="choices" class="choices"></div>
           </div>
-          <div class="narrative" aria-live="polite">
-            <p id="description"></p>
-            <p id="feedback" tabindex="-1"></p>
-            <p id="sequence"></p>
-            <details id="notebook" hidden>
-              <summary data-zh="線索筆記" data-en="Clue notebook">線索筆記</summary>
-              <ul id="notes"></ul>
-            </details>
-          </div>
-          <div id="choices" class="choices"></div>
         </div>
       </div>
     </section>
