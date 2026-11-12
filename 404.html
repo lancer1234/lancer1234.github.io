@@ -1,0 +1,71 @@
+---
+permalink: /404.html
+---
+<!doctype html>
+<html lang="zh-Hant" data-lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#000000">
+  <title>404 · Lost Signal — MAKOTO LAB</title>
+  <link rel="stylesheet" href="/assets/404-game.css?v=4">
+  <script src="/assets/404-game.js?v=4" defer></script>
+</head>
+<body data-phase="error">
+  <main>
+    <section id="error" class="intro" aria-labelledby="error-title">
+      <h1 id="error-title">404</h1>
+      <a href="/" class="intro-home" data-zh="返回首頁" data-en="Return home">返回首頁</a>
+    </section>
+    <div id="static" aria-hidden="true" hidden><canvas id="noise" width="192" height="108"></canvas></div>
+    <div id="question" class="intro" hidden>
+      <div class="prompt">
+        <p id="prompt-title" tabindex="-1" data-zh="你在找什麼嗎？" data-en="Are you looking for something?">你在找什麼嗎？</p>
+        <div id="answers" class="choices" hidden>
+          <button id="yes" type="button" data-zh="是" data-en="Yes">是</button>
+          <button id="unsure" type="button" data-zh="不知道" data-en="I don't know">不知道</button>
+        </div>
+        <nav id="destinations" class="choices" aria-label="網站頁面" hidden>
+          <a href="/" data-zh="首頁" data-en="Home">首頁</a>
+          <a href="/makoto-lab/#projects" data-zh="專案" data-en="Projects">專案</a>
+          <a href="/blog/" data-zh="文章" data-en="Notes">文章</a>
+          <button id="back" type="button" data-zh="返回" data-en="Back">返回</button>
+        </nav>
+      </div>
+    </div>
+    <section id="adventure" aria-labelledby="location" hidden>
+      <header>
+        <a href="/">MAKOTO LAB</a>
+        <div class="header-actions">
+          <button id="language" type="button">EN</button>
+          <a href="/" data-zh="返回首頁" data-en="Return home">返回首頁</a>
+        </div>
+      </header>
+      <div class="game">
+        <div class="scene">
+          <canvas id="view" width="320" height="180" role="img"></canvas>
+          <div class="eyelid top" aria-hidden="true"></div>
+          <div class="eyelid bottom" aria-hidden="true"></div>
+        </div>
+        <div class="story">
+          <div class="location">
+            <h2 id="location" tabindex="-1"></h2>
+            <p id="inventory"></p>
+          </div>
+          <div class="narrative" aria-live="polite">
+            <p id="description"></p>
+            <p id="feedback" tabindex="-1"></p>
+            <p id="sequence"></p>
+            <details id="notebook" hidden>
+              <summary data-zh="線索筆記" data-en="Clue notebook">線索筆記</summary>
+              <ul id="notes"></ul>
+            </details>
+          </div>
+          <div id="choices" class="choices"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

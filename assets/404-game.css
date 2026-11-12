@@ -1,0 +1,154 @@
+:root {
+  color-scheme: dark;
+  color: #f0efed;
+  background: #000;
+  font: 16px/1.55 system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+a { color: inherit; text-underline-offset: .35em; }
+button { color: inherit; font: inherit; }
+:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+.intro, #static {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #000;
+}
+.intro h1 {
+  margin: 0;
+  font: 400 clamp(8rem, 30vw, 26rem)/.8 "Times New Roman", serif;
+  letter-spacing: -.08em;
+}
+.intro-home {
+  position: absolute;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  padding: .75rem;
+  color: #c4c4c4;
+  font-size: .85rem;
+}
+#static canvas { width: 100%; height: 100%; opacity: .48; image-rendering: pixelated; }
+#question p {
+  margin: 1rem;
+  text-align: center;
+  font: 400 clamp(1.8rem, 5vw, 4rem)/1.25 "Times New Roman", "Songti TC", serif;
+}
+@keyframes question-in { from { opacity: 0; } to { opacity: 1; } }
+
+#adventure { min-height: 100svh; background: #0b0b0b; }
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #424242;
+  padding: .65rem max(1rem, 4vw);
+  font: 600 .8rem/1.2 ui-monospace, monospace;
+  letter-spacing: .06em;
+}
+header > a { text-decoration: none; }
+.header-actions { display: flex; align-items: center; gap: 1rem; }
+.header-actions button { border: 1px solid #686868; background: none; min-width: 48px; min-height: 44px; cursor: pointer; }
+.game { width: min(100% - 2rem, 65rem); margin-inline: auto; padding: clamp(1rem, 3vw, 2.5rem) 0; }
+.scene { position: relative; overflow: hidden; border: 1px solid #565656; background: #000; }
+.scene canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.eyelid { display: none; position: absolute; inset-inline: -5%; height: 56%; background: #000; pointer-events: none; }
+.eyelid.top { top: 0; border-radius: 0 0 49% 49% / 0 0 12% 12%; }
+.eyelid.bottom { bottom: 0; border-radius: 49% 49% 0 0 / 12% 12% 0 0; }
+body[data-phase="opening"] .eyelid { display: block; animation: open-eye 1.8s cubic-bezier(.3,.05,.25,1) both; }
+body[data-phase="opening"] .eyelid.top { --lid-travel: -110%; }
+body[data-phase="opening"] .eyelid.bottom { --lid-travel: 110%; }
+body[data-phase="opening"] header, body[data-phase="opening"] .story { visibility: hidden; }
+@keyframes open-eye {
+  0% { transform: translateY(0); }
+  31% { transform: translateY(calc(var(--lid-travel) * .34)); }
+  47% { transform: translateY(calc(var(--lid-travel) * .08)); }
+  100% { transform: translateY(var(--lid-travel)); }
+}
+.story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.6fr); gap: .8rem 1.75rem; padding-block: 1.25rem; }
+h2 { margin: 0; font: 400 clamp(1.65rem, 4vw, 2.5rem)/1.12 "Times New Roman", "Songti TC", serif; }
+.story p { margin: 0; }
+#inventory { color: #aeaeae; margin-top: .55rem; font-size: .78rem; }
+#description { color: #dedede; }
+#feedback { color: #bdbdbd; margin-top: .55rem; }
+#feedback:empty { display: none; }
+.choices { grid-column: 2; display: flex; flex-wrap: wrap; gap: .5rem; }
+.choices button, .choices a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .5rem .75rem;
+  border: 1px solid #6b6b6b;
+  background: #151515;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .choices button:hover, .choices a:hover { background: #eee; color: #0b0b0b; }
+}
+@media (max-width: 600px) {
+  .story { grid-template-columns: minmax(0, 1fr); }
+  .choices { grid-column: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-phase="opening"] .eyelid { animation: none; }
+  body[data-phase="opening"] .eyelid { display: none; }
+}
+
+.prompt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  max-width: 100%;
+  animation: prompt-drift 7s ease-in-out infinite;
+}
+.prompt .choices {
+  grid-column: 1;
+  justify-content: center;
+  gap: .5rem clamp(.65rem, 3vw, 2rem);
+  margin: .7rem 1rem 0;
+}
+.prompt .choices button, .prompt .choices a {
+  border: 0;
+  background: transparent;
+  color: #e1e1e1;
+  text-decoration: none;
+}
+.prompt .choices button:focus-visible, .prompt .choices a:focus-visible {
+  outline: none;
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: .45em;
+}
+#prompt-title:focus { outline: none; }
+#prompt-title span { visibility: hidden; }
+#prompt-title span[data-typed] { visibility: visible; }
+@media (hover: hover) {
+  .prompt .choices button:hover, .prompt .choices a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: .45em;
+  }
+}
+@keyframes prompt-drift {
+  0%, 100% { transform: translateY(-4px); }
+  50% { transform: translateY(4px); }
+}
+#answers, #destinations { animation: question-in .6s ease-out both; }
+body[data-phase="opening"] .game { width: 100%; padding: 0; }
+body[data-phase="opening"] .scene { position: fixed; inset: 0; border: 0; }
+body[data-phase="opening"] .scene canvas { width: 100%; height: 100%; object-fit: cover; }
+body[data-phase="opening"] { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { #answers, #destinations, .prompt { animation: none; } }
+
+#sequence { margin-top: .65rem; color: #f0efed; font-family: ui-monospace, monospace; }
+#sequence:empty { display: none; }
+#notebook { margin-top: .75rem; color: #c5c5c5; font-size: .9rem; }
+#notebook summary { width: fit-content; padding-block: .35rem; cursor: pointer; }
+#notes { margin: .35rem 0; padding-inline-start: 1.25rem; }
+#notes li + li { margin-top: .4rem; }
