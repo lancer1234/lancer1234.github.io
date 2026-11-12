@@ -1,0 +1,50 @@
+:root { color-scheme: light dark; }
+.personal-page .about-side { top: var(--site-nav-clearance, 86px); }
+.personal-page :is(.project[id], #work, #experience) { scroll-margin-top: 0; }
+.personal-page :is(a,button):focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.personal-page .strength-grid > a:focus-visible { outline-offset: -4px; }
+.personal-page a.personal-action:active,
+.personal-page .strength-grid > a:active .strength-link { opacity: .65; }
+@media (prefers-color-scheme: dark) {
+  .personal-page {
+    --paper: #0b0b0b;
+    --muted: #adadad;
+    --personal-text: #f2f2f2;
+    --personal-copy: #d0d0d0;
+    --personal-line: #505050;
+    --personal-surface: #1b1b1b;
+    background: var(--paper);
+    color: var(--personal-text);
+  }
+  .personal-page .topbar { background: #0b0b0b; border-color: var(--personal-line); }
+  .personal-page .lang-toggle { color: var(--personal-text); border-color: #888; }
+  .personal-page .lang-toggle:is(:hover,:focus-visible) { color: #0b0b0b; background: var(--personal-text); }
+  .personal-page :is(.about-copy p,.project-main>p:not(.project-meta),.hero-position>p:not(.position-label),.current-copy dd,.exp p) { color: var(--personal-copy); }
+  .personal-page :is(.about-copy h3,.about-copy .closing,.exp.current,.exp.current>span,.exp.current p) { color: var(--personal-text); }
+  .personal-page :is(.side-block small,.exp>span) { color: var(--muted); }
+  .personal-page :is(.about-hero,.about-facts,.about-facts div,.about-copy h2,.about-copy .closing,.side-block,.hero,.hero-status,.hero-links a,.strength-grid,.strength-grid>a+a,.case-summary>div,.product-editorial,.product-editorial small,.current-role,.section-kicker:not(.lab-kicker),.current-copy dl,.text-link,.inline-links a,.document-link,.project,.project-image,.project-image>span,.number-stack>div,.editorial-panel,.editorial-panel small,.exp-list,.exp,.profile-copy a,.contact,.contact-links a,footer) {
+    border-color: var(--personal-line);
+  }
+  .personal-page :is(.product-editorial,.project-image,.project-image img,.project-image>span) { background: var(--personal-surface); }
+  .personal-page .exp:hover { background: var(--personal-surface); color: var(--personal-text); }
+  .personal-page .live-dot, .personal-page .exp.current::before { background: var(--personal-text); }
+  .personal-page .strength-grid > a:focus-visible { background: var(--personal-surface); }
+  @media (hover:hover) and (pointer:fine) {
+    .personal-page .strength-grid > a:hover { background: var(--personal-surface); }
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .personal-page .personal-enter { animation: site-motion-content .38s ease-out both; }
+  .personal-page a.personal-action { transition: opacity .16s ease, text-underline-offset .18s ease; }
+  .personal-page :is(.personal-action,.strength-grid>a,.lab-card):focus-visible .site-motion-arrow,
+  .personal-page a.personal-action:active .site-motion-arrow { transform: translate(2px,-2px); }
+  .personal-page .strength-grid>a:active .strength-link { transform: translateY(1px); }
+  .personal-page .strength-link { transition: opacity .16s ease, transform .16s ease; }
+}
+@media (prefers-reduced-motion: no-preference) and (hover:hover) and (pointer:fine) {
+  .personal-page :is(.personal-action,.strength-grid>a,a.lab-card):hover .site-motion-arrow { transform: translate(2px,-2px); }
+  .personal-page a.personal-action:hover { text-underline-offset: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .personal-page :is(.strength-grid>a,.lab-card,.exp) { transition: none; }
+}
