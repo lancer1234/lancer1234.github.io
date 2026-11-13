@@ -4386,5 +4386,5 @@
   }
 
   setLanguage(language);
-  timer = window.setTimeout(() => transition(showQuestion), reduced.matches ? 120 : 5000);
+  timer = window.setTimeout(() => transition(showQuestion), reduced.matches ? 120 : 3000);
 })();
