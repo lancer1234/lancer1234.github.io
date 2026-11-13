@@ -63,7 +63,7 @@
     ['照明迴路', 'Lighting'],
     ['廣播迴路', 'Broadcast'],
     ['號誌迴路', 'Signal'],
-    ['備用接地（勿動）', 'Ground (Idle)'],
+    ['備用接地迴路', 'Ground Circuit'],
   ];
   // 3 Suitcase Dials x 5 Options = 125 combinations (1 from Letter, 1 from Pillar, 1 from Ticket)
   const dialOptions = [
@@ -385,7 +385,7 @@
       } else if (type === 'switch') {
         playNote(140, 0.09, 0.07, 0, 'sawtooth');
         playNoiseBurst(0.05, 680, 2.5, 0.08, 0.01);
-      } else if (type === 'wrong') {
+      } else if (type === 'wrong' || type === 'error') {
         playNote(110, 0.14, 0.06, 0, 'triangle');
         playNote(92, 0.18, 0.06, 0.12, 'triangle');
       } else if (type === 'unlock') {
@@ -412,7 +412,7 @@
           playNoiseBurst(0.04, 1800 + idx * 300, 3.0, 0.07, d);
           playNote(261.63 * (1 + idx * 0.25), 0.7, 0.03, d + 0.02, 'sine');
         });
-      } else if (type === 'punch') {
+      } else if (type === 'punch' || type === 'punchHit') {
         playNoiseBurst(0.045, 2600, 3.5, 0.11, 0);
         playNote(620, 0.08, 0.05, 0.01, 'triangle');
       } else if (type === 'punchDone') {
@@ -460,20 +460,20 @@
   // Piano & Cursor-Following Ticket Punch State
   // =========================================================================
   const pianoNotes = [
-    { key: '1', alt: 'a', label: ['1 (Do)', '1 (Do)'], freq: 261.63 },
-    { key: '2', alt: 's', label: ['2 (Re)', '2 (Re)'], freq: 293.66 },
-    { key: '3', alt: 'd', label: ['3 (Mi)', '3 (Mi)'], freq: 329.63 },
-    { key: '4', alt: 'f', label: ['4 (Fa)', '4 (Fa)'], freq: 349.23 },
-    { key: '5', alt: 'g', label: ['5 (Sol)', '5 (Sol)'], freq: 392.00 },
-    { key: '6', alt: 'h', label: ['6 (La)', '6 (La)'], freq: 440.00 },
-    { key: '7', alt: 'j', label: ['7 (Si)', '7 (Ti)'], freq: 493.88 },
+    { key: '1', alt: 'a', label: ['一音 · Do', '1 · Do'], freq: 261.63 },
+    { key: '2', alt: 's', label: ['二音 · Re', '2 · Re'], freq: 293.66 },
+    { key: '3', alt: 'd', label: ['三音 · Mi', '3 · Mi'], freq: 329.63 },
+    { key: '4', alt: 'f', label: ['四音 · Fa', '4 · Fa'], freq: 349.23 },
+    { key: '5', alt: 'g', label: ['五音 · Sol', '5 · Sol'], freq: 392.00 },
+    { key: '6', alt: 'h', label: ['六音 · La', '6 · La'], freq: 440.00 },
+    { key: '7', alt: 'j', label: ['七音 · Si', '7 · Ti'], freq: 493.88 },
   ];
   const pianoBlackNotes = [
-    { slot: 0, key: 'w', label: ['♯1 (C♯)', '♯1 (C♯)'], freq: 277.18 },
-    { slot: 1, key: 'e', label: ['♯2 (D♯)', '♯2 (D♯)'], freq: 311.13 },
-    { slot: 3, key: 't', label: ['♯4 (F♯)', '♯4 (F♯)'], freq: 369.99 },
-    { slot: 4, key: 'y', label: ['♯5 (G♯)', '♯5 (G♯)'], freq: 415.30 },
-    { slot: 5, key: 'u', label: ['♯6 (A♯)', '♯6 (A♯)'], freq: 466.16 },
+    { slot: 0, key: 'w', label: ['升一音 · C♯', '♯1 · C♯'], freq: 277.18 },
+    { slot: 1, key: 'e', label: ['升二音 · D♯', '♯2 · D♯'], freq: 311.13 },
+    { slot: 3, key: 't', label: ['升四音 · F♯', '♯4 · F♯'], freq: 369.99 },
+    { slot: 4, key: 'y', label: ['升五音 · G♯', '♯5 · G♯'], freq: 415.30 },
+    { slot: 5, key: 'u', label: ['升六音 · A♯', '♯6 · A♯'], freq: 466.16 },
   ];
   let pianoTarget = [2, 4, 5, 4]; // Randomized 4-note melody indices (0..6)
   let pianoInput = [];
@@ -555,8 +555,8 @@
         }, 380);
       } else {
         feedback = [
-          `琴音在空曠的大廳迴盪（目前已彈奏：${pianoInput.map((n) => n + 1).join(' - ')}）。照著琴譜上的四個音彈奏，就能解開譜架暗格。`,
-          `The note echoes through the hall (Played: ${pianoInput.map((n) => n + 1).join(' - ')}). Play the four notes on the sheet music to unlock the music stand.`
+          `琴音在空曠的大廳裡輕輕迴盪。照著父親〈寄遠人〉詩中首句的四個音彈奏，就能解開譜架下的暗格。`,
+          `The note echoes gently through the hall. Play the four notes from the first line of your father’s poem to unlock the music stand.`
         ];
       }
       render();
@@ -577,8 +577,8 @@
     playNoiseBurst(0.018, 950, 2.5, 0.024, 0);
     if (puzzle === 'pianoGame' && !pianoSolved) {
       feedback = [
-        `半音黑鍵（${note.label[0]}）在候車大廳裡輕輕迴響。你也可以自由結合白鍵（1–7 / A–J）與黑鍵（W E T Y U）彈奏。`,
-        `The sharp black key (${note.label[1]}) resonates softly through the hall. Play freely with both white keys (1–7 / A–J) and black keys (W E T Y U).`
+        `半音黑鍵的餘韻在候車大廳裡靜靜散開。`,
+        `The sharp black key resonates softly through the waiting hall.`
       ];
       render();
     } else {
@@ -706,19 +706,70 @@
     if (name === 'cutscene-arrival') {
       if (progress < 0.38) {
         return say(
-          '隧道深處的霧氣被兩道刺眼的暖白車頭燈劃破。鐵軌微微震動，銀灰色的末班列車伴隨著悠長的鳴笛，緩緩滑入第四〇四號月台。',
-          'Twin warm headlights pierce the tunnel mist. The rails hum as the silver-gray last train sounds a long horn and glides into Platform 404.'
+          '隧道深處的霧氣被兩道刺眼的暖白車頭燈劃破。鐵軌微微震動，銀灰色的末班列車伴隨著悠長的鳴笛，沿著枕木與鋼軌緩緩滑入第四〇四號月台。',
+          'Twin warm headlights pierce the tunnel mist. The rails hum as the silver-gray last train sounds a long horn and glides along the tracks into Platform 404.'
         );
       }
-      if (progress < 0.75) {
+      if (progress < 0.74) {
         return say(
-          '氣動車門輕輕向兩側滑開，車廂裡透出溫暖柔和的燈光，在潮濕的月台地磚上映出長長的光影。',
-          'The pneumatic doors slide open, spilling warm light across the wet platform tiles.'
+          '列車在月台黃線旁平穩停妥，氣動雙扇車門輕輕向兩側滑開，溫暖的木質車廂燈光頃刻傾瀉而出，在潮濕的磨石子地磚上映出長長的光影。',
+          'The train brakes smoothly beside the yellow platform line. Its pneumatic double doors slide apart, spilling warm golden light from the wooden carriage across the wet terrazzo tiles.'
         );
       }
       return say(
-        '老站長一生守候的最後一班車，已經停在你面前了。',
-        'The final train your father waited his whole life to send off now rests before you.'
+        '老站長一生守候的最後一班車，已經敞開車門停在你面前了。',
+        'The final train your father waited his whole life to send off now stands open before you.'
+      );
+    }
+
+    if (name === 'cutscene-ending-board') {
+      if (progress < 0.34) {
+        return say(
+          '你提著那把遲到了七年的黑傘踏入溫暖的車廂。氣動車門在身後輕輕合攏，車窗外的月台燈下，彷彿佇立著老站長戴著制帽、微笑舉手敬禮的身影。',
+          'Carrying the black umbrella seven years late, you step into the warm carriage. As the doors slide shut behind you, beneath the platform lamp outside stands the gentle silhouette of the old stationmaster raising his hand to his cap in farewell.'
+        );
+      }
+      if (progress < 0.67) {
+        return say(
+          '列車在幽暗的地底隧道裡加速前行。父親的黑傘靜靜靠在膝旁，剪過三枚歸途印記的車票躺在木窗台上，隧道盡頭漸漸泛起一抹破曉的金光。',
+          'The train gathers speed through the underground tunnel. Your father’s black umbrella rests by your knee and the punched return ticket lies on the wooden sill as a golden glimmer blooms at the tunnel’s end.'
+        );
+      }
+      return say(
+        '第一道金白色的晨光穿透車窗灑滿車廂。波光粼粼的霧河岸與雲海翻湧的望山隘口在窗外次第展開——這一次，你終於帶著他的祝福，真正踏上了歸途。',
+        'The first golden-white rays of daybreak flood the carriage. As the shimmering Misty Riverside and the sea of clouds over Mountain Pass unfold outside, you are finally on your way home.'
+      );
+    }
+
+    if (name === 'cutscene-ending-send') {
+      if (progress < 0.35) {
+        return say(
+          '你握著父親留下的黑傘與黃銅號誌燈站在月台黃線後。氣動車門輕輕合上，一格格溫暖的車窗光影從你眼前緩緩滑過。',
+          'Holding your father’s black umbrella and brass signal lantern behind the yellow line, you watch the doors close as the warm carriage windows glide past.'
+        );
+      }
+      if (progress < 0.70) {
+        return say(
+          '兩盞紅色的車尾燈漸漸遠去，沒入隧道彼端的晨光裡。老站長掛念了一輩子的最後一班車，終於由你親手替他安全送出了第四〇四號月台。',
+          'Twin red tail-lights recede into the morning light at the far end of the tunnel. You have safely sent off the final train your father watched over his whole life.'
+        );
+      }
+      return say(
+        '你合上值班日誌，帶著那把黑傘拾級走上長長的石階。無名街口的天空已經破曉，雨後初晴的晨風正溫柔地吹過整座城市。',
+        'Closing the shift log, you carry the black umbrella up the long stone stairs. Dawn has broken over the street, and a gentle morning breeze sweeps across the rain-washed city.'
+      );
+    }
+
+    if (name === 'cutscene-ending-early') {
+      if (progress < 0.50) {
+        return say(
+          '你沒有等待那班尚未進站的列車，獨自穿過升起的鐵捲門，沿著長長的石階一步步走向地面。',
+          'Without waiting for the train, you pass beneath the raised iron grille and climb the long stone stairs toward the surface.'
+        );
+      }
+      return say(
+        '微涼的夜風吹過黎明前的無名街口。身後的地底深處，那盞為晚歸旅人留著的燈火依然安靜地亮著。',
+        'A cool night breeze drifts across the pre-dawn street. Deep underground behind you, the lamp left for a late traveler still glows quietly.'
       );
     }
     return '';
@@ -951,18 +1002,27 @@
     }
     if (key === 'carriage') {
       return [
-        ['末班車廂 · 破曉', 'Last Train · Daybreak'],
+        ['末班車廂 · 破曉歸途', 'Last Train · Homeward at Daybreak'],
         [
-          '你坐在溫暖的木質車廂窗邊，父親留下的黑傘靠在膝旁，剪過孔的回程票靜靜放在窗台上。\n\n列車駛出幽暗的地底隧道，窗外依序掠過波光粼粼的霧河岸與雲海翻湧的望山隘口，破曉的第一道金白晨光正穿透車窗灑在你身上。',
-          'You sit by the warm wooden carriage window with your father’s black umbrella beside your knee and your punched return ticket on the sill.\n\nThe train emerges from the underground tunnel, gliding past the shimmering Misty Riverside and the clouds of Mountain Pass as golden-white daybreak fills the car.'
+          '你坐在溫暖的木質車廂窗邊，父親留下的黑傘安靜靠在膝旁，親手剪下三枚歸途印記的回程票平放在窗台上。\n\n列車駛出幽暗的地底隧道，窗外依序掠過波光粼粼的霧河岸與雲海翻湧的望山隘口。破曉的第一道金白晨光穿透車窗灑在你肩上，彷彿那件舊站務大衣依然帶著父親掌心的溫度。\n\n第四〇四號月台不再是迷途者的滯留之地。那杯溫熱的茶、那首雨天的鋼琴曲、那把遲到了七年的黑傘，都在這個黎明化作了送你前行的力量。天亮以後，你終於可以不再回頭，好好地往前走了。',
+          'You sit by the warm wooden carriage window with your father’s black umbrella resting against your knee and the return ticket—clipped with the three emblems of home—lying on the sill.\n\nEmerging from the underground tunnel, the train glides past the shimmering waters of Misty Riverside and the cloud-wreathed peaks of Mountain Pass. The first golden-white rays of daybreak warm your shoulders like the old station coat.\n\nPlatform 404 is no longer a limbo for the lost. The cup of warm tea, the rainy-day piano melody, and the umbrella that waited seven years have all become the strength carrying you forward into the morning.'
+        ]
+      ];
+    }
+    if (ending === 'send') {
+      return [
+        ['地面街口 · 目送黎明', 'Street Level · Sending Off the Dawn'],
+        [
+          '你在月台邊替老站長打完最後三次進站號誌，目送那班銀灰色的末班車載著溫暖的燈火駛向破曉，隨後撐起父親留下的黑傘，拾級走上地面的無名街口。\n\n雨已經停了，天邊浮起溫柔的金橘色朝霞。身後的地下車站完成了它最後一次發車，安靜地沉入晨光之中。\n\n你摸了摸口袋裡那張寫著「永遠有效」的回程車票。這一次，你替父親守完了最後一班夜車，也終於在黎明的微風裡與過去達成了和解。',
+          'After raising the brass lantern three times on the platform to guide the final train into the dawn, you carry your father’s black umbrella up the stone steps to the street.\n\nThe night rain has cleared, and a rose-gold sunrise warms the city skyline. Beneath your feet, Platform 404 has completed its final departure and rests in peace.\n\nYour fingers brush the ticket in your pocket marked “Always Valid.” Having fulfilled your father’s final watch, you step forward into the morning breeze at peace with the past.'
         ]
       ];
     }
     return [
-      ['地面無名街口', 'Street Level'],
+      ['地面街口 · 未竟之夜', 'Street Level · The Unfinished Night'],
       [
-        '你走上最後一階。天快亮了，微涼的晨風吹過這條安靜的街道。',
-        'You climb the final step. Dawn is breaking, and a cool morning breeze sweeps down the quiet street.'
+        '你穿過升起的鐵捲門，沿著長長的石階走上地面。黎明前的無名街口還籠罩在微涼的薄霧裡，遠處偶爾傳來一兩聲早班車的回音。\n\n身後的地下月台依然亮著剛恢復的燈火。你總覺得候車大廳的皮箱裡、或是廣播室緩緩轉動的磁帶上，還有老站長沒來得及對你說完的話。',
+        'Passing through the raised iron gate, you climb the long stairs to the surface. The pre-dawn street lies wrapped in cool mist.\n\nDeep underground behind you, the restored lights of Platform 404 still hum softly—and you sense that in the Waiting Hall suitcase or the Broadcast Room tape deck, your father’s final words are still waiting to be heard.'
       ]
     ];
   }
@@ -970,7 +1030,7 @@
   function getPuzzleConfig(key) {
     if (key === 'locker') {
       return {
-        title: ['維修櫃五鍵符號鎖', '5-Key Symbol Lock'],
+        title: ['維修櫃 · 五鍵符號鎖', 'Service Cabinet · Symbol Lock'],
         labels: symbolDefs,
         order: lockerTarget,
         prompt: [
@@ -984,7 +1044,7 @@
     }
     if (key === 'circuits') {
       return {
-        title: ['備援電源配電盤', 'Backup Power Board'],
+        title: ['配電控制室 · 備援配電盤', 'Control Room · Breaker Board'],
         labels: circuitDefs,
         order: circuitTarget,
         prompt: [
@@ -998,10 +1058,10 @@
     }
     if (key === 'pianoGame') {
       return {
-        title: ['候車大廳立式鋼琴（可點擊黑白鍵或按鍵盤彈奏）', 'Hall Upright Piano (Click keys or play with keyboard)'],
+        title: ['候車大廳 · 立式鋼琴', 'Waiting Hall · Upright Piano'],
         prompt: [
-          '你可以自由點擊白鍵與黑鍵（或按鍵盤 1～7 / A～J 與 W E T Y U）彈奏。若依序彈出父親家書題詩〈寄遠人〉首句所藏的四個音，就能解開譜架暗格。',
-          'Click the white and black keys (or press 1–7 / A–J and W E T Y U) to play freely. Playing the four notes hidden in the first line of your father’s poem will unlock the music stand.'
+          '指尖輕觸黑白琴鍵，琴聲便在空曠的候車大廳裡迴盪。若依序彈出父親家書題詩〈寄遠人〉首句所藏的四個音，就能解開譜架下的暗格。',
+          'Touch the ivory and ebony keys to let the melody echo through the hall. Playing the four notes hidden in the first line of your father’s poem will unlock the compartment beneath the music stand.'
         ],
         hint: clues.has('letter')
           ? getNoteText('letter')
@@ -1010,10 +1070,10 @@
     }
     if (key === 'suitcase') {
       return {
-        title: ['舊皮箱三輪記憶鎖', 'Suitcase Memory Lock'],
+        title: ['舊皮箱 · 三輪記憶鎖', 'Leather Suitcase · Memory Lock'],
         prompt: [
-          '三組黃銅轉輪分別對應「別離季節 · 柱上刻痕 · 車票番號」。請吟味老站長家書背面的古詩〈寄遠人〉（或查看大廳柱面與隨身車票），對準三組轉輪後開鎖。',
-          'The three brass wheels correspond to “Season · Pillar Mark · Ticket Track”. Read your father’s poem (or inspect the hall pillar and pocket ticket) to align the wheels.'
+          '三組黃銅轉輪分別刻著季節、身高刻痕與車票番號。請吟味老站長家書背面的古詩〈寄遠人〉，對準三組轉輪後壓下銅扣開鎖。',
+          'The three brass wheels bear the Season, Height Mark, and Ticket Track. Read your father’s poem to align the three wheels and press the brass latches.'
         ],
         hint: clues.has('letter')
           ? getNoteText('letter')
@@ -1022,10 +1082,10 @@
     }
     if (key === 'punchGame') {
       return {
-        title: ['手持站長驗票鉗（移動滑鼠對準印記格，點擊即可剪孔）', 'Holding Conductor’s Ticket Punch (Move cursor & click to punch)'],
+        title: ['站長驗票鉗 · 歸途車票', 'Conductor’s Ticket Punch · Return Ticket'],
         prompt: [
-          '手上的黃銅驗票鉗會跟隨你的游標移動。車票上印著「彎月、圓圈、水波、星芒、山稜」五格印記，請依月台古詩〈夜車行〉中「初發、中渡、終歸」三印之序，移動驗票鉗至對應方格並點擊剪孔。',
-          'The brass punch follows your cursor across the five emblem boxes on the ticket. Following the platform poem “Verse of the Night Train”, move the punch over the three emblems in order and click to clip each hole.'
+          '手上的黃銅驗票鉗跟隨著你的視線與手勢移動。車票上印著「彎月、圓圈、水波、星芒、山稜」五格印記，請依月台古詩〈夜車行〉中「初發、中渡、終歸」三印之序，將驗票鉗移至對應印記格上方並剪下圓孔。',
+          'The brass ticket punch moves with your hand across the five emblem boxes on the ticket. Following the platform poem “Verse of the Night Train”, position the punch over each of the three emblems in order and clip the holes.'
         ],
         hint: clues.has('schedule')
           ? getNoteText('schedule')
@@ -1034,9 +1094,9 @@
     }
     if (key === 'tunerGame') {
       return {
-        title: ['廣播室真空管調頻台', 'Vacuum-Tube Wave Receiver'],
+        title: ['廣播室 · 真空管調頻台', 'Broadcast Room · Wave Receiver'],
         prompt: [
-          '轉動右側的「頻率波段」與「相位微調」兩顆旋鈕，參照家書〈寄遠人〉末句所藏的道數，讓亮白色的即時波形與基準波完全重合。',
+          '轉動右側的頻率波段與相位微調旋鈕，參照家書〈寄遠人〉末句所藏的道數，讓亮白色的即時波形與基準波完全重合。',
           'Turn the Frequency and Phase knobs on the right, following the final line of your father’s poem until the live waveform locks onto the reference wave.'
         ],
         hint: clues.has('letter')
@@ -1046,14 +1106,14 @@
     }
     if (key === 'lanternGame') {
       return {
-        title: ['月台手提號誌燈', 'Platform Signal Lantern'],
+        title: ['第四〇四號月台 · 手提號誌燈', 'Platform 404 · Signal Lantern'],
         prompt: [
-          '凝視手提號誌燈的琥珀色光圈，當外圍收縮的光圈與中央燈框重疊時點擊畫面揮燈，向隧道裡的末班車發送三次進站號誌。',
-          'Watch the lantern’s amber glow and click to raise the lantern when the converging ring overlaps the inner frame, sending three docking signals.'
+          '凝視手提號誌燈的琥珀色光圈，當外圍收縮的光環與中央燈框重疊時舉起提燈，向隧道裡的末班車發送三次進站號誌。',
+          'Watch the lantern’s amber glow and raise the lantern when the converging ring overlaps the inner frame, sending three docking signals to the approaching train.'
         ],
         hint: [
-          '當白色收縮圓環進入手提燈中央的雙線圓框時點擊即可。共需發送三次號誌引導列車停靠。',
-          'Click when the shrinking ring enters the double circle at the center of the lantern. Three signals will dock the train.'
+          '待收縮的亮白光環進入提燈中央的雙線圓框時即可揮燈回應。',
+          'Raise the lantern when the shrinking white ring enters the double circle at the center of the globe.'
         ],
       };
     }
@@ -1223,12 +1283,310 @@
     return Math.max(12, Math.round(100 - freqDiff * 24 - phaseDiff * 20));
   }
 
+  // =========================================================================
+  // Detailed Character, Arched Umbrella & Commuter Train Drawing Helpers
+  // =========================================================================
+  function drawOpenUmbrella(cx, cy, rx, ry, shaftLen, t = 0, facing = 1) {
+    // 1. Central steel shaft descending from canopy apex into the character's hand
+    const handY = cy + shaftLen;
+    ctx.strokeStyle = '#c4d2e2';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - ry * 0.3);
+    ctx.lineTo(cx, handY);
+    ctx.stroke();
+
+    // 2. Curved wooden J-handle at the bottom of the shaft
+    ctx.strokeStyle = '#d8b688';
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(cx, handY - 3);
+    ctx.lineTo(cx, handY + 1.5);
+    ctx.arc(cx - facing * 2.6, handY + 1.5, 2.6, facing > 0 ? 0 : Math.PI, facing > 0 ? Math.PI : 0, false);
+    ctx.stroke();
+
+    // 3. Top metallic ferrule spike above the canopy dome
+    ctx.strokeStyle = '#dce6f4';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - ry - 4.5);
+    ctx.lineTo(cx, cy - ry + 1);
+    ctx.stroke();
+    circle('#eef4fc', cx, cy - ry - 4.5, 1.1);
+
+    // 4. Arched 4-panel umbrella canopy with scalloped bottom rim
+    const domeGrad = ctx.createLinearGradient(cx, cy - ry, cx, cy + 3);
+    domeGrad.addColorStop(0, '#273142');
+    domeGrad.addColorStop(0.55, '#141a24');
+    domeGrad.addColorStop(1, '#0b0e14');
+
+    const p0 = cx - rx;
+    const p1 = cx - rx * 0.5;
+    const p2 = cx;
+    const p3 = cx + rx * 0.5;
+    const p4 = cx + rx;
+
+    ctx.fillStyle = domeGrad;
+    ctx.beginPath();
+    ctx.moveTo(p0, cy);
+    // Smooth arched dome top
+    ctx.bezierCurveTo(cx - rx * 0.82, cy - ry * 0.98, cx - rx * 0.25, cy - ry, cx, cy - ry);
+    ctx.bezierCurveTo(cx + rx * 0.25, cy - ry, cx + rx * 0.82, cy - ry * 0.98, p4, cy);
+    // 4 concave scalloped panels along bottom edge
+    ctx.quadraticCurveTo((p3 + p4) * 0.5, cy - 3.4, p3, cy + 0.8);
+    ctx.quadraticCurveTo((p2 + p3) * 0.5, cy - 3.2, p2, cy + 1.2);
+    ctx.quadraticCurveTo((p1 + p2) * 0.5, cy - 3.2, p1, cy + 0.8);
+    ctx.quadraticCurveTo((p0 + p1) * 0.5, cy - 3.4, p0, cy);
+    ctx.closePath();
+    ctx.fill();
+
+    // 5. Crisp wet specular highlight along upper dome arch
+    ctx.strokeStyle = 'rgba(218, 236, 255, 0.86)';
+    ctx.lineWidth = 1.35;
+    ctx.beginPath();
+    ctx.moveTo(p0, cy);
+    ctx.bezierCurveTo(cx - rx * 0.82, cy - ry * 0.98, cx - rx * 0.25, cy - ry, cx, cy - ry);
+    ctx.bezierCurveTo(cx + rx * 0.25, cy - ry, cx + rx * 0.82, cy - ry * 0.98, p4, cy);
+    ctx.stroke();
+
+    // 6. Curved internal umbrella ribs & metallic rib tips
+    ctx.strokeStyle = 'rgba(180, 206, 236, 0.42)';
+    ctx.lineWidth = 0.9;
+    for (const [rxPt, ryPt] of [[p1, cy + 0.8], [p2, cy + 1.2], [p3, cy + 0.8]]) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - ry);
+      ctx.quadraticCurveTo((cx + rxPt) * 0.5, cy - ry * 0.55, rxPt, ryPt);
+      ctx.stroke();
+    }
+    for (const [tipX, tipY] of [[p0, cy], [p1, cy + 0.8], [p2, cy + 1.2], [p3, cy + 0.8], [p4, cy]]) {
+      circle('#d8e4f2', tipX, tipY, 0.9);
+    }
+
+    // 7. Animated raindrop splashes bouncing off the dome & dripping from rib tips
+    for (let s = 0; s < 5; s++) {
+      const phase = (t * 3.2 + s * 0.21) % 1;
+      const sx = cx + (s - 2) * (rx * 0.38);
+      const baseArcY = cy - ry * (1 - Math.pow((s - 2) / 2.4, 2) * 0.78);
+      const splashY = baseArcY - phase * 4.5;
+      circle(`rgba(205, 232, 255, ${(1 - phase) * 0.85})`, sx + (phase - 0.5) * 3, splashY, 0.9);
+    }
+  }
+
+  function drawFoldedUmbrella(handX, handY, tipX, tipY) {
+    // Curved wooden J-handle held in the extended hand
+    ctx.strokeStyle = '#e0be8e';
+    ctx.lineWidth = 2.1;
+    ctx.beginPath();
+    ctx.arc(handX - 2, handY - 1, 2.5, 0.2 * Math.PI, 1.25 * Math.PI, false);
+    ctx.stroke();
+
+    // Tapered black umbrella fabric body
+    const dx = tipX - handX;
+    const dy = tipY - handY;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    shape('#141922', [
+      [handX + nx * 2.2, handY + ny * 2.2],
+      [handX - nx * 2.2, handY - ny * 2.2],
+      [tipX - nx * 0.8, tipY - ny * 0.8],
+      [tipX + nx * 0.8, tipY + ny * 0.8],
+    ]);
+    // Crisp wet silver edge along top of the folded umbrella
+    ctx.strokeStyle = '#d4e2f4';
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.moveTo(handX + nx * 2.1, handY + ny * 2.1);
+    ctx.lineTo(tipX, tipY);
+    ctx.stroke();
+    // Brass collar ring & white button strap
+    const midX = handX + dx * 0.45;
+    const midY = handY + dy * 0.45;
+    circle('#e6c882', handX + dx * 0.14, handY + dy * 0.14, 1.3);
+    circle('#e8f0fa', midX, midY, 1.2);
+    // Silver ferrule tip
+    ctx.strokeStyle = '#eef4fc';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(tipX, tipY);
+    ctx.lineTo(tipX + (dx / len) * 4, tipY + (dy / len) * 4);
+    ctx.stroke();
+  }
+
+  function drawStationmasterFigure(x, footY, scale = 1, opts = {}) {
+    const {
+      facing = 1,
+      hasUmbrella = true,
+      offerUmbrella = false,
+      salute = false,
+      sepia = false,
+      t = 0,
+    } = opts;
+    const coatCol = sepia ? '#382f28' : '#222c3c';
+    const coatEdge = sepia ? '#6e5c4e' : '#4e6078';
+    const skinCol = sepia ? '#ebd8be' : '#dce6f2';
+    const capCol = sepia ? '#28201b' : '#18202c';
+    const goldCol = '#e8c67a';
+
+    const headY = footY - 46 * scale;
+    const shoulderY = footY - 38 * scale;
+    const hemY = footY - 11 * scale;
+
+    // 1. If holding open umbrella overhead, draw canopy & shaft behind/above head
+    const umbX = x + facing * 2 * scale;
+    const umbY = headY - 9 * scale;
+    if (hasUmbrella) {
+      drawOpenUmbrella(umbX, umbY, 24 * scale, 13.5 * scale, 22 * scale, t, facing);
+    }
+
+    // 2. Boots & trousers
+    rect('#12161e', x - 5 * scale, hemY, 4 * scale, 11 * scale);
+    rect('#1a202c', x + 1.5 * scale, hemY, 4 * scale, 11 * scale);
+    rect('#0b0d12', x - 6 * scale, footY - 2.5 * scale, 6 * scale, 2.5 * scale);
+    rect('#0b0d12', x + 1 * scale, footY - 2.5 * scale, 6 * scale, 2.5 * scale);
+
+    // 3. Tailored long stationmaster overcoat
+    shape(coatCol, [
+      [x - 7.5 * scale, shoulderY],
+      [x + 7.5 * scale, shoulderY],
+      [x + 9.5 * scale, hemY],
+      [x - 9.5 * scale, hemY],
+    ]);
+    ctx.strokeStyle = coatEdge;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x - 7.5 * scale, shoulderY);
+    ctx.lineTo(x - 9.5 * scale, hemY);
+    ctx.moveTo(x + 7.5 * scale, shoulderY);
+    ctx.lineTo(x + 9.5 * scale, hemY);
+    ctx.stroke();
+
+    // Brass coat buttons & warm scarf at collar
+    rect('#c8a87e', x - 4.5 * scale, shoulderY - 1.5 * scale, 9 * scale, 3 * scale);
+    for (let b = 0; b < 3; b++) {
+      circle(goldCol, x + facing * 2 * scale, shoulderY + (6 + b * 6) * scale, 0.9 * scale);
+    }
+
+    // 4. Head & silver-gray hair
+    circle(skinCol, x, headY, 5.8 * scale);
+    rect('#c8d4e4', x - facing * 5.5 * scale, headY - 2 * scale, 3 * scale, 4 * scale);
+
+    // 5. Peaked Stationmaster Cap (Crown, gold band, badge & visor brim)
+    shape(capCol, [
+      [x - 6.5 * scale, headY - 3 * scale],
+      [x - 5.5 * scale, headY - 8.5 * scale],
+      [x + 6.5 * scale, headY - 8.5 * scale],
+      [x + 6.5 * scale, headY - 3 * scale],
+    ]);
+    rect(goldCol, x - 6 * scale, headY - 4.2 * scale, 12 * scale, 1.4 * scale);
+    circle('#fff2c8', x + facing * 2 * scale, headY - 6 * scale, 1.1 * scale);
+    // Visor brim
+    shape('#0d1118', [
+      [x + facing * 2 * scale, headY - 3.2 * scale],
+      [x + facing * 10 * scale, headY - 1.8 * scale],
+      [x + facing * 9 * scale, headY - 0.5 * scale],
+      [x + facing * 1 * scale, headY - 1.8 * scale],
+    ]);
+
+    // 6. Arm gripping the open umbrella's J-handle
+    if (hasUmbrella) {
+      const handX = umbX;
+      const handY = umbY + 21 * scale;
+      ctx.strokeStyle = coatEdge;
+      ctx.lineWidth = 3.2 * scale;
+      ctx.beginPath();
+      ctx.moveTo(x - facing * 2 * scale, shoulderY + 4 * scale);
+      ctx.lineTo(handX, handY);
+      ctx.stroke();
+      circle(skinCol, handX, handY, 1.8 * scale);
+    }
+
+    // 7. Second arm: offering the spare folded umbrella OR saluting cap brim
+    if (offerUmbrella) {
+      const extX = x + facing * 16 * scale;
+      const extY = shoulderY + 5 * scale;
+      ctx.strokeStyle = coatCol;
+      ctx.lineWidth = 3.4 * scale;
+      ctx.beginPath();
+      ctx.moveTo(x + facing * 4 * scale, shoulderY + 4 * scale);
+      ctx.lineTo(extX, extY);
+      ctx.stroke();
+      circle(skinCol, extX, extY, 2 * scale);
+      drawFoldedUmbrella(extX, extY, extX + facing * 18 * scale, extY - 9 * scale);
+    } else if (salute) {
+      ctx.strokeStyle = coatEdge;
+      ctx.lineWidth = 3 * scale;
+      ctx.beginPath();
+      ctx.moveTo(x + facing * 4 * scale, shoulderY + 4 * scale);
+      ctx.lineTo(x + facing * 10 * scale, headY - 1 * scale);
+      ctx.lineTo(x + facing * 7 * scale, headY - 3 * scale);
+      ctx.stroke();
+      circle(skinCol, x + facing * 7 * scale, headY - 3 * scale, 1.7 * scale);
+    }
+  }
+
+  function drawTravelerFigure(x, footY, scale = 1, stride = 0) {
+    const headY = footY - 43 * scale;
+    const shoulderY = footY - 35 * scale;
+    const hemY = footY - 12 * scale;
+    const legSwing = Math.sin(stride) * 4 * scale;
+
+    // Walking legs
+    ctx.strokeStyle = '#1b222e';
+    ctx.lineWidth = 3.2 * scale;
+    ctx.beginPath();
+    ctx.moveTo(x - 2 * scale, hemY);
+    ctx.lineTo(x - 2 * scale - legSwing, footY);
+    ctx.moveTo(x + 2 * scale, hemY);
+    ctx.lineTo(x + 2 * scale + legSwing, footY);
+    ctx.stroke();
+
+    // Coat silhouette
+    shape('#38465c', [
+      [x - 6.5 * scale, shoulderY],
+      [x + 6.5 * scale, shoulderY],
+      [x + 8.5 * scale, hemY],
+      [x - 8.5 * scale, hemY],
+    ]);
+    // Scarf & head
+    rect('#d8ba92', x - 4 * scale, shoulderY - 1.5 * scale, 8 * scale, 2.5 * scale);
+    circle('#e6eef8', x, headY, 5.4 * scale);
+    shape('#1c222c', [
+      [x - 5.6 * scale, headY - 1 * scale],
+      [x - 4 * scale, headY - 6.2 * scale],
+      [x + 5.6 * scale, headY - 5 * scale],
+      [x + 5.8 * scale, headY + 0.5 * scale],
+    ]);
+
+    // Arm carrying vintage leather suitcase
+    const bagX = x + 7 * scale;
+    const bagY = footY - 19 * scale;
+    ctx.strokeStyle = '#4c5e78';
+    ctx.lineWidth = 2.8 * scale;
+    ctx.beginPath();
+    ctx.moveTo(x + 3 * scale, shoulderY + 4 * scale);
+    ctx.lineTo(bagX + 6 * scale, bagY);
+    ctx.stroke();
+    rect('#6e523c', bagX, bagY + 2 * scale, 13 * scale, 9 * scale);
+    strokeRect('#cbb08e', bagX, bagY + 2 * scale, 13 * scale, 9 * scale);
+    rect('#cbb08e', bagX + 4 * scale, bagY, 5 * scale, 2 * scale);
+  }
+
+  function drawFinBadge() {
+    rect('rgba(8, 9, 12, 0.76)', 248, 152, 60, 18);
+    strokeRect('rgba(255, 240, 205, 0.55)', 248, 152, 60, 18);
+    ctx.fillStyle = '#fff4d8';
+    ctx.font = '600 8px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('FIN · 404', 278, 164);
+    ctx.textAlign = 'start';
+  }
+
   // Render Hands-Free Cinematic Story Cutscenes (320x180 logical space scaled 2x to 640x360)
   function paintCutscene(name, progress, t) {
     rect('#07070a', 0, 0, 320, 180);
 
     if (name === 'cutscene-piano') {
-      // Warm nostalgic sepia-amber & twilight vignette
       const bgGrad = ctx.createLinearGradient(0, 0, 0, 180);
       bgGrad.addColorStop(0, '#121016');
       bgGrad.addColorStop(1, '#261e18');
@@ -1236,147 +1594,543 @@
 
       if (progress < 0.36) {
         // Shot 1: Father & child sitting together at the upright piano in warm golden light
-        radialGlow(160, 75, 10, 145, 'rgba(255, 224, 165, 0.32)');
+        radialGlow(160, 75, 10, 145, 'rgba(255, 224, 165, 0.34)');
         linearRay(90, 0, 180, 170, [[70, 0], [135, 0], [230, 180], [95, 180]], 'rgba(255, 236, 195, 0.22)');
 
-        // Upright Piano body in profile/front-3/4
-        rect('#231d1a', 92, 54, 96, 86);
-        strokeRect('rgba(255, 225, 175, 0.45)', 92, 54, 96, 86);
-        rect('#f5ebd6', 98, 94, 84, 8); // glowing keyboard
-        for (let k = 1; k < 14; k++) rect('rgba(56, 48, 42, 0.35)', 98 + k * 6, 94, 0.8, 8);
+        // Upright Piano body with warm wood paneling, brass pedals & music stand
+        rect('#231d1a', 88, 48, 108, 92);
+        strokeRect('rgba(255, 225, 175, 0.48)', 88, 48, 108, 92);
+        rect('#181311', 96, 54, 92, 28);
+        rect('#f2e6ce', 130, 66, 24, 14); // sheet music on stand
+        rect('#f5ebd6', 94, 92, 96, 8); // ivory keyboard
+        for (let k = 1; k < 16; k++) rect('rgba(56, 48, 42, 0.35)', 94 + k * 6, 92, 0.8, 8);
         for (const bk of [0, 1, 3, 4, 5, 7, 8, 10, 11, 12]) {
-          rect('#181412', 102 + bk * 6, 94, 3.5, 4.8);
+          rect('#181412', 98 + bk * 6, 92, 3.5, 4.8);
         }
-        // Father silhouette (tall, stationmaster cap)
-        circle('#e6d4b8', 128, 72, 9);
-        rect('#d8c3a5', 119, 64, 18, 3); // cap brim
-        shape('#cbb292', [[114, 82], [142, 82], [146, 140], [110, 140]]);
-        // Child silhouette beside him on bench, swinging legs
-        circle('#f5e6cc', 158, 84, 6.5);
-        shape('#e8d5b5', [[149, 92], [167, 92], [169, 126], [147, 126]]);
-        // Floating musical notes / dust motes rising in the light beam
+        // Father in stationmaster cap seated on bench guiding the child's hands
+        circle('#e6d4b8', 124, 68, 8);
+        rect('#2b221c', 116, 59, 16, 5);
+        rect('#e6c478', 116, 63, 16, 1.5);
+        shape('#cbb292', [[111, 77], [137, 77], [141, 138], [107, 138]]);
+        // Child seated beside him
+        circle('#f5e6cc', 158, 80, 6.2);
+        shape('#e8d5b5', [[149, 87], [167, 87], [169, 126], [147, 126]]);
+        rect('#3a2e26', 102, 122, 74, 5); // piano bench
         for (let m = 0; m < 12; m++) {
-          const mx = 105 + ((m * 19) % 85);
-          const my = 88 - ((t * 18 + m * 11) % 62);
-          circle('rgba(255, 242, 210, 0.75)', mx, my, 1.5);
+          const mx = 100 + ((m * 19) % 92);
+          const my = 86 - ((t * 18 + m * 11) % 58);
+          circle('rgba(255, 242, 210, 0.78)', mx, my, 1.5);
         }
       } else if (progress < 0.72) {
         // Shot 2: Father kneeling by the tile pillar marking the child's height with a pencil
-        radialGlow(160, 82, 12, 140, 'rgba(255, 228, 175, 0.30)');
-        // Tile Pillar in center
-        rect('#383432', 138, 18, 36, 148);
-        strokeRect('rgba(255, 235, 200, 0.4)', 138, 18, 36, 148);
-        for (let y = 30; y < 160; y += 16) rect('rgba(255,255,255,0.12)', 139, y, 34, 1);
-        //Glowing height notch on pillar
+        radialGlow(160, 82, 12, 140, 'rgba(255, 228, 175, 0.32)');
+        rect('#383432', 138, 18, 36, 144);
+        strokeRect('rgba(255, 235, 200, 0.42)', 138, 18, 36, 144);
+        for (let y = 30; y < 158; y += 16) rect('rgba(255,255,255,0.12)', 139, y, 34, 1);
         rect('#fff5dc', 162, 86, 12, 2);
         radialGlow(168, 87, 1, 18, 'rgba(255, 245, 215, 0.65)');
         // Child standing tall against the pillar
-        circle('#f5e6cc', 184, 93, 6.5);
-        rect('#e6d4b8', 178, 100, 12, 46);
+        circle('#f5e6cc', 184, 93, 6.2);
+        shape('#e6d4b8', [[177, 100], [191, 100], [193, 144], [175, 144]]);
         // Father kneeling on the left holding the pencil to the mark
-        circle('#d8c3a5', 114, 84, 8.5);
-        shape('#c4ad8d', [[102, 94], [128, 94], [134, 146], [98, 146]]);
-        rect('#fff0c8', 128, 86, 34, 2.5); // arm reaching to mark
+        circle('#d8c3a5', 114, 82, 7.8);
+        rect('#2b221c', 106, 73, 16, 4.5);
+        rect('#e6c478', 106, 77, 16, 1.3);
+        shape('#c4ad8d', [[102, 91], [126, 91], [132, 144], [98, 144]]);
+        rect('#fff0c8', 124, 86, 38, 2.5);
       } else {
-        // Shot 3: Memory dissolving into the empty present-day hall with glowing open music stand
+        // Shot 3: Memory dissolving into the present-day hall with glowing open music stand
         const fade = (progress - 0.72) / 0.28;
         radialGlow(160, 90, 8, 130, `rgba(255, 230, 180, ${0.35 * (1 - fade * 0.4)})`);
         rect('#1d1918', 104, 58, 112, 82);
         strokeRect('rgba(255, 230, 185, 0.5)', 104, 58, 112, 82);
-        // Open compartment glowing with the sheet music inside
         rect('#fff4d8', 142, 68, 36, 22);
         radialGlow(160, 79, 4, 38, 'rgba(255, 240, 200, 0.6)');
       }
     } else if (name === 'cutscene-rain') {
-      // Cool blue-slate rainy night contrasted with solitary warm platform lamp
+      // Cool slate-blue rainy night on Platform 404 with detailed arched black umbrella
       const bgGrad = ctx.createLinearGradient(0, 0, 0, 180);
-      bgGrad.addColorStop(0, '#090d14');
-      bgGrad.addColorStop(1, '#141c28');
+      bgGrad.addColorStop(0, '#070b12');
+      bgGrad.addColorStop(1, '#131c28');
       rect(bgGrad, 0, 0, 320, 180);
 
-      // Falling rain streaks across the night
-      for (let r = 0; r < 42; r++) {
-        const rx = (r * 23 - Math.round(t * 28)) % 320;
-        const ry = (r * 17 + Math.round(t * 110)) % 165;
-        rect('rgba(185, 215, 255, 0.35)', (rx + 320) % 320, ry, 1, 7);
+      // Slanted rain streaks falling across the night sky
+      ctx.strokeStyle = 'rgba(185, 216, 255, 0.36)';
+      ctx.lineWidth = 0.9;
+      for (let r = 0; r < 46; r++) {
+        const rx = ((r * 23 - Math.round(t * 36)) % 320 + 320) % 320;
+        const ry = (r * 19 + Math.round(t * 118)) % 146;
+        ctx.beginPath();
+        ctx.moveTo(rx, ry);
+        ctx.lineTo(rx - 2.5, ry + 7.5);
+        ctx.stroke();
       }
-      // Wet reflective platform floor
-      rect('#0e131b', 0, 142, 320, 38);
+
+      // Wet reflective platform floor & yellow safety line
+      rect('#0d131c', 0, 140, 320, 24);
+      rect('#d8b458', 0, 141, 320, 1.6);
 
       if (progress < 0.35) {
-        // Shot 1: Young traveler walking away toward the train on the right
-        const walkX = Math.round(135 + progress * 90);
-        radialGlow(90, 52, 4, 95, 'rgba(255, 220, 155, 0.28)');
-        // Platform lamp post
-        rect('#586370', 88, 42, 3, 100);
-        circle('#ffefc8', 89.5, 42, 5);
-        // Young traveler walking right with suitcase
-        circle('#dce6f2', walkX, 96, 6.5);
-        rect('#c2d0e0', walkX - 6, 103, 12, 39);
-        rect('#8fa0b5', walkX + 8, 120, 14, 10);
+        // Shot 1: Young traveler walking toward the waiting train in the rain while Father hurries behind under his open black umbrella, offering a second umbrella!
+        const p1 = progress / 0.35;
+        // Station canopy shelter & warm lamp on the left
+        shape('#161f2c', [[0, 18], [132, 18], [116, 34], [0, 34]]);
+        rect('#465264', 76, 34, 3, 106);
+        circle('#fff2ce', 77.5, 36, 4.5);
+        radialGlow(77.5, 38, 3, 85, 'rgba(255, 220, 155, 0.30)');
+
+        // Waiting commuter train on the right edge (x: 218..320)
+        rect('#202836', 218, 44, 102, 96);
+        strokeRect('#7e90a8', 218, 44, 102, 96);
+        rect('#dce4f0', 218, 92, 102, 3.5);
+        rect('#ffefd0', 230, 58, 30, 28); // open warm doorway
+        rect('#ffefd0', 272, 62, 34, 22); // passenger window
+        radialGlow(245, 76, 4, 48, 'rgba(255, 232, 180, 0.35)');
+
+        // Young traveler walking right toward train carrying suitcase
+        const walkX = Math.round(142 + p1 * 54);
+        drawTravelerFigure(walkX, 141, 0.92, t * 8);
+
+        // Stationmaster Father hurrying after the traveler under his open arched black umbrella + holding out the spare umbrella!
+        const fatherX = Math.round(58 + p1 * 42);
+        drawStationmasterFigure(fatherX, 141, 0.96, {
+          facing: 1,
+          hasUmbrella: true,
+          offerUmbrella: true,
+          t,
+        });
       } else if (progress < 0.72) {
-        // Shot 2: Father running to the closing train doors holding out the black umbrella
+        // Shot 2: Close-up at the train door — doors sliding shut while Father stands under his arched black umbrella holding out the spare umbrella!
         const p2 = (progress - 0.35) / 0.37;
-        // Train car on right half of screen
-        rect('#1d2633', 168, 46, 140, 96);
-        strokeRect('#7a8ea8', 168, 46, 140, 96);
-        // Warm lit train window with young traveler inside
-        rect('#ffeed2', 192, 68, 42, 34);
-        radialGlow(213, 85, 4, 48, 'rgba(255, 230, 180, 0.38)');
-        circle('#2a3038', 213, 86, 6);
-        rect('#2a3038', 207, 92, 12, 10);
-        // Father outside on the platform holding out the black umbrella
-        const fatherX = Math.round(112 + p2 * 24);
-        circle('#d8e2ef', fatherX, 92, 7);
-        rect('#b8c7d9', fatherX - 7, 100, 14, 42);
-        // Extended arm holding the Black Umbrella toward the train
-        rect('#e6eef8', fatherX + 7, 104, 22, 3);
-        shape('#ffffff', [[fatherX + 26, 86], [fatherX + 34, 114], [fatherX + 22, 114]]);
+        // Detailed commuter carriage occupying right side (x: 162..320)
+        rect('#3e4756', 162, 34, 158, 8); // corrugated roof
+        rect('#1e2634', 162, 42, 158, 98);
+        strokeRect('#8a9bb2', 162, 42, 158, 98);
+        rect('#dce4f0', 162, 98, 158, 4);
+        rect('#d8b464', 162, 103, 158, 2);
+
+        // Pneumatic double doors closing (x: 174..218, y: 54..136)
+        rect('#2c241e', 174, 54, 44, 82);
+        const doorGap = Math.max(0, Math.round((1 - Math.min(1, p2 * 1.35)) * 18));
+        const leafW = 22 - Math.round(doorGap * 0.5);
+        rect('#323c4e', 174, 54, leafW, 82);
+        strokeRect('#98a8be', 174, 54, leafW, 82);
+        rect('#323c4e', 218 - leafW, 54, leafW, 82);
+        strokeRect('#98a8be', 218 - leafW, 54, leafW, 82);
+
+        // Warm lit carriage window with young traveler looking back inside (x: 234..296, y: 58..92)
+        rect('#ffefd0', 234, 58, 62, 34);
+        strokeRect('#98a8be', 234, 58, 62, 34);
+        radialGlow(265, 75, 4, 54, 'rgba(255, 230, 180, 0.38)');
+        circle('#262d38', 262, 73, 6);
+        shape('#262d38', [[253, 80], [271, 80], [274, 92], [250, 92]]);
+
+        // Father on the rain-swept platform under his large arched black umbrella, extending the spare umbrella toward the door
+        const fatherX = Math.round(92 + Math.min(1, p2 * 1.2) * 26);
+        radialGlow(72, 42, 4, 95, 'rgba(255, 220, 160, 0.25)');
+        drawStationmasterFigure(fatherX, 141, 1.08, {
+          facing: 1,
+          hasUmbrella: true,
+          offerUmbrella: true,
+          t,
+        });
       } else {
-        // Shot 3: Train tail-lights receding into tunnel; Father standing alone under the lamp with the umbrella
+        // Shot 3: Train tail-lights receding down the tracks into the dark tunnel; Father standing alone under his arched black umbrella beneath the platform lamp
         const p3 = (progress - 0.72) / 0.28;
-        radialGlow(110, 50, 5, 110, 'rgba(255, 220, 160, 0.34)');
-        rect('#586370', 108, 40, 3, 102);
-        circle('#fff0cc', 109.5, 40, 5);
-        // Father standing motionless beneath the open black umbrella
-        shape('#e2eaf5', [[84, 78], [110, 62], [136, 78]]);
-        rect('#c2d0e0', 104, 88, 12, 54);
-        // Reflection on wet floor
-        radialGlow(110, 156, 4, 45, 'rgba(255, 220, 160, 0.18)');
-        // Receding red tail-lights in the dark tunnel on the right
-        const tailR = Math.max(1.5, 5 * (1 - p3 * 0.7));
-        const tailX = Math.round(235 + p3 * 35);
-        radialGlow(tailX, 98, 1, 24, `rgba(255, 90, 70, ${0.65 * (1 - p3 * 0.5)})`);
-        circle('#ff6b57', tailX - 6, 98, tailR);
-        circle('#ff6b57', tailX + 6, 98, tailR);
+        // Tunnel portal & receding tracks on the right
+        shape('#05070b', [[188, 52], [298, 52], [312, 140], [176, 140]]);
+        ctx.strokeStyle = '#485466';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(176, 140);
+        ctx.lineTo(188, 52);
+        ctx.lineTo(298, 52);
+        ctx.lineTo(312, 140);
+        ctx.stroke();
+
+        // Receding train car with twin red tail-lights
+        const scaleT = Math.max(0.28, 1 - p3 * 0.65);
+        const tx = Math.round(215 + p3 * 36);
+        const ty = Math.round(96 - p3 * 6);
+        const tw = Math.round(64 * scaleT);
+        const th = Math.round(56 * scaleT);
+        rect('#1c222e', tx - Math.round(tw / 2), ty - Math.round(th / 2), tw, th);
+        strokeRect('#68788e', tx - Math.round(tw / 2), ty - Math.round(th / 2), tw, th);
+        const tailR = Math.max(1.6, 3.8 * scaleT);
+        radialGlow(tx, ty + Math.round(th * 0.15), 1, 28 * scaleT, `rgba(255, 85, 65, ${0.72 * (1 - p3 * 0.4)})`);
+        circle('#ff6b57', tx - Math.round(tw * 0.28), ty + Math.round(th * 0.15), tailR);
+        circle('#ff6b57', tx + Math.round(tw * 0.28), ty + Math.round(th * 0.15), tailR);
+
+        // Warm platform lamp post on the left
+        rect('#586370', 74, 32, 3, 109);
+        circle('#fff0cc', 75.5, 32, 5);
+        radialGlow(75.5, 36, 4, 108, 'rgba(255, 222, 160, 0.36)');
+        radialGlow(98, 152, 4, 48, 'rgba(255, 220, 160, 0.20)');
+
+        // Solitary Stationmaster standing motionless under his large arched black umbrella
+        drawStationmasterFigure(98, 141, 1.06, {
+          facing: 1,
+          hasUmbrella: true,
+          offerUmbrella: false,
+          t,
+        });
+        // Puddle ripples around his boots
+        circle('rgba(195, 224, 255, 0.35)', 98, 143, 10 + (t * 8) % 8, true, 0.8);
       }
     } else if (name === 'cutscene-arrival') {
-      // Dramatic HDR Headlight Volumetric Cutscene on Platform 404
-      rect('#08090c', 0, 0, 320, 180);
-      const beamReach = Math.min(1, progress * 1.35);
-      linearRay(
-        24, 96, 310, 110,
-        [[20, 82], [320, Math.round(20 + (1 - beamReach) * 40)], [320, 175], [20, 116]],
-        `rgba(255, 248, 228, ${0.48 * beamReach})`,
-        'rgba(255, 240, 200, 0.02)'
-      );
-      // Train body gliding across the track
-      const trainX = Math.round(-120 + Math.min(1, progress * 1.15) * 210);
-      rect('#2a2d34', trainX, 54, 185, 78);
-      strokeRect('#b8c2d0', trainX, 54, 185, 78);
-      rect('#d8e0ec', trainX, 88, 185, 4); // silver trim stripe
-      // Glowing carriage windows casting light onto the wet platform
-      for (let w = 0; w < 4; w++) {
-        const wx = trainX + 18 + w * 40;
-        rect('#fff4da', wx, 66, 28, 20);
-        radialGlow(wx + 14, 76, 2, 32, 'rgba(255, 240, 200, 0.28)');
-        // Wet floor reflection below each window
-        rect('rgba(255, 240, 200, 0.14)', wx + 2, 138, 24, 28);
+      // Multi-shot architectural train arrival on Platform 404
+      rect('#090b10', 0, 0, 320, 180);
+
+      // Station back wall tiles & concrete pillars
+      rect('#12151e', 0, 18, 320, 118);
+      for (let ty = 32; ty < 132; ty += 16) {
+        rect('rgba(255,255,255,0.03)', 0, ty, 320, 0.8);
       }
-      // Twin HDR Headlights at front of train
-      const frontX = trainX + 185;
-      radialGlow(frontX, 96, 2, 42, 'rgba(255, 252, 240, 0.85)');
-      circle('#ffffff', frontX - 3, 96, 5);
+      for (let px = 48; px < 320; px += 84) {
+        rect('#1a1e28', px, 18, 14, 118);
+      }
+      // Overhead catenary contact wire
+      rect('#586274', 0, 35, 320, 1);
+
+      if (progress < 0.38) {
+        // Shot 1: Commuter train gliding out of the dark tunnel arch along steel rails with volumetric headlights
+        const p1 = progress / 0.38;
+        const ease1 = 1 - Math.pow(1 - p1, 2.4);
+
+        // Tunnel portal arch on the left
+        shape('#050609', [[0, 18], [82, 18], [82, 136], [0, 136]]);
+        strokeRect('#4a5262', -2, 24, 84, 112);
+
+        // Track bed, wooden sleepers & steel rails
+        rect('#0b0d12', 0, 126, 320, 18);
+        for (let sx = 8; sx < 320; sx += 14) {
+          shape('#2a2420', [[sx, 132], [sx + 7, 132], [sx + 4, 140], [sx - 3, 140]]);
+        }
+        rect('#8a94a6', 0, 131, 320, 1.5);
+        rect('#a8b2c4', 0, 137, 320, 1.8);
+
+        // Train body advancing along the rails
+        const frontX = Math.round(56 + ease1 * 178);
+        const carLeft = frontX - 210;
+
+        // Undercarriage bogies & steel wheels on rails
+        for (const bx of [carLeft + 26, carLeft + 148]) {
+          rect('#14171f', bx, 122, 38, 12);
+          circle('#788294', bx + 8, 132, 4.5);
+          circle('#788294', bx + 30, 132, 4.5);
+        }
+
+        // Main steel carriage body & sculpted aerodynamic front nose
+        shape('#282f3d', [
+          [carLeft, 46],
+          [frontX - 14, 46],
+          [frontX, 74],
+          [frontX, 124],
+          [carLeft, 124],
+        ]);
+        // Corrugated silver roof & pantograph
+        shape('#525b6c', [
+          [carLeft, 40],
+          [frontX - 20, 40],
+          [frontX - 14, 46],
+          [carLeft, 46],
+        ]);
+        ctx.strokeStyle = '#8892a4';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(carLeft + 64, 40);
+        ctx.lineTo(carLeft + 72, 35);
+        ctx.lineTo(carLeft + 62, 35);
+        ctx.stroke();
+
+        // Silver & warm-amber waist stripes
+        rect('#dce4f0', carLeft, 92, Math.max(0, frontX - carLeft - 2), 4);
+        rect('#d8b05c', carLeft, 97, Math.max(0, frontX - carLeft - 2), 2);
+
+        // Glowing passenger windows with interior seats & straps
+        for (let w = 0; w < 4; w++) {
+          const wx = carLeft + 16 + w * 40;
+          if (wx + 28 < frontX - 18) {
+            rect('#ffefd0', wx, 58, 28, 22);
+            strokeRect('#9aa6ba', wx, 58, 28, 22);
+            rect('#c89666', wx + 4, 73, 8, 7);
+            rect('#c89666', wx + 16, 73, 8, 7);
+            radialGlow(wx + 14, 69, 2, 26, 'rgba(255, 236, 190, 0.25)');
+          }
+        }
+
+        // Sculpted front windshield, '404' destination headmark & cowcatcher skirt
+        shape('#d8e6f5', [
+          [frontX - 18, 54],
+          [frontX - 6, 54],
+          [frontX - 1, 74],
+          [frontX - 18, 74],
+        ]);
+        rect('#fff2cc', frontX - 17, 47, 10, 5); // 404 headmark
+        shape('#181c24', [
+          [frontX - 12, 118],
+          [frontX + 4, 124],
+          [frontX - 4, 130],
+          [frontX - 16, 130],
+        ]);
+
+        // Twin HDR Volumetric Headlights piercing the mist
+        radialGlow(frontX, 96, 2, 46, 'rgba(255, 250, 232, 0.88)');
+        linearRay(
+          frontX, 96, 320, 118,
+          [[frontX, 86], [320, 44], [320, 162], [frontX, 108]],
+          'rgba(255, 248, 224, 0.42)',
+          'rgba(255, 240, 200, 0.02)'
+        );
+        circle('#ffffff', frontX - 2, 92, 3.8);
+        circle('#ffffff', frontX - 1, 102, 3.8);
+
+        // Foreground platform edge & yellow tactile line
+        rect('#1d212a', 0, 140, 320, 22);
+        rect('#d8b458', 0, 142, 320, 2);
+      } else if (progress < 0.74) {
+        // Shot 2: Train braking beside Platform 404 & pneumatic double doors sliding open!
+        const p2 = (progress - 0.38) / 0.36;
+        const brakeOffset = Math.round(Math.pow(Math.max(0, 1 - p2 * 3.2), 2) * -18);
+        const doorRaw = Math.max(0, Math.min(1, (p2 - 0.18) / 0.68));
+        const doorOpen = 1 - Math.pow(1 - doorRaw, 3);
+
+        // Corrugated roof & main steel body of the docked carriage
+        rect('#4e586a', 0, 36, 320, 8);
+        rect('#252c3a', 0, 44, 320, 90);
+        rect('#dce4f0', 0, 98, 320, 4.5);
+        rect('#d8b05c', 0, 104, 320, 2);
+
+        // Left & Right passenger windows flanking the central double doors
+        for (const wx of [22 + brakeOffset, 78 + brakeOffset, 204 + brakeOffset, 260 + brakeOffset]) {
+          rect('#ffefd0', wx, 56, 42, 28);
+          strokeRect('#9aa6ba', wx, 56, 42, 28);
+          rect('#b87e52', wx + 6, 74, 12, 10);
+          rect('#b87e52', wx + 24, 74, 12, 10);
+          for (let s = 0; s < 3; s++) {
+            circle('#d8c8b0', wx + 9 + s * 11, 62, 1.5, true, 0.9);
+          }
+        }
+
+        // Central Double Doorway Recess (x: 134..186, y: 52..134)
+        const doorX = 134 + brakeOffset;
+        rect('#382b22', doorX, 52, 52, 82); // warm wooden interior background
+        rect('#ffefd2', doorX + 4, 55, 44, 4); // warm interior ceiling light
+        rect('#8c583a', doorX + 2, 92, 12, 18); // interior cushioned seats
+        rect('#8c583a', doorX + 38, 92, 12, 18);
+        rect('#e6cf9e', doorX + 14, 54, 1.8, 78); // vertical brass handrails
+        rect('#e6cf9e', doorX + 36, 54, 1.8, 78);
+        rect('#261d17', doorX, 124, 52, 10); // wooden carriage floor
+
+        // Sliding Left & Right Pneumatic Door Leaves
+        const slidePx = Math.round(doorOpen * 21);
+        // Left door leaf
+        rect('#323b4c', doorX - slidePx, 52, 26, 82);
+        strokeRect('#9aa8be', doorX - slidePx, 52, 26, 82);
+        rect('#cfe0f2', doorX - slidePx + 5, 58, 16, 26);
+        // Right door leaf
+        rect('#323b4c', doorX + 26 + slidePx, 52, 26, 82);
+        strokeRect('#9aa8be', doorX + 26 + slidePx, 52, 26, 82);
+        rect('#cfe0f2', doorX + 26 + slidePx + 5, 58, 16, 26);
+
+        // Platform floor & expanding golden light spill from the opening doors
+        rect('#181c24', 0, 134, 320, 28);
+        rect('#d8b458', 0, 136, 320, 2);
+        if (doorOpen > 0.02) {
+          const halfGap = Math.round(doorOpen * 22);
+          linearRay(
+            doorX + 26, 134, doorX + 26, 162,
+            [
+              [doorX + 26 - halfGap, 134],
+              [doorX + 26 + halfGap, 134],
+              [doorX + 26 + halfGap + 34, 162],
+              [doorX + 26 - halfGap - 34, 162],
+            ],
+            `rgba(255, 238, 192, ${0.46 * doorOpen})`,
+            'rgba(255, 230, 175, 0.04)'
+          );
+        }
+      } else {
+        // Shot 3: Inviting close-up of the open carriage doorway waiting for the player
+        const p3 = (progress - 0.74) / 0.26;
+        rect('#222836', 0, 18, 320, 122);
+        rect('#dce4f0', 0, 96, 320, 5);
+        rect('#d8b05c', 0, 103, 320, 2.5);
+
+        // Wide open warm wooden carriage doorway in center (x: 106..214, y: 28..140)
+        rect('#3b2d23', 106, 28, 108, 112);
+        strokeRect('#b8c4d8', 104, 28, 112, 112);
+        radialGlow(160, 74, 8, 92, 'rgba(255, 232, 180, 0.44)');
+        rect('#fff6de', 124, 32, 72, 5); // warm ceiling lamp
+        // Cushioned benches & brass handrails inside
+        rect('#8f5638', 110, 88, 26, 22);
+        rect('#8f5638', 184, 88, 26, 22);
+        rect('#ebd29e', 136, 32, 2.5, 104);
+        rect('#ebd29e', 181, 32, 2.5, 104);
+        for (let s = 0; s < 4; s++) {
+          rect('#cbb698', 144 + s * 10, 32, 1, 12);
+          circle('#f0e2c8', 144.5 + s * 10, 46, 2.5, true, 1.1);
+        }
+        rect('#281e18', 106, 126, 108, 14);
+
+        // Platform floor with warm golden light beam & floating motes
+        rect('#161922', 0, 140, 320, 22);
+        rect('#d8b458', 0, 142, 320, 2);
+        linearRay(
+          160, 140, 160, 162,
+          [[106, 140], [214, 140], [256, 162], [64, 162]],
+          'rgba(255, 238, 192, 0.48)',
+          'rgba(255, 230, 175, 0.06)'
+        );
+        for (let m = 0; m < 10; m++) {
+          const mx = 116 + ((m * 17) % 88);
+          const my = 128 - ((t * 14 + m * 13 + p3 * 12) % 82);
+          circle('rgba(255, 245, 215, 0.75)', mx, my, 1.3);
+        }
+      }
+    } else if (name === 'cutscene-ending-board') {
+      // TRUE ENDING FINALE CUTSCENE: Boarding the Last Train into Daybreak
+      if (progress < 0.34) {
+        // Shot 1: Looking back through the closing carriage doors at Platform 404 as Father's memory salutes under the lamp
+        const p1 = progress / 0.34;
+        const doorClose = Math.min(1, p1 * 1.25);
+        const scrollX = Math.round(Math.max(0, p1 - 0.3) * 65);
+
+        rect('#0c1018', 0, 18, 320, 144);
+        // Platform lamp & Father's warm memory silhouette saluting farewell outside
+        const lampX = 160 - scrollX;
+        rect('#586474', lampX - 22, 34, 3, 102);
+        circle('#fff2cc', lampX - 20.5, 34, 5);
+        radialGlow(lampX - 10, 62, 6, 96, 'rgba(255, 226, 165, 0.36)');
+        drawStationmasterFigure(lampX + 4, 136, 0.96, {
+          facing: -1,
+          hasUmbrella: false,
+          salute: true,
+          sepia: true,
+          t,
+        });
+
+        // Interior carriage door frame & closing pneumatic doors in foreground
+        rect('#231b16', 0, 18, 76, 144);
+        rect('#231b16', 244, 18, 76, 144);
+        const leafW = Math.round(22 + doorClose * 62);
+        rect('#342a22', 76, 24, leafW, 134);
+        strokeRect('#9e8870', 76, 24, leafW, 134);
+        rect('#bfe0ff', 86, 38, Math.max(8, leafW - 18), 46);
+        rect('#342a22', 244 - leafW, 24, leafW, 134);
+        strokeRect('#9e8870', 244 - leafW, 24, leafW, 134);
+        rect('#bfe0ff', 244 - leafW + 10, 38, Math.max(8, leafW - 18), 46);
+      } else if (progress < 0.67) {
+        // Shot 2: Seated by the carriage window with Father's umbrella & punched ticket as tunnel lights streak toward dawn
+        const p2 = (progress - 0.34) / 0.33;
+        const dawnMix = Math.pow(p2, 2);
+        const winGrad = ctx.createLinearGradient(42, 24, 278, 114);
+        winGrad.addColorStop(0, '#0c101a');
+        winGrad.addColorStop(1, dawnMix > 0.3 ? '#d89b6a' : '#1b2436');
+        rect(winGrad, 42, 24, 236, 90);
+
+        // Streaking tunnel lights & blooming sunrise at tunnel exit
+        for (let l = 0; l < 6; l++) {
+          const lx = 280 - ((Math.round(t * 220) + l * 48) % 250);
+          rect('rgba(255, 230, 175, 0.55)', lx, 48, 18, 3);
+        }
+        radialGlow(248, 68, 4, 30 + dawnMix * 95, `rgba(255, 242, 200, ${0.25 + dawnMix * 0.65})`);
+
+        // Carriage wooden window frame, punched ticket & Father's black umbrella
+        rect('#171414', 0, 18, 42, 144);
+        rect('#171414', 278, 18, 42, 144);
+        rect('#171414', 42, 18, 236, 8);
+        shape('#332b26', [[28, 114], [292, 114], [310, 142], [10, 142]]);
+        rect('#221d1a', 10, 142, 300, 20);
+        strokeRect('#8a7e72', 40, 24, 240, 92);
+
+        // Ticket & Black Umbrella with curved J-handle resting beside knee
+        rect('#f5ebd8', 132, 120, 52, 14);
+        for (let p = 0; p < 3; p++) circle('#171516', 164 + p * 6, 127, 2);
+        drawFoldedUmbrella(72, 98, 66, 158);
+      } else {
+        // Shot 3: Train emerging into golden-white daybreak over Misty Riverside & Mountain Pass
+        const p3 = (progress - 0.67) / 0.33;
+        const skyGrad = ctx.createLinearGradient(0, 24, 0, 90);
+        skyGrad.addColorStop(0, '#3a4e72');
+        skyGrad.addColorStop(0.55, '#d4966c');
+        skyGrad.addColorStop(1, '#fff4d6');
+        rect(skyGrad, 42, 24, 236, 66);
+
+        radialGlow(218, 52, 6, 105, 'rgba(255, 246, 212, 0.88)');
+        circle('#ffffff', 218, 52, 12);
+        shape('#44495a', [[42, 88], [95, 50], [148, 88]]);
+        shape('#323746', [[120, 88], [182, 42], [252, 88]]);
+        shape('#52586c', [[210, 88], [255, 58], [278, 88]]);
+
+        const riverGrad = ctx.createLinearGradient(0, 88, 0, 114);
+        riverGrad.addColorStop(0, '#5e6a80');
+        riverGrad.addColorStop(1, '#2c3442');
+        rect(riverGrad, 42, 88, 236, 26);
+        for (let i = 0; i < 18; i++) {
+          const wx = 46 + ((i * 22 - Math.round((t * 32 + p3 * 40))) % 228 + 228) % 228;
+          rect('#fff4d4', wx, 92 + (i % 4) * 5, 10, 1.5);
+        }
+
+        rect('#171516', 0, 18, 42, 144);
+        rect('#171516', 278, 18, 42, 144);
+        rect('#171516', 42, 18, 236, 8);
+        shape('#332b26', [[28, 114], [292, 114], [310, 142], [10, 142]]);
+        rect('#221d1a', 10, 142, 300, 20);
+        strokeRect('#8a7e72', 40, 24, 240, 92);
+        rect('#f5ebd8', 132, 120, 52, 14);
+        for (let p = 0; p < 3; p++) circle('#171516', 164 + p * 6, 127, 2);
+        drawFoldedUmbrella(72, 98, 66, 158);
+        linearRay(218, 52, 140, 162, [[130, 24], [278, 24], [245, 162], [60, 162]], 'rgba(255, 244, 208, 0.34)');
+      }
+    } else if (name === 'cutscene-ending-send') {
+      // ENDING 2 CUTSCENE: Sending Off the Final Train & Walking into Dawn
+      if (progress < 0.35) {
+        const p1 = progress / 0.35;
+        rect('#0b0e15', 0, 18, 320, 144);
+        const tx = Math.round(20 + p1 * 95);
+        rect('#262e3c', tx, 42, 220, 92);
+        strokeRect('#8896ac', tx, 42, 220, 92);
+        rect('#dce4f0', tx, 94, 220, 4);
+        for (let w = 0; w < 4; w++) {
+          rect('#ffefd0', tx + 18 + w * 48, 56, 32, 24);
+        }
+        rect('#181c24', 0, 134, 320, 28);
+        rect('#d8b458', 0, 136, 320, 2);
+        // Player holding brass lantern & Father's umbrella in foreground
+        circle('#fff2c8', 84, 118, 6);
+        radialGlow(84, 118, 2, 38, 'rgba(255, 225, 160, 0.5)');
+        drawFoldedUmbrella(64, 108, 56, 152);
+      } else if (progress < 0.70) {
+        const p2 = (progress - 0.35) / 0.35;
+        rect('#090c12', 0, 18, 320, 144);
+        radialGlow(248, 86, 4, 85, `rgba(255, 220, 165, ${0.25 + p2 * 0.45})`);
+        const tx = Math.round(180 + p2 * 62);
+        const s = Math.max(0.3, 1 - p2 * 0.6);
+        rect('#1e2430', tx, 72, Math.round(52 * s), Math.round(46 * s));
+        circle('#ff6b57', tx + 8, 96, 3 * s);
+        circle('#ff6b57', tx + Math.round(44 * s), 96, 3 * s);
+      } else {
+        const skyGrad = ctx.createLinearGradient(0, 18, 0, 114);
+        skyGrad.addColorStop(0, '#2a3548');
+        skyGrad.addColorStop(0.6, '#8c6e62');
+        skyGrad.addColorStop(1, '#f2d4ae');
+        rect(skyGrad, 0, 18, 320, 96);
+        radialGlow(225, 42, 4, 78, 'rgba(255, 236, 188, 0.78)');
+        circle('#fff9ec', 225, 42, 10);
+        shape('#20232b', [[145, 112], [181, 112], [278, 162], [42, 162]]);
+      }
+    } else if (name === 'cutscene-ending-early') {
+      const skyGrad = ctx.createLinearGradient(0, 18, 0, 114);
+      skyGrad.addColorStop(0, '#0a0d16');
+      skyGrad.addColorStop(1, '#1d2433');
+      rect(skyGrad, 0, 18, 320, 96);
+      radialGlow(225, 38, 4, 42, 'rgba(220, 235, 255, 0.45)');
+      circle('#fff9ec', 225, 38, 9);
+      shape('#20232b', [[145, 112], [181, 112], [278, 162], [42, 162]]);
+      rect('#111318', 52, 122, 62, 38);
+      strokeRect('#7a8290', 52, 122, 62, 38);
+      radialGlow(83, 142, 4, 48, 'rgba(255, 224, 165, 0.45)');
     }
 
     // Cinematic Letterbox Bars & Progress Bar at Bottom
@@ -1405,11 +2159,11 @@
 
     rect('#09090c', 0, 0, 320, 180);
 
-    // 1. Street Level (Ending 1 & Ending 2)
+    // 1. Street Level (Ending: Send Off or Early Exit)
     if (room === 'outside') {
-      const isKeep = ending === 'keep';
+      const isEarly = ending === 'early' || ending === 'keep';
       const skyGrad = ctx.createLinearGradient(0, 0, 0, 114);
-      if (isKeep) {
+      if (isEarly) {
         skyGrad.addColorStop(0, '#0a0d16');
         skyGrad.addColorStop(1, '#1d2433');
       } else {
@@ -1420,18 +2174,18 @@
       rect(skyGrad, 0, 0, 320, 114);
 
       // HDR Moon or Rising Dawn Sun
-      radialGlow(225, 32, 4, isKeep ? 42 : 76, isKeep ? 'rgba(220,235,255,0.45)' : 'rgba(255,235,185,0.75)');
+      radialGlow(225, 32, 4, isEarly ? 42 : 76, isEarly ? 'rgba(220,235,255,0.45)' : 'rgba(255,235,185,0.75)');
       circle('#fff9ec', 225, 32, 10);
 
       for (let i = 0; i < 12; i++) {
         const height = 18 + (i * 31) % 48;
-        rect(i % 2 ? (isKeep ? '#1a1e28' : '#323742') : (isKeep ? '#13161f' : '#262a34'), i * 28, 114 - height, 25, height);
-        if (i % 3 === 0) rect(isKeep ? '#ffe6b0' : '#ffefc8', i * 28 + 6, 114 - height + 8, 4, 5);
+        rect(i % 2 ? (isEarly ? '#1a1e28' : '#323742') : (isEarly ? '#13161f' : '#262a34'), i * 28, 114 - height, 25, height);
+        if (i % 3 === 0) rect(isEarly ? '#ffe6b0' : '#ffefc8', i * 28 + 6, 114 - height + 8, 4, 5);
       }
       shape('#20232b', [[145, 112], [181, 112], [278, 180], [42, 180]]);
       shape('#7e8490', [[161, 119], [164, 119], [169, 180], [154, 180]]);
 
-      if (isKeep) {
+      if (isEarly) {
         rect('#111318', 52, 126, 62, 42);
         strokeRect('#7a8290', 52, 126, 62, 42);
         const pulse = 0.65 + 0.35 * Math.sin(t * 2.4);
@@ -1441,19 +2195,22 @@
 
       if (ending === 'send') {
         const trainPos = sceneEffect === 'train' ? progress : 0.72;
-        const trainX = Math.round(70 + 230 * trainPos);
+        const trainX = Math.round(70 + 185 * trainPos);
         if (trainX < 320) {
-          rect('#222630', trainX, 100, 86, 18);
-          for (let i = 0; i < 5; i++) rect('#fff0cc', trainX + 8 + i * 15, 104, 10, 6);
-          radialGlow(trainX + 43, 108, 4, 45, 'rgba(255, 235, 190, 0.28)');
+          rect('#222630', trainX, 98, 92, 18);
+          strokeRect('#788498', trainX, 98, 92, 18);
+          rect('#dce4f0', trainX, 110, 92, 2);
+          for (let i = 0; i < 5; i++) rect('#fff0cc', trainX + 8 + i * 16, 102, 11, 6);
+          radialGlow(trainX + 46, 107, 4, 45, 'rgba(255, 235, 190, 0.28)');
         }
       }
+      drawFinBadge();
       grain(41, 1400);
       ctx.restore();
       return;
     }
 
-    // 2. Last Train Carriage (Ending 3 - HDR Daybreak Journey)
+    // 2. Last Train Carriage (True Ending - HDR Daybreak Journey)
     if (room === 'carriage') {
       const scroll = sceneEffect === 'journey' ? progress * 120 : (t * 24) % 240;
       const skyGrad = ctx.createLinearGradient(0, 22, 0, 92);
@@ -1489,16 +2246,15 @@
       shape('#332b26', [[28, 116], [292, 116], [310, 142], [10, 142]]);
       rect('#221d1a', 10, 142, 300, 38);
 
-      // Punched Return Ticket & Father's Black Umbrella
+      // Punched Return Ticket & Father's Black Umbrella with curved J-handle
       rect('#f5ebd8', 132, 122, 52, 14);
       rect('#2a2420', 136, 125, 26, 2);
       for (let p = 0; p < 3; p++) circle('#171516', 164 + p * 6, 129, 2);
-      rect('#4a4440', 66, 98, 4, 68);
-      rect('#cbb292', 60, 95, 10, 4);
-      shape('#242226', [[63, 112], [73, 112], [76, 162], [60, 162]]);
+      drawFoldedUmbrella(72, 100, 66, 164);
 
       // Volumetric HDR Sunbeams pouring into the carriage
       linearRay(218, 52, 140, 175, [[140, 22], [278, 22], [240, 180], [65, 180]], 'rgba(255, 242, 204, 0.30)');
+      drawFinBadge();
       grain(19, 1200);
       ctx.restore();
       return;
@@ -1509,7 +2265,6 @@
     floorGrad.addColorStop(0, '#18191e');
     floorGrad.addColorStop(1, '#262830');
     rect(floorGrad, 0, 96, 320, 84);
-    // Perspective floor tile grid lines
     for (let f = 1; f < 6; f++) {
       const fy = 118 + f * 11;
       rect('rgba(255,255,255,0.035)', 0, fy, 320, 0.7);
@@ -1537,36 +2292,81 @@
     }
 
     if (room === 'station') {
-      // Left Wall: Tunnel Portal
-      shape('#08090c', [[19, 44], [72, 64], [72, 129], [19, 155]]);
-      shape('#686d78', [[16, 42], [19, 44], [19, 155], [16, 158]]);
+      // Left Wall: Trackside Platform Recess & Tunnel Portal in True 1-Point Perspective
+      shape('#07090e', [[12, 34], [104, 62], [104, 115], [12, 150]]);
+      shape('#5c6270', [[9, 32], [12, 34], [12, 150], [9, 153]]);
+      // Yellow tactile safety line along the left platform edge
+      shape('#d8b458', [[6, 153], [112, 112], [114, 113], [8, 155]]);
 
       ctx.save();
       ctx.beginPath();
-      ctx.moveTo(19, 44);
-      ctx.lineTo(72, 64);
-      ctx.lineTo(72, 129);
-      ctx.lineTo(19, 155);
+      ctx.moveTo(12, 34);
+      ctx.lineTo(104, 62);
+      ctx.lineTo(104, 115);
+      ctx.lineTo(12, 150);
       ctx.closePath();
       ctx.clip();
 
+      // Perspective rails inside the track recess
+      shape('#485060', [[12, 146], [104, 113], [104, 114.5], [12, 148]]);
+      shape('#363c48', [[12, 138], [104, 110], [104, 111], [12, 140]]);
+
       if (trainApproaching && !trainArrived && puzzle !== 'lanternGame') {
-        const glow = 0.5 + 0.35 * Math.sin(t * 3.5);
-        radialGlow(48, 103, 1, 22, `rgba(255, 240, 200, ${glow * 0.65})`);
-        circle('#fff8e6', 42, 102, 3.5);
-        circle('#fff8e6', 56, 104, 3);
+        const glow = 0.55 + 0.35 * Math.sin(t * 3.5);
+        // Approaching locomotive silhouette deep in the tunnel portal
+        rect('#1d2330', 74, 76, 24, 32);
+        strokeRect('#6e7b90', 74, 76, 24, 32);
+        rect('#cfe0f5', 77, 81, 18, 8);
+        radialGlow(86, 98, 1, 28, `rgba(255, 242, 200, ${glow * 0.75})`);
+        linearRay(86, 98, 12, 146, [[80, 96], [92, 98], [32, 150], [12, 138]], `rgba(255, 244, 210, ${glow * 0.32})`);
+        circle('#fff9ec', 80, 98, 2.8);
+        circle('#fff9ec', 92, 99, 2.5);
       }
 
       if (trainArrived || sceneEffect === 'arrival') {
-        const slide = sceneEffect === 'arrival' ? Math.max(0, (progress - 0.15) / 0.85) : 1;
-        const ease = 1 - Math.pow(1 - slide, 3);
-        const offsetX = Math.round((1 - ease) * -55);
-        rect('#3a3e48', 18 + offsetX, 52, 56, 96);
-        rect('#7a8292', 18 + offsetX, 52, 56, 5);
-        rect('#fff2d6', 24 + offsetX, 68, 16, 26);
-        rect('#fff2d6', 46 + offsetX, 72, 18, 24);
+        // True 1-Point Perspective Docked Commuter Train along Left Track Wall (x: 12..100)
+        const pLerp = (x, yL, yR) => yL + ((x - 12) / 88) * (yR - yL);
+        const pQuad = (color, x0, x1, yL0, yR0, yL1, yR1) => {
+          shape(color, [
+            [x0, pLerp(x0, yL0, yR0)],
+            [x1, pLerp(x1, yL0, yR0)],
+            [x1, pLerp(x1, yL1, yR1)],
+            [x0, pLerp(x0, yL1, yR1)],
+          ]);
+        };
+
+        // 1. Perspective corrugated silver roof & upper trim
+        pQuad('#505868', 12, 100, 40, 65, 49, 69);
+        pQuad('#9aa4b6', 12, 100, 49, 69, 51, 70);
+        // 2. Perspective steel carriage body
+        pQuad('#252c3a', 12, 100, 51, 70, 148, 114);
+        // 3. Perspective silver & warm-gold waist stripes
+        pQuad('#dce4f0', 12, 100, 96, 93, 101, 95);
+        pQuad('#d8b05c', 12, 100, 102, 96, 104, 97);
+
+        // 4. Perspective glowing passenger windows (front, mid-back, rear)
+        for (const [wx0, wx1] of [[16, 34], [66, 80], [84, 96]]) {
+          pQuad('#ffefd0', wx0, wx1, 58, 74, 88, 89);
+          pQuad('#b87e52', wx0 + 2, wx1 - 2, 79, 84, 88, 89);
+        }
+
+        // 5. Perspective Open Double Doorway (x: 38..62) glowing with warm interior light
+        pQuad('#3b2d23', 38, 62, 55, 72, 136, 121);
+        pQuad('#fff6de', 40, 60, 56, 73, 60, 75); // interior ceiling light
+        pQuad('#e6cf9e', 49, 51, 58, 74, 132, 122); // interior brass handrail pole
+        pQuad('#281e18', 38, 62, 128, 118, 136, 121); // wooden carriage floor
       }
       ctx.restore();
+
+      // Warm golden light spilling from the open train doorway across the platform floor
+      if (trainArrived) {
+        linearRay(
+          48, 132, 128, 174,
+          [[36, 140], [64, 129], [142, 162], [72, 179]],
+          'rgba(255, 238, 192, 0.34)',
+          'rgba(255, 230, 175, 0.02)'
+        );
+      }
 
       // Back Wall: Service Room Door & Schedule Board
       rect('#585c66', 143, 61, 34, 56);
@@ -1588,10 +2388,6 @@
 
       shape('#888d98', [[126, 121], [130, 121], [67, 180], [54, 180]]);
       shape('#888d98', [[191, 121], [195, 121], [266, 180], [253, 180]]);
-
-      if (trainArrived) {
-        linearRay(45, 130, 115, 175, [[19, 155], [72, 129], [128, 152], [68, 179]], 'rgba(255, 240, 200, 0.30)');
-      }
     } else if (room === 'service') {
       rect('#454852', 81, 56, 158, 55);
       rect('#6e7380', 65, 111, 190, 10);
@@ -1970,25 +2766,76 @@
       } else {
         lanternPulse = 0.62;
       }
-      rect('rgba(5, 6, 9, 0.86)', 0, 0, 320, 180);
+      rect('rgba(5, 6, 9, 0.88)', 0, 0, 320, 180);
 
+      // Tunnel Portal Arch & Perspective Steel Rails on the Left (x: 24..152)
+      shape('#06080d', [[28, 148], [46, 36], [130, 36], [148, 148]]);
+      ctx.strokeStyle = '#485264';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(28, 148);
+      ctx.lineTo(46, 36);
+      ctx.lineTo(130, 36);
+      ctx.lineTo(148, 148);
+      ctx.stroke();
+
+      // Perspective rails & wooden sleepers approaching from the tunnel
+      for (let r = 0; r < 5; r++) {
+        const ry = 114 + r * 8;
+        const spread = 14 + r * 7;
+        rect('#28221e', 88 - spread, ry, spread * 2, 2);
+      }
+      shape('#788498', [[74, 108], [76, 108], [52, 148], [49, 148]]);
+      shape('#788498', [[100, 108], [102, 108], [127, 148], [124, 148]]);
+
+      // Detailed Front Profile of Approaching Commuter Train advancing with lanternStage
       const stageProgress = lanternStage / 3;
-      const trainScale = 0.35 + stageProgress * 0.65;
-      const trainCX = Math.round(68 + stageProgress * 38);
-      const trainCY = Math.round(88 + stageProgress * 10);
-      const w = Math.round(54 * trainScale);
-      const h = Math.round(62 * trainScale);
-      rect('#22252e', trainCX - Math.round(w / 2), trainCY - Math.round(h / 2), w, h);
-      strokeRect('#98a0b0', trainCX - Math.round(w / 2), trainCY - Math.round(h / 2), w, h);
-      rect('#e6ebf2', trainCX - Math.round(w * 0.36), trainCY - Math.round(h * 0.32), Math.round(w * 0.72), Math.round(h * 0.26));
-      const hlRadius = Math.max(2, Math.round(5 * trainScale));
-      radialGlow(trainCX, trainCY + Math.round(h * 0.18), 2, 32 * trainScale, 'rgba(255, 242, 200, 0.55)');
-      circle('#ffffff', trainCX - Math.round(w * 0.26), trainCY + Math.round(h * 0.18), hlRadius);
-      circle('#ffffff', trainCX + Math.round(w * 0.26), trainCY + Math.round(h * 0.18), hlRadius);
+      const trainScale = 0.44 + stageProgress * 0.56;
+      const trainCX = 88;
+      const trainCY = Math.round(84 + stageProgress * 12);
+      const w = Math.round(64 * trainScale);
+      const h = Math.round(68 * trainScale);
+      const tx0 = trainCX - Math.round(w / 2);
+      const ty0 = trainCY - Math.round(h / 2);
+
+      // Corrugated roof & main locomotive body
+      shape('#4e586a', [
+        [tx0 + Math.round(w * 0.1), ty0 - Math.round(5 * trainScale)],
+        [tx0 + Math.round(w * 0.9), ty0 - Math.round(5 * trainScale)],
+        [tx0 + w, ty0],
+        [tx0, ty0],
+      ]);
+      rect('#222836', tx0, ty0, w, h);
+      strokeRect('#98a6bc', tx0, ty0, w, h);
+      // Illuminated '404' headmark box at top center
+      rect('#fff2cc', trainCX - Math.round(w * 0.18), ty0 + Math.round(h * 0.06), Math.round(w * 0.36), Math.round(h * 0.1));
+      // Dual front windshields with center pillar
+      const winY = ty0 + Math.round(h * 0.20);
+      const winW = Math.round(w * 0.38);
+      const winH = Math.round(h * 0.26);
+      rect('#cfe2f6', tx0 + Math.round(w * 0.08), winY, winW, winH);
+      rect('#cfe2f6', tx0 + Math.round(w * 0.54), winY, winW, winH);
+      // Silver & amber waist stripes
+      rect('#dce4f0', tx0, ty0 + Math.round(h * 0.56), w, Math.max(1.5, Math.round(3.5 * trainScale)));
+      rect('#d8b05c', tx0, ty0 + Math.round(h * 0.62), w, Math.max(1, Math.round(2 * trainScale)));
+      // Lower skirt / cowcatcher
+      shape('#151922', [
+        [tx0 - 2, ty0 + h],
+        [tx0 + w + 2, ty0 + h],
+        [tx0 + w - 4, ty0 + h + Math.round(7 * trainScale)],
+        [tx0 + 4, ty0 + h + Math.round(7 * trainScale)],
+      ]);
+
+      // Twin HDR Headlights & mist glow
+      const hlY = ty0 + Math.round(h * 0.74);
+      const hlRadius = Math.max(2.2, Math.round(4.5 * trainScale));
+      radialGlow(trainCX, hlY, 2, 38 * trainScale, 'rgba(255, 244, 205, 0.65)');
+      circle('#ffffff', trainCX - Math.round(w * 0.28), hlY, hlRadius);
+      circle('#ffffff', trainCX + Math.round(w * 0.28), hlY, hlRadius);
 
       const beamFade = Math.max(0, 1 - (now - lanternBeamTime) / 450);
       if (beamFade > 0) {
-        linearRay(222, 92, trainCX, trainCY, [[222, 92], [trainCX - 22, trainCY - 30], [trainCX + 22, trainCY + 30]], `rgba(255, 235, 180, ${beamFade * 0.55})`);
+        linearRay(222, 92, trainCX, trainCY, [[222, 92], [trainCX - 24, trainCY - 30], [trainCX + 24, trainCY + 30]], `rgba(255, 235, 180, ${beamFade * 0.55})`);
         circle('#ffefc4', trainCX, trainCY, Math.round((1 - beamFade) * 48), true);
       }
 
@@ -2037,12 +2884,13 @@
       } else if (inspectedItem === 'punch') {
         shape('#cbb28c', [[142, 82], [156, 72], [184, 102], [172, 112]]);
       } else if (inspectedItem === 'photo') {
-        rect('#e6dfd3', 124, 58, 72, 64);
-        rect('#222226', 129, 63, 62, 48);
-        circle('#dcd4c6', 150, 82, 5);
-        rect('#dcd4c6', 145, 89, 10, 22);
-        circle('#b8b0a2', 170, 85, 5);
-        rect('#b8b0a2', 165, 92, 10, 19);
+        rect('#e6dfd3', 112, 58, 66, 62);
+        rect('#222226', 117, 63, 56, 46);
+        circle('#dcd4c6', 136, 82, 5);
+        rect('#dcd4c6', 131, 89, 10, 20);
+        circle('#b8b0a2', 154, 85, 4.5);
+        rect('#b8b0a2', 149, 91, 9, 18);
+        drawFoldedUmbrella(192, 66, 204, 122);
       } else if (inspectedItem === 'tapeB') {
         rect('#32302e', 116, 64, 88, 52);
         strokeRect('#d8c8b0', 116, 64, 88, 52);
@@ -2159,6 +3007,15 @@
         '末班列車的車門敞開著，暖黃的燈光灑在月台上。站在車門與出口之間，你終於明白自己為什麼會醒在這裡了。',
         'The doors of the last train stand open, spilling warm light across the platform. Standing between the carriage and the exit, you finally understand why you woke here.'
       ];
+    } else if (
+      finished === 'cutscene-ending-board' ||
+      finished === 'cutscene-ending-send' ||
+      finished === 'cutscene-ending-early'
+    ) {
+      feedback = [
+        '——《失落訊號 Lost Signal》 · 劇終 ——',
+        '— LOST SIGNAL · FIN —'
+      ];
     }
     render();
   }
@@ -2173,16 +3030,14 @@
   function attemptTicketPunchAt(x, y) {
     initAudio();
     punchFlash = performance.now();
-    // Check if the player clicked inside one of the 5 emblem boxes on the ticket
     const hitBox = ticketBoxes.find((b) => Math.hypot(x - b.x, y - b.y) <= 17);
     if (!hitBox) {
-      // Punched on blank paper margin -> still leaves a hole and plays sound, with gentle reminder
       punchedHoles.push({ x, y, stIdx: -1 });
       if (punchedHoles.length > 8) punchedHoles.shift();
       playSFX('click');
       feedback = [
-        '驗票鉗在車票空白處剪下了一個小圓孔。請將驗票鉗移到車票中央的五格印記上方再點擊剪孔。',
-        'The punch clipped a hole in the blank margin. Move the punch over one of the five emblem boxes on the ticket and click.'
+        '驗票鉗在車票空白處剪下了一個小圓孔。請將驗票鉗移到車票中央的五格印記上方再剪孔。',
+        'The punch clipped a hole in the blank margin. Move the punch over one of the five emblem boxes on the ticket and clip.'
       ];
       render();
       return;
@@ -2197,18 +3052,19 @@
         ticketPunched = true;
         puzzle = '';
         inspectedItem = '';
+        playSFX('punchDone');
         feedback = [
           '第三聲清脆的「喀嚓」落定。三枚圓孔連成歸途的軌跡，車票背面浮現出老站長用鉛筆寫的一行小字：「無論走得多遠，這張車票永遠有效。」',
           'With a third crisp snap, the three holes align along your homeward route. Pencil writing appears on the back: “No matter how far you go, this ticket is always valid.”'
         ];
         triggerEffect('unlock', [
-          '車票已打上完整的三枚歸途驗票孔',
-          'Return ticket validated with all three station holes'
+          '車票已剪下完整的三枚歸途印記',
+          'Return ticket validated with all three route emblems'
         ], 900);
       } else {
         feedback = [
-          `清脆的「喀嚓」一聲，第 ${punchStep} 枚驗票孔已剪下（${punchStep} / 3）。請依〈夜車行〉詩意繼續剪下下一枚印記。`,
-          `A crisp snap! Emblem ${punchStep} of 3 is punched. Continue to the next emblem in the poem.`
+          `清脆的「喀嚓」一聲，第${cnNums[punchStep]}枚驗票孔已剪下。請依〈夜車行〉詩意繼續剪下下一枚印記。`,
+          `A crisp snap! Emblem ${punchStep} is clipped. Continue to the next emblem in the poem.`
         ];
       }
     } else {
@@ -2255,18 +3111,18 @@
         puzzle = '';
         playSFX('arrival');
         updateAmbience();
-        startCutscene('cutscene-arrival', 10500);
+        startCutscene('cutscene-arrival', 11000);
       } else {
         playSFX('lantern');
         feedback = [
-          `你高舉提燈，金黃色的光束穿透濃霧！隧道深處傳來第 ${lanternStage} 聲低沉的鳴笛回應，車頭燈越來越近了（${lanternStage} / 3）。`,
-          `You raise the lantern and golden light pierces the fog! A deep horn answers from the tunnel (${lanternStage} / 3).`
+          `你高舉提燈，金黃色的光束穿透濃霧！隧道深處傳來第${cnNums[lanternStage]}聲低沉的鳴笛回應，車頭燈越來越近了。`,
+          `You raise the lantern and golden light pierces the fog! A deep horn answers from the tunnel as the headlights draw closer.`
         ];
       }
     } else {
       playSFX('error');
       feedback = [
-        '光束舉起的時機偏了一點，被濃霧吞沒了。等光圈收攏到提燈中央時再舉燈。',
+        '光束舉起的時機偏了一點，被濃霧吞沒了。等光環收攏到提燈中央時再舉燈。',
         'The beam was raised slightly off-timing and swallowed by the fog. Wait until the ring converges on the lantern center.'
       ];
     }
@@ -2295,7 +3151,6 @@
     mouseX = x;
     mouseY = y;
 
-    // If a hands-free cutscene is playing, clicking skips/completes it gently
     if (activeCutscene) {
       finishCutscene();
       return;
@@ -2326,8 +3181,8 @@
                 input = [];
                 playSFX('error');
                 feedback = [
-                  '鎖芯彈回原位。請對照筆記本裡的《發車時刻表》與《維修手冊》查出正確的三枚符號順序。',
-                  'The pins reset. Cross-reference the Departure Schedule and Service Manual in your notebook.'
+                  '鎖芯彈回原位。請對照筆記本裡的古詩〈夜車行〉查出初發、中渡、終歸的三枚印記。',
+                  'The pins reset. Cross-reference the platform poem in your notebook.'
                 ];
               }
             } else {
@@ -2364,8 +3219,8 @@
                 input = [];
                 playSFX('error');
                 feedback = [
-                  '過載保護跳脫，開關彈回原位。請檢查《維修手冊》記載的三道送電順序。',
-                  'Overload protection tripped. Check the three-circuit startup order in the Service Manual.'
+                  '過載保護跳脫，開關彈回原位。請對照手札上的古詩〈送電吟〉查出先、繼、終三道迴路。',
+                  'Overload protection tripped. Check the startup order in the manual poem.'
                 ];
               }
             } else {
@@ -2377,7 +3232,6 @@
         }
       }
     } else if (puzzle === 'pianoGame') {
-      // First check if player clicked one of the 5 black keys on top (bx = 72 + slot * 31, y: 68..115)
       for (let bIdx = 0; bIdx < pianoBlackNotes.length; bIdx++) {
         const bx = 72 + pianoBlackNotes[bIdx].slot * 31;
         if (x >= bx && x <= bx + 16 && y >= 68 && y <= 115) {
@@ -2385,7 +3239,6 @@
           return;
         }
       }
-      // Then check if player clicked one of the 7 white keys (kx = 50 + k * 31, y: 68..148)
       for (let k = 0; k < 7; k++) {
         const kx = 50 + k * 31;
         if (x >= kx && x <= kx + 29 && y >= 68 && y <= 148) {
@@ -2401,7 +3254,7 @@
           activeDial = i;
           playSFX('click');
           feedback = [
-            `第 ${i + 1} 轉輪已轉至「${say(...dialOptions[i][dials[i]])}」。`,
+            `第${cnNums[i + 1]}轉輪已轉至「${say(...dialOptions[i][dials[i]])}」。`,
             `Wheel ${i + 1} turned to “${say(...dialOptions[i][dials[i]])}”.`
           ];
           render();
@@ -2416,8 +3269,8 @@
         playSFX('click');
         if (!checkTunerSuccess()) {
           feedback = [
-            `已轉動左旋鈕（頻率 CH-${tunerFreq + 1}），目前訊號契合度：${getTunerLockPercent()}%。`,
-            `Turned left knob (Freq CH-${tunerFreq + 1}). Signal lock: ${getTunerLockPercent()}%.`
+            `頻率波段已轉至第${cnNums[tunerFreq + 1]}道，目前訊號契合度為 ${getTunerLockPercent()}%。`,
+            `Frequency channel set to ${tunerFreq + 1}. Signal lock: ${getTunerLockPercent()}%.`
           ];
           render();
         }
@@ -2426,8 +3279,8 @@
         playSFX('click');
         if (!checkTunerSuccess()) {
           feedback = [
-            `已轉動右旋鈕（相位 P-${tunerPhase + 1}），目前訊號契合度：${getTunerLockPercent()}%。`,
-            `Turned right knob (Phase P-${tunerPhase + 1}). Signal lock: ${getTunerLockPercent()}%.`
+            `相位微調已轉至第${cnNums[tunerPhase + 1]}相，目前訊號契合度為 ${getTunerLockPercent()}%。`,
+            `Phase set to ${tunerPhase + 1}. Signal lock: ${getTunerLockPercent()}%.`
           ];
           render();
         }
@@ -2508,16 +3361,11 @@
     lanternStage = 0;
     pianoSolved = false;
     activeCutscene = '';
+    delete document.body.dataset.ending;
     clues.clear();
     randomizePuzzles();
     randomizeExtras();
     updateAmbience();
-  }
-
-  function getTunerLockPercent() {
-    const fDiff = Math.abs(tunerFreq - tunerTargetFreq);
-    const pDiff = Math.abs(tunerPhase - tunerTargetPhase);
-    return Math.max(10, 100 - fDiff * 22 - pDiff * 22);
   }
 
   function getRoomActions(key) {
@@ -2566,11 +3414,15 @@
             label: ['持驗訖車票與黑傘，踏上末班列車', 'Board the Last Train with Ticket & Umbrella'],
             run() {
               ending = 'board';
-              travel('carriage');
-              triggerEffect('journey', [
-                '末班列車駛離第四〇四號月台 · 迎向破曉',
-                'The last train departs Platform 404 into daybreak'
-              ], 1600);
+              room = 'carriage';
+              puzzle = '';
+              inspectedItem = '';
+              caption = [
+                '終章 · 破曉歸途',
+                'FINALE · HOMEWARD AT DAYBREAK'
+              ];
+              updateAmbience();
+              startCutscene('cutscene-ending-board', 15000);
             },
           });
         }
@@ -2578,11 +3430,15 @@
           label: ['站在月台目送列車，轉身走上地面街口', 'Send Off the Train & Walk Up to Street'],
           run() {
             ending = 'send';
-            travel('outside');
-            triggerEffect('train', [
-              '目送父親最後一班列車遠去 · 黎明街口',
-              'Sending off your father’s final train · Dawn Street'
-            ], 1400);
+            room = 'outside';
+            puzzle = '';
+            inspectedItem = '';
+            caption = [
+              '終章 · 目送黎明',
+              'FINALE · SENDING OFF THE DAWN'
+            ];
+            updateAmbience();
+            startCutscene('cutscene-ending-send', 13500);
           },
         });
       }
@@ -2593,7 +3449,7 @@
       const list = [];
       if (!lockerOpen) {
         list.push({
-          label: ['走近角落的工具鐵櫃（五鍵符號鎖）', 'Inspect Corner Tool Cabinet (Symbol Lock)'],
+          label: ['走近角落的工具鐵櫃', 'Approach the Corner Tool Cabinet'],
           run() {
             puzzle = 'locker';
             input = [];
@@ -2711,7 +3567,7 @@
         {
           label: pianoSolved
             ? ['再次彈奏角落的立式鋼琴', 'Play the Upright Piano Again']
-            : ['走近角落的立式鋼琴（可點擊或按鍵盤彈奏）', 'Approach the Upright Piano (Click or Keyboard)'],
+            : ['走近角落的立式鋼琴', 'Approach the Upright Piano'],
           run() {
             puzzle = 'pianoGame';
             pianoInput = [];
@@ -2736,7 +3592,7 @@
       ];
       if (!suitcaseOpen) {
         list.unshift({
-          label: ['查看長椅上的老站長舊皮箱（三輪密碼鎖）', 'Inspect Father’s Leather Suitcase (3-Wheel Lock)'],
+          label: ['查看長椅上的老站長舊皮箱', 'Inspect Father’s Leather Suitcase'],
           run() {
             puzzle = 'suitcase';
             feedback = [];
@@ -2745,7 +3601,6 @@
           },
         });
       } else {
-        // Direct navigation to Broadcast Room right at the top so the player never gets stuck!
         list.unshift({
           label: ['推開走廊側門，前往「廣播室」播放父親的錄音帶', 'Enter Broadcast Room to Play Father’s Tape'],
           run: () => travel('radio'),
@@ -2794,10 +3649,18 @@
             run: () => travel('radio'),
           },
           {
-            label: ['直接走上地面街口（不搭末班車離開）', 'Walk Up to Street Level Now'],
+            label: ['拾級走上地面無名街口', 'Walk Up the Stairs to the Street'],
             run() {
               ending = 'early';
-              travel('outside');
+              room = 'outside';
+              puzzle = '';
+              inspectedItem = '';
+              caption = [
+                '終章 · 未竟之夜',
+                'EPILOGUE · THE UNFINISHED NIGHT'
+              ];
+              updateAmbience();
+              startCutscene('cutscene-ending-early', 9500);
             },
           }
         );
@@ -2866,9 +3729,12 @@
     }
 
     // Endings: outside or carriage
+    const finaleCutsceneName = ending === 'board'
+      ? 'cutscene-ending-board'
+      : (ending === 'send' ? 'cutscene-ending-send' : 'cutscene-ending-early');
     return [
       {
-        label: ['重新回到第四〇四號月台（新一輪隨機謎題）', 'Play Again on Platform 404 (New Randomized Run)'],
+        label: ['再次回到第四〇四號月台', 'Return to Platform 404'],
         run() {
           resetAllState();
           showActCard(1);
@@ -2876,7 +3742,13 @@
         },
       },
       {
-        label: ['返回 MAKOTO LAB 首頁', 'Return to MAKOTO LAB Home'],
+        label: ['重溫終章畫面', 'Replay Finale'],
+        run() {
+          startCutscene(finaleCutsceneName, ending === 'board' ? 15000 : 12000);
+        },
+      },
+      {
+        label: ['返回 MAKOTO LAB 首頁', 'Return to MAKOTO LAB'],
         run() {
           window.location.href = '/';
         },
@@ -2889,6 +3761,12 @@
     const puzzleConfig = puzzle ? getPuzzleConfig(puzzle) : null;
     const pct = computeProgress();
 
+    if (ending) {
+      document.body.dataset.ending = ending;
+    } else {
+      delete document.body.dataset.ending;
+    }
+
     // Update Header & HUD
     get('language').textContent = language === 'zh' ? 'EN' : '中文';
     get('language').setAttribute('aria-label', say('切換為英文', 'Switch to Chinese'));
@@ -2900,19 +3778,51 @@
     }
 
     const actInfo = actCards[currentAct] || actCards[1];
-    get('chapter-hud').textContent = `${say(...actInfo.eyebrow)} · ${say(...actInfo.title)}`;
-    get('status-hud').textContent = trainArrived
-      ? say('末班車 · 已進站停靠', 'LAST TRAIN · DOCKED')
-      : (trainApproaching
-        ? say('末班車 · 進站號誌待發', 'LAST TRAIN · APPROACHING')
-        : (powered
-          ? say('全站電力 · 已恢復', 'POWER · ONLINE')
-          : say('全站電力 · 待復電', 'POWER · OFFLINE')));
+    get('chapter-hud').textContent = ending
+      ? say('FINALE · 終章結局', 'FINALE · EPILOGUE')
+      : `${say(...actInfo.eyebrow)} · ${say(...actInfo.title)}`;
+    get('status-hud').textContent = ending
+      ? say('第四〇四號月台 · 黎明破曉', 'PLATFORM 404 · DAYBREAK')
+      : (trainArrived
+        ? say('末班車 · 已進站停靠', 'LAST TRAIN · DOCKED')
+        : (trainApproaching
+          ? say('末班車 · 進站號誌待發', 'LAST TRAIN · APPROACHING')
+          : (powered
+            ? say('全站電力 · 已恢復', 'POWER · ONLINE')
+            : say('全站電力 · 待復電', 'POWER · OFFLINE'))));
 
-    get('room-code').textContent = say(...roomMeta[room].code);
+    get('room-code').textContent = ending
+      ? say('FIN / 終章銘記', 'FIN / EPILOGUE')
+      : say(...roomMeta[room].code);
     get('location').textContent = say(...roomName);
     get('progress-text').textContent = `${pct}%`;
     get('progress-fill').style.width = `${pct}%`;
+
+    // Epilogue Banner in Narrative Panel when an Ending is active
+    const epilogueBanner = get('epilogue-banner');
+    if (epilogueBanner) {
+      if (ending && !activeCutscene) {
+        epilogueBanner.hidden = false;
+        const epilogueMeta = ending === 'board'
+          ? {
+              eyebrow: ['TRUE ENDING · 終章結局', 'TRUE ENDING · EPILOGUE'],
+              title: ['破曉歸途', 'Homeward at Daybreak'],
+            }
+          : (ending === 'send'
+            ? {
+                eyebrow: ['ENDING · 終章結局', 'ENDING · EPILOGUE'],
+                title: ['目送黎明', 'Sending Off the Dawn'],
+              }
+            : {
+                eyebrow: ['ENDING · 結局', 'ENDING · EPILOGUE'],
+                title: ['未竟之夜', 'The Unfinished Night'],
+              });
+        get('epilogue-eyebrow').textContent = say(...epilogueMeta.eyebrow);
+        get('epilogue-title').textContent = say(...epilogueMeta.title);
+      } else {
+        epilogueBanner.hidden = true;
+      }
+    }
 
     // Main Narrative Description & Feedback
     if (activeCutscene) {
@@ -2926,15 +3836,22 @@
         : (puzzleConfig.hint ? say(...puzzleConfig.hint) : '');
     } else {
       get('description').textContent = say(...roomDesc);
-      get('feedback').textContent = feedback.length ? say(...feedback) : '';
+      if (ending && !feedback.length) {
+        get('feedback').textContent = say(
+          '——《失落訊號 Lost Signal》 · 劇終 ——',
+          '— LOST SIGNAL · FIN —'
+        );
+      } else {
+        get('feedback').textContent = feedback.length ? say(...feedback) : '';
+      }
     }
 
-    // Sequence Display (for locker, circuits, piano, punch, tuner)
+    // Sequence Display (for locker, circuits, piano, punch)
     const seqEl = get('sequence');
     if (puzzle === 'locker') {
       seqEl.textContent = input.length
         ? say(
-          `已按下符號：${input.map((i) => symbolDefs[i][0]).join(' → ')}`,
+          `已按下印記：${input.map((i) => symbolDefs[i][0]).join(' → ')}`,
           `Pressed: ${input.map((i) => symbolDefs[i][1]).join(' → ')}`
         )
         : '';
@@ -2948,20 +3865,20 @@
     } else if (puzzle === 'pianoGame') {
       seqEl.textContent = pianoInput.length
         ? say(
-          `目前彈奏音階：${pianoInput.map((n) => n + 1).join(' - ')}`,
+          `目前彈奏音階：${pianoInput.map((n) => cnNums[n + 1]).join(' · ')}`,
           `Played notes: ${pianoInput.map((n) => n + 1).join(' - ')}`
         )
         : '';
     } else if (puzzle === 'punchGame') {
       seqEl.textContent = say(
-        `已剪下驗票孔：${punchStep} / 3`,
-        `Holes punched: ${punchStep} / 3`
+        `已剪下驗票孔：第${cnNums[punchStep]}枚`,
+        `Emblems clipped: ${punchStep} of 3`
       );
     } else {
       seqEl.textContent = '';
     }
 
-    // Scene Caption Overlay (Hidden during cutscenes so no meta prompt blocks the art!)
+    // Scene Caption Overlay
     const capEl = get('scene-caption');
     if (activeCutscene) {
       capEl.hidden = true;
@@ -2979,34 +3896,33 @@
 
     // Render Interactive Inventory (#inventory & #inventory-items)
     const items = getInventoryList();
-    get('inventory').textContent = say(
-      `隨身物品（${items.length}）`,
-      `INVENTORY (${items.length})`
-    );
+    get('inventory').textContent = ending
+      ? say('旅途信物', 'KEEPSAKES')
+      : say('隨身行囊', 'BELONGINGS');
     const invContainer = get('inventory-items');
     invContainer.replaceChildren();
     items.forEach((item) => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'inventory-chip';
+      btn.className = 'item-chip';
       btn.dataset.active = String(inspectedItem === item.id);
       btn.textContent = say(...item.name);
       btn.addEventListener('click', () => {
         initAudio();
         playSFX('click');
-        if (item.id === 'ticket' && hasPunch && !ticketPunched) {
+        if (item.id === 'ticket' && hasPunch && !ticketPunched && !ending) {
           puzzle = 'punchGame';
           inspectedItem = '';
           punchStep = 0;
           punchedHoles = [];
           feedback = [
-            '你把回程車票平鋪在桌面上，右手拿起父親留下的黃銅驗票鉗。移動滑鼠將驗票鉗對準車票上的印記方格，點擊即可剪下驗票孔。',
-            'You lay the return ticket flat and hold your father’s brass punch. Move your cursor to aim the punch over an emblem box and click to punch.'
+            '你把回程車票平鋪在桌面上，右手拿起父親留下的黃銅驗票鉗。將驗票鉗移至車票上的印記方格上方，即可剪下驗票孔。',
+            'You lay the return ticket flat and hold your father’s brass punch. Position the punch over an emblem box to clip a hole.'
           ];
           render();
           return;
         }
-        if (item.id === 'photo' && suitcaseOpen) {
+        if (item.id === 'photo' && suitcaseOpen && !ending) {
           startCutscene('cutscene-rain', 14000);
           return;
         }
@@ -3027,7 +3943,7 @@
     const notesEl = get('notes');
     notesEl.replaceChildren();
     const noteKeys = [...clues];
-    if (!noteKeys.length) {
+    if (!noteKeys.length || ending) {
       notebookEl.hidden = true;
     } else {
       notebookEl.hidden = false;
@@ -3060,7 +3976,7 @@
         button.type = 'button';
         const pos = input.indexOf(index);
         button.textContent = pos !== -1
-          ? `${say(...sym)} (${pos + 1})`
+          ? `${say(...sym)} · 第${cnNums[pos + 1]}印`
           : say(...sym);
         button.disabled = pos !== -1;
         button.addEventListener('click', () => {
@@ -3070,8 +3986,8 @@
           if (input.length < 3) {
             playSFX('click');
             feedback = [
-              `已按下第 ${input.length} 個符號：${say(...sym)}。`,
-              `Pressed symbol ${input.length}: ${say(...sym)}.`
+              `已按下第${cnNums[input.length]}枚印記：${say(...sym)}。`,
+              `Pressed emblem ${input.length}: ${say(...sym)}.`
             ];
             render();
             return;
@@ -3108,7 +4024,7 @@
         button.type = 'button';
         const pos = input.indexOf(index);
         button.textContent = pos !== -1
-          ? `${say(...cDef)} (${pos + 1})`
+          ? `${say(...cDef)} · 第${cnNums[pos + 1]}道`
           : say(...cDef);
         button.disabled = pos !== -1;
         button.addEventListener('click', () => {
@@ -3118,7 +4034,7 @@
           if (input.length < 3) {
             playSFX('click');
             feedback = [
-              `已推上第 ${input.length} 道開關：${say(...cDef)}。`,
+              `已推上第${cnNums[input.length]}道閘刀：${say(...cDef)}。`,
               `Engaged switch ${input.length}: ${say(...cDef)}.`
             ];
             render();
@@ -3168,9 +4084,9 @@
       });
     } else if (puzzle === 'suitcase') {
       const wheelNames = [
-        ['左輪（季節）', 'Left (Season)'],
-        ['中輪（身高）', 'Middle (Height)'],
-        ['右輪（番號）', 'Right (Track)'],
+        ['左輪 · 季節', 'Left Wheel · Season'],
+        ['中輪 · 刻痕', 'Middle Wheel · Mark'],
+        ['右輪 · 番號', 'Right Wheel · Track'],
       ];
       for (let i = 0; i < 3; i++) {
         const button = document.createElement('button');
@@ -3220,7 +4136,7 @@
         btn.type = 'button';
         btn.textContent = say(
           `移至「${symbolDefs[idx][0]}」格剪孔`,
-          `Punch “${symbolDefs[idx][1]}” Box`
+          `Clip “${symbolDefs[idx][1]}” Emblem`
         );
         btn.addEventListener('click', () => {
           mouseX = box.x;
@@ -3233,8 +4149,8 @@
       const freqBtn = document.createElement('button');
       freqBtn.type = 'button';
       freqBtn.textContent = say(
-        `轉動左旋鈕（頻率：CH-${tunerFreq + 1}）`,
-        `Turn Left Knob (Freq: CH-${tunerFreq + 1})`
+        `轉動頻率波段旋鈕 · 第${cnNums[tunerFreq + 1]}道`,
+        `Turn Frequency Knob · Channel ${tunerFreq + 1}`
       );
       freqBtn.addEventListener('click', () => {
         initAudio();
@@ -3242,8 +4158,8 @@
         playSFX('click');
         if (!checkTunerSuccess()) {
           feedback = [
-            `頻率已切換至 CH-${tunerFreq + 1}，目前訊號契合度：${getTunerLockPercent()}%。`,
-            `Frequency set to CH-${tunerFreq + 1}. Signal lock: ${getTunerLockPercent()}%.`
+            `頻率波段已切換至第${cnNums[tunerFreq + 1]}道，目前訊號契合度為 ${getTunerLockPercent()}%。`,
+            `Frequency channel set to ${tunerFreq + 1}. Signal lock: ${getTunerLockPercent()}%.`
           ];
           render();
         }
@@ -3253,8 +4169,8 @@
       const phaseBtn = document.createElement('button');
       phaseBtn.type = 'button';
       phaseBtn.textContent = say(
-        `轉動右旋鈕（相位：P-${tunerPhase + 1}）`,
-        `Turn Right Knob (Phase: P-${tunerPhase + 1})`
+        `轉動相位微調旋鈕 · 第${cnNums[tunerPhase + 1]}相`,
+        `Turn Phase Knob · Phase ${tunerPhase + 1}`
       );
       phaseBtn.addEventListener('click', () => {
         initAudio();
@@ -3262,8 +4178,8 @@
         playSFX('click');
         if (!checkTunerSuccess()) {
           feedback = [
-            `相位已切換至 P-${tunerPhase + 1}，目前訊號契合度：${getTunerLockPercent()}%。`,
-            `Phase set to P-${tunerPhase + 1}. Signal lock: ${getTunerLockPercent()}%.`
+            `相位微調已切換至第${cnNums[tunerPhase + 1]}相，目前訊號契合度為 ${getTunerLockPercent()}%。`,
+            `Phase set to ${tunerPhase + 1}. Signal lock: ${getTunerLockPercent()}%.`
           ];
           render();
         }
@@ -3273,8 +4189,8 @@
       const flashBtn = document.createElement('button');
       flashBtn.type = 'button';
       flashBtn.textContent = say(
-        `高舉號誌提燈閃光（已回應 ${lanternStage} / 3）`,
-        `Raise Signal Lantern (${lanternStage} / 3)`
+        '高舉號誌提燈揮動光束',
+        'Raise Signal Lantern'
       );
       flashBtn.addEventListener('click', () => attemptLanternFlash());
       choicesEl.append(flashBtn);

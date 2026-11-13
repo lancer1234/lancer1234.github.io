@@ -360,7 +360,8 @@ h2:focus { outline: none; }
   flex-wrap: wrap;
   gap: .4rem;
 }
-.item-chip {
+.item-chip,
+.inventory-chip {
   display: inline-flex;
   align-items: center;
   gap: .4rem;
@@ -373,26 +374,31 @@ h2:focus { outline: none; }
   cursor: pointer;
   transition: background .16s ease, color .16s ease, border-color .16s ease;
 }
-.item-chip::before {
+.item-chip::before,
+.inventory-chip::before {
   content: "◇";
   font-size: .72rem;
   color: #aaa;
 }
-.item-chip[data-active="true"] {
+.item-chip[data-active="true"],
+.inventory-chip[data-active="true"] {
   border-color: var(--hdr-warm);
   background: #252429;
 }
-.item-chip[data-active="true"]::before {
+.item-chip[data-active="true"]::before,
+.inventory-chip[data-active="true"]::before {
   content: "◆";
   color: var(--hdr-warm);
 }
 @media (hover: hover) {
-  .item-chip:hover {
+  .item-chip:hover,
+  .inventory-chip:hover {
     background: var(--hdr-warm);
     color: #0b0b0b;
     border-color: var(--hdr-warm);
   }
-  .item-chip:hover::before { color: #0b0b0b; }
+  .item-chip:hover::before,
+  .inventory-chip:hover::before { color: #0b0b0b; }
 }
 
 .progress-head {
@@ -512,6 +518,57 @@ h2:focus { outline: none; }
 #notes li {
   line-height: 1.62;
   color: #c8c8d0;
+}
+
+/* Ending Epilogue Presentation */
+.epilogue-banner {
+  border-bottom: 1px solid rgba(255, 244, 218, 0.28);
+  padding-bottom: 1rem;
+  margin-bottom: .35rem;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  animation: fade-slide-up .45s ease-out both;
+}
+.epilogue-eyebrow {
+  margin: 0;
+  font: 600 .74rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .24em;
+  color: var(--hdr-warm);
+  text-transform: uppercase;
+}
+.epilogue-title {
+  margin: 0;
+  font: 400 clamp(1.75rem, 3.6vw, 2.5rem)/1.2 "Times New Roman", "Songti TC", serif;
+  letter-spacing: .04em;
+  color: #ffffff;
+  text-shadow: 0 0 24px var(--hdr-glow);
+}
+body[data-ending="board"] .scene-shell,
+body[data-ending="send"] .scene-shell,
+body[data-ending="early"] .scene-shell {
+  border-color: rgba(255, 244, 218, 0.65);
+  box-shadow: 0 28px 76px rgba(0, 0, 0, 0.85), 0 0 56px rgba(255, 236, 195, 0.12);
+}
+body[data-ending="board"] .narrative,
+body[data-ending="send"] .narrative,
+body[data-ending="early"] .narrative {
+  border-color: rgba(255, 244, 218, 0.42);
+  background: linear-gradient(180deg, #151418 0%, #0e0e11 100%);
+  padding: 1.65rem 1.8rem;
+}
+body[data-ending="board"] #feedback,
+body[data-ending="send"] #feedback,
+body[data-ending="early"] #feedback {
+  margin-top: .45rem;
+  border-left: 0;
+  border-top: 1px solid rgba(255, 244, 218, 0.24);
+  border-bottom: 1px solid rgba(255, 244, 218, 0.24);
+  background: rgba(255, 244, 218, 0.04);
+  text-align: center;
+  font-family: "Times New Roman", "Songti TC", serif;
+  letter-spacing: .08em;
+  color: var(--hdr-warm);
 }
 
 /* Action Choices */
