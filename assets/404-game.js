@@ -318,22 +318,59 @@
     if (bgmTimer) clearInterval(bgmTimer);
     const seqDark = [220.0, 261.63, 329.63, 293.66, 246.94, 196.0, 220.0, 164.81];
     const seqLit = [261.63, 329.63, 392.0, 493.88, 440.0, 349.23, 329.63, 293.66];
-    const seqDawn = [261.63, 329.63, 392.0, 523.25, 493.88, 392.0, 440.0, 349.23];
+    // 1. True Ending (board) — Luminous F-Lydian / C-Major Homeward Daybreak Theme
+    const seqEndingBoard = [
+      261.63, 329.63, 392.00, 523.25, 659.25, 587.33, 523.25, 392.00,
+      349.23, 440.00, 523.25, 659.25, 587.33, 493.88, 523.25, 392.00,
+    ];
+    // 2. Send-Off Ending (send) — Bittersweet G-Major / E-Aeolian Farewell Waltz Theme
+    const seqEndingSend = [
+      392.00, 493.88, 587.33, 493.88, 440.00, 392.00, 329.63, 293.66,
+      329.63, 392.00, 493.88, 440.00, 392.00, 369.99, 329.63, 293.66,
+    ];
+    // 3. Unfinished Night Ending (early) — Solitary A-Minor / D-Minor Nocturne
+    const seqEndingEarly = [
+      220.00, 261.63, 246.94, 196.00, 174.61, 220.00, 164.81, 146.83,
+      220.00, 293.66, 261.63, 220.00, 196.00, 174.61, 164.81, 146.83,
+    ];
 
     bgmTimer = setInterval(() => {
       if (!audioCtx || !soundEnabled || document.hidden) return;
       const phase = document.body.dataset.phase;
       if (phase !== 'playing' && phase !== 'opening') return;
-      const palette = (room === 'carriage' || room === 'outside')
-        ? seqDawn
-        : (powered ? seqLit : seqDark);
-      const note = palette[bgmStep % palette.length];
-      playNote(note, powered ? 3.1 : 2.6, 0.026, 0, 'sine');
-      if (bgmStep % 2 === 0 && powered) {
-        playNote(note * 1.5, 2.8, 0.012, 0.18, 'triangle');
+
+      if (ending === 'board') {
+        const note = seqEndingBoard[bgmStep % seqEndingBoard.length];
+        playNote(note, 2.8, 0.032, 0, 'sine');
+        playNote(note * 0.5, 3.2, 0.020, 0.04, 'triangle');
+        if (bgmStep % 2 === 0) {
+          playNote(note * 2.0, 2.2, 0.014, 0.22, 'sine');
+          playNote(note * 1.5, 2.5, 0.012, 0.44, 'triangle');
+        }
+      } else if (ending === 'send') {
+        const note = seqEndingSend[bgmStep % seqEndingSend.length];
+        playNote(note, 3.0, 0.028, 0, 'triangle');
+        playNote(note * 0.5, 3.4, 0.022, 0.08, 'sine');
+        if (bgmStep % 3 === 0) {
+          playNote(note * 1.5, 2.6, 0.013, 0.32, 'sine');
+        }
+      } else if (ending === 'early') {
+        const note = seqEndingEarly[bgmStep % seqEndingEarly.length];
+        playNote(note, 3.4, 0.024, 0, 'sine');
+        if (bgmStep % 2 === 0) {
+          playNote(110.0, 3.8, 0.018, 0.05, 'triangle');
+          playNote(note * 1.2, 2.8, 0.009, 0.45, 'sine');
+        }
+      } else {
+        const palette = powered ? seqLit : seqDark;
+        const note = palette[bgmStep % palette.length];
+        playNote(note, powered ? 3.1 : 2.6, 0.026, 0, 'sine');
+        if (bgmStep % 2 === 0 && powered) {
+          playNote(note * 1.5, 2.8, 0.012, 0.18, 'triangle');
+        }
       }
       bgmStep += 1;
-    }, 2400);
+    }, 1750);
 
     if (railTimer) clearInterval(railTimer);
     railTimer = setInterval(() => {
@@ -443,6 +480,26 @@
       } else if (type === 'memory') {
         [523.25, 659.25, 783.99, 987.77].forEach((f, i) => {
           playNote(f, 1.6, 0.032, i * 0.18, 'sine');
+        });
+      } else if (type === 'endingBoard') {
+        // Luminous C-Major / F-Lydian rising daybreak arpeggio + warm bass chord
+        playNote(130.81, 3.6, 0.035, 0, 'triangle');
+        playNote(196.00, 3.6, 0.030, 0.05, 'triangle');
+        [261.63, 329.63, 392.00, 523.25, 659.25, 783.99].forEach((f, i) => {
+          playNote(f, 2.4, 0.034, i * 0.22, 'sine');
+        });
+      } else if (type === 'endingSend') {
+        // Bittersweet G-Major / E-Minor farewell horn & gentle descending bell motif
+        playNote(196.00, 3.4, 0.036, 0, 'triangle');
+        playNote(246.94, 3.2, 0.030, 0.10, 'sine');
+        [587.33, 493.88, 392.00, 329.63, 392.00, 493.88].forEach((f, i) => {
+          playNote(f, 2.5, 0.030, 0.25 + i * 0.28, 'triangle');
+        });
+      } else if (type === 'endingEarly') {
+        // Solitary nocturnal A-Minor / D-Minor sparse echoing chords
+        playNote(110.00, 4.0, 0.034, 0, 'triangle');
+        [329.63, 261.63, 246.94, 220.00, 164.81].forEach((f, i) => {
+          playNote(f, 2.8, 0.028, 0.15 + i * 0.35, 'sine');
         });
       } else if (type === 'railClick') {
         playNoiseBurst(0.03, 420, 2.5, 0.045, 0);
@@ -779,7 +836,18 @@
     activeCutscene = name;
     cutsceneStart = performance.now();
     cutsceneDuration = reduced.matches ? 600 : duration;
-    playSFX('memory');
+    if (name === 'cutscene-ending-board') {
+      bgmStep = 0;
+      playSFX('endingBoard');
+    } else if (name === 'cutscene-ending-send') {
+      bgmStep = 0;
+      playSFX('endingSend');
+    } else if (name === 'cutscene-ending-early') {
+      bgmStep = 0;
+      playSFX('endingEarly');
+    } else {
+      playSFX('memory');
+    }
     render();
   }
 
@@ -1373,44 +1441,74 @@
   }
 
   function drawFoldedUmbrella(handX, handY, tipX, tipY) {
-    // Curved wooden J-handle held in the extended hand
-    ctx.strokeStyle = '#e0be8e';
-    ctx.lineWidth = 2.1;
-    ctx.beginPath();
-    ctx.arc(handX - 2, handY - 1, 2.5, 0.2 * Math.PI, 1.25 * Math.PI, false);
-    ctx.stroke();
-
-    // Tapered black umbrella fabric body
     const dx = tipX - handX;
     const dy = tipY - handY;
     const len = Math.hypot(dx, dy) || 1;
-    const nx = -dy / len;
-    const ny = dx / len;
-    shape('#141922', [
-      [handX + nx * 2.2, handY + ny * 2.2],
-      [handX - nx * 2.2, handY - ny * 2.2],
-      [tipX - nx * 0.8, tipY - ny * 0.8],
-      [tipX + nx * 0.8, tipY + ny * 0.8],
+    const ux = dx / len;
+    const uy = dy / len;
+
+    ctx.save();
+    ctx.translate(handX, handY);
+    // Rotate so +Y points along the umbrella shaft from (handX, handY) to (tipX, tipY), and -Y points straight UP out of the handle
+    ctx.rotate(Math.atan2(uy, ux) - Math.PI / 2);
+
+    const collarY = Math.min(7.5, len * 0.13);
+    const hookR = Math.min(3.5, Math.max(2.4, len * 0.062));
+    const ferruleY = len * 0.88;
+    const strapY = len * 0.48;
+
+    // 1. Curved Wooden J-Handle: straight shaft from collarY up to 0, then 180-deg semicircular hook over the top (y < 0)!
+    for (const [col, lw] of [['#4a301c', 3.0], ['#e2be8c', 1.9]]) {
+      ctx.strokeStyle = col;
+      ctx.lineWidth = lw;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(0, collarY);
+      ctx.lineTo(0, 0);
+      ctx.arc(-hookR, 0, hookR, 0, Math.PI, true);
+      ctx.lineTo(-hookR * 2, hookR * 0.55);
+      ctx.stroke();
+    }
+
+    // 2. Folded Black Canopy Fabric (gathered at collar, gently pleated at middle strap, tapered toward ferrule)
+    shape('#121720', [
+      [-1.5, collarY],
+      [1.5, collarY],
+      [2.6, strapY],
+      [1.1, ferruleY],
+      [-1.1, ferruleY],
+      [-2.6, strapY],
     ]);
-    // Crisp wet silver edge along top of the folded umbrella
-    ctx.strokeStyle = '#d4e2f4';
-    ctx.lineWidth = 1.1;
+
+    // Subtle longitudinal pleat highlights along the folded black cloth
+    ctx.strokeStyle = 'rgba(200, 222, 248, 0.42)';
+    ctx.lineWidth = 0.85;
     ctx.beginPath();
-    ctx.moveTo(handX + nx * 2.1, handY + ny * 2.1);
-    ctx.lineTo(tipX, tipY);
+    ctx.moveTo(-0.8, collarY + 1);
+    ctx.lineTo(-1.5, strapY);
+    ctx.lineTo(-0.5, ferruleY);
+    ctx.moveTo(0.6, collarY + 1);
+    ctx.lineTo(1.1, strapY);
+    ctx.lineTo(0.4, ferruleY);
     ctx.stroke();
-    // Brass collar ring & white button strap
-    const midX = handX + dx * 0.45;
-    const midY = handY + dy * 0.45;
-    circle('#e6c882', handX + dx * 0.14, handY + dy * 0.14, 1.3);
-    circle('#e8f0fa', midX, midY, 1.2);
-    // Silver ferrule tip
-    ctx.strokeStyle = '#eef4fc';
-    ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(tipX, tipY);
-    ctx.lineTo(tipX + (dx / len) * 4, tipY + (dy / len) * 4);
-    ctx.stroke();
+
+    // 3. Brass Collar Ring at the neck of the canopy
+    rect('#dfc078', -1.8, collarY - 0.8, 3.6, 1.8);
+
+    // 4. Horizontal Fabric Tie-Strap & small metallic snap button in the middle
+    rect('#283244', -2.7, strapY - 1.1, 5.4, 2.2);
+    circle('#dce6f4', 0.9, strapY, 0.7);
+
+    // 5. Sleek Silver Ferrule Tip at the bottom end
+    shape('#dce6f4', [
+      [-1.0, ferruleY],
+      [1.0, ferruleY],
+      [0.45, len],
+      [-0.45, len],
+    ]);
+
+    ctx.restore();
   }
 
   function drawStationmasterFigure(x, footY, scale = 1, opts = {}) {
@@ -1582,151 +1680,165 @@
     ctx.textAlign = 'start';
   }
 
-  // True 1-Point Perspective Platform, Arched Tunnel Portal & Receding Train on Steel Rails
+  // True 1-Point Perspective Platform, Arched Tunnel Portal & Full-Scale Receding Train on Steel Rails
   function drawPerspectiveTunnelAndRecedingTrain(p, t, dawnAmount = 0) {
-    // 1. Perspective Track Bed & Ballast on the Right (converging toward tunnel arch at x: 232, y: 104)
-    shape('#070a10', [[194, 104], [274, 104], [320, 162], [128, 162]]);
+    // 1. Perspective Track Bed & Ballast on the Right (converging toward tunnel arch at x: 232, y: 114)
+    shape('#070a10', [[182, 112], [282, 112], [320, 162], [124, 162]]);
 
-    // 2. Arched Masonry / Concrete Tunnel Portal at the end of the tracks (x: 180..284, y: 34..108)
-    rect('#1a2230', 180, 36, 104, 72);
-    strokeRect('#3e4c62', 180, 36, 104, 72);
-    rect('#2b3648', 176, 32, 112, 5); // tunnel portal coping cornice
-    // Horizontal stone coursework lines on portal facade
-    for (let py = 46; py < 104; py += 12) {
-      rect('rgba(255, 255, 255, 0.05)', 181, py, 102, 0.8);
+    // 2. Arched Masonry / Concrete Tunnel Portal at the end of the tracks (x: 170..294, y: 20..114)
+    rect('#1a2230', 170, 22, 124, 92);
+    strokeRect('#3e4c62', 170, 22, 124, 92);
+    rect('#2b3648', 166, 18, 132, 5); // tunnel portal coping cornice
+    for (let py = 34; py < 110; py += 12) {
+      rect('rgba(255, 255, 255, 0.05)', 171, py, 122, 0.8);
     }
 
-    // Semicircular Arched Tunnel Bore (center: 232, 72, radius: 36)
+    // Semicircular Arched Tunnel Bore (center: 232, 72, radius: 46 -> width 92px, height 88px)
     ctx.fillStyle = '#030508';
     ctx.beginPath();
-    ctx.moveTo(196, 108);
-    ctx.lineTo(196, 72);
-    ctx.arc(232, 72, 36, Math.PI, 0, false);
-    ctx.lineTo(268, 108);
+    ctx.moveTo(186, 114);
+    ctx.lineTo(186, 72);
+    ctx.arc(232, 72, 46, Math.PI, 0, false);
+    ctx.lineTo(278, 114);
     ctx.closePath();
     ctx.fill();
 
     // Concrete arch ring voussoir highlight
     ctx.strokeStyle = '#5c6c84';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.2;
     ctx.beginPath();
-    ctx.moveTo(196, 108);
-    ctx.lineTo(196, 72);
-    ctx.arc(232, 72, 36, Math.PI, 0, false);
-    ctx.lineTo(268, 108);
+    ctx.moveTo(186, 114);
+    ctx.lineTo(186, 72);
+    ctx.arc(232, 72, 46, Math.PI, 0, false);
+    ctx.lineTo(278, 114);
     ctx.stroke();
 
     // Optional warm daybreak glow deep inside the tunnel bore (for Ending 2)
     if (dawnAmount > 0) {
-      radialGlow(232, 86, 3, 68, `rgba(255, 224, 168, ${dawnAmount})`);
+      radialGlow(232, 86, 4, 78, `rgba(255, 224, 168, ${dawnAmount})`);
     }
 
     // Overhead catenary contact wire entering the tunnel arch
     ctx.strokeStyle = 'rgba(150, 172, 200, 0.45)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(240, 18);
-    ctx.lineTo(232, 60);
+    ctx.moveTo(238, 18);
+    ctx.lineTo(232, 50);
     ctx.stroke();
 
-    // 3. Perspective Wooden Sleepers & Converging Steel Rails (y: 106 -> 162)
-    for (let s = 0; s <= 9; s++) {
-      const frac = Math.pow(s / 9, 1.45);
-      const ry = 106 + frac * 54;
-      const rcx = 232 + frac * 10;
-      const halfTie = 12 + frac * 42;
-      const tieH = Math.max(1.2, 1.2 + frac * 2.2);
-      rect('#231e1b', rcx - halfTie, ry, halfTie * 2, tieH);
+    // 3. Perspective Wooden Sleepers & Converging Steel Rails (locked to exact train wheel gauge!)
+    const railLeftAtY = (y) => 209 - ((y - 114) / 48) * 12;
+    const railRightAtY = (y) => 255 + ((y - 114) / 48) * 20;
+
+    for (let s = 0; s <= 8; s++) {
+      const frac = Math.pow(s / 8, 1.35);
+      const ry = 114 + frac * 46;
+      const rL = railLeftAtY(ry);
+      const rR = railRightAtY(ry);
+      const overhang = 8 + frac * 14;
+      const tieH = Math.max(1.4, 1.4 + frac * 2.2);
+      rect('#231e1b', rL - overhang, ry, (rR - rL) + overhang * 2, tieH);
     }
-    // Left steel rail & right steel rail converging into the tunnel bore
-    shape('#7e8ea6', [[223, 105], [225, 105], [208, 162], [204, 162]]);
-    shape('#7e8ea6', [[239, 105], [241, 105], [278, 162], [274, 162]]);
-    // Inner rail shadow lines for 3D rail depth
-    shape('#384252', [[225, 105], [226, 105], [210, 162], [208, 162]]);
-    shape('#384252', [[241, 105], [242, 105], [280, 162], [278, 162]]);
+
+    // Continuous Left & Right Steel Rails converging into the tunnel bore
+    shape('#7e8ea6', [[208, 114], [210.5, 114], [199.5, 162], [196, 162]]);
+    shape('#7e8ea6', [[253.5, 114], [256, 114], [276, 162], [272.5, 162]]);
+    shape('#384252', [[210.5, 114], [212, 114], [201, 162], [199.5, 162]]);
+    shape('#384252', [[256, 114], [257.5, 114], [277.5, 162], [276, 162]]);
 
     // 4. Perspective Platform Surface, Concrete Drop-Wall & Yellow Tactile Line on the Left
-    // Platform vertical concrete edge wall dropping down to the track bed
-    shape('#161e2b', [[194, 104], [198, 108], [136, 162], [124, 162]]);
-    // Main wet platform floor receding from foreground-left to the tunnel portal
-    shape('#0d131d', [[0, 104], [194, 104], [124, 162], [0, 162]]);
-    // Crisp platform curb coping edge
-    shape('#4e5c70', [[192, 104], [194, 104], [124, 162], [121, 162]]);
-    // Perspective Yellow Safety Line running parallel to the platform edge!
-    shape('#d8b458', [[186, 104], [189, 104], [114, 162], [107, 162]]);
+    shape('#161e2b', [[182, 112], [186, 116], [134, 162], [122, 162]]);
+    shape('#0d131d', [[0, 112], [182, 112], [122, 162], [0, 162]]);
+    shape('#4e5c70', [[180, 112], [182, 112], [122, 162], [119, 162]]);
+    shape('#d8b458', [[174, 112], [177, 112], [112, 162], [105, 162]]);
 
-    // 5. Detailed Rear Car of the Commuter Train riding ON the Steel Rails
+    // 5. Full-Scale Rear Car of the Commuter Train riding ON the Steel Rails
+    // Scales from massive foreground car (114x98 at p=0) to tunnel-filling car (76x66 at p=1)
     const depth = Math.min(1, Math.max(0, p));
-    const sc = 0.90 - depth * 0.56; // scales smoothly from 0.90 down to 0.34
-    const railY = Math.round(146 - depth * 38); // moves up along the rails from y=146 to y=108
-    const tcx = Math.round(239 - depth * 7); // centered between the two steel rails
-    const cw = Math.round(58 * sc);
-    const ch = Math.round(50 * sc);
+    const railY = Math.round(154 - depth * 38); // moves along the rails from y=154 to y=116
+    const rL = railLeftAtY(railY);
+    const rR = railRightAtY(railY);
+    const gauge = rR - rL; // 46px at tunnel mouth -> 72.5px in foreground
+    const tcx = Math.round((rL + rR) * 0.5);
+    const cw = Math.round(gauge * 1.62); // 117px in foreground -> 75px at tunnel mouth!
+    const ch = Math.round(cw * 0.86);   // 101px in foreground -> 64px at tunnel mouth!
+    const sc = cw / 90;
     const cx0 = tcx - Math.round(cw / 2);
     const cy0 = railY - ch;
 
-    // Crimson tail-light reflection streaks along the wet steel rails behind the train
-    const railLeftX = Math.round(224 - ((railY - 105) / 57) * 18);
-    const railRightX = Math.round(240 + ((railY - 105) / 57) * 36);
-    radialGlow(tcx, railY + 4, 2, 34 * sc, `rgba(255, 78, 58, ${0.48 * (1 - depth * 0.45)})`);
-    rect(`rgba(255, 95, 75, ${0.55 * (1 - depth * 0.4)})`, railLeftX - 1, railY, 2.5, Math.min(28, 162 - railY));
-    rect(`rgba(255, 95, 75, ${0.55 * (1 - depth * 0.4)})`, railRightX - 1, railY, 2.5, Math.min(28, 162 - railY));
+    // Angled crimson tail-light reflection streaks along the two steel rails behind the train
+    const glowAlpha = 0.52 * (1 - depth * 0.35);
+    radialGlow(tcx, railY + 4, 3, 44 * sc, `rgba(255, 78, 58, ${glowAlpha})`);
+    shape(`rgba(255, 92, 72, ${glowAlpha})`, [
+      [rL - 1.5, railY],
+      [rL + 1.8, railY],
+      [railLeftAtY(162) + 2, 162],
+      [railLeftAtY(162) - 2, 162],
+    ]);
+    shape(`rgba(255, 92, 72, ${glowAlpha})`, [
+      [rR - 1.8, railY],
+      [rR + 1.5, railY],
+      [railRightAtY(162) + 2, 162],
+      [railRightAtY(162) - 2, 162],
+    ]);
 
-    // Undercarriage bogie, wheels on rails & central coupler
-    rect('#0b0e14', cx0 + Math.round(cw * 0.12), railY - Math.round(5 * sc), Math.round(cw * 0.76), Math.round(5 * sc));
-    circle('#68768c', cx0 + Math.round(cw * 0.22), railY - Math.round(1.5 * sc), Math.max(1.5, 3.2 * sc));
-    circle('#68768c', cx0 + Math.round(cw * 0.78), railY - Math.round(1.5 * sc), Math.max(1.5, 3.2 * sc));
-    rect('#28303e', tcx - Math.round(3 * sc), railY - Math.round(4 * sc), Math.round(6 * sc), Math.round(3.5 * sc));
+    // Undercarriage bogie frame, central coupler & steel wheels locked directly onto (rL, railY) and (rR, railY)!
+    rect('#0b0e14', cx0 + Math.round(cw * 0.10), railY - Math.round(7 * sc), Math.round(cw * 0.80), Math.round(6 * sc));
+    circle('#7888a0', rL, railY - Math.round(2 * sc), Math.max(2.5, 4.2 * sc));
+    circle('#7888a0', rR, railY - Math.round(2 * sc), Math.max(2.5, 4.2 * sc));
+    rect('#2c3546', tcx - Math.round(4.5 * sc), railY - Math.round(5.5 * sc), Math.round(9 * sc), Math.round(4.5 * sc));
 
     // Arched corrugated silver roof
     shape('#4e586a', [
-      [cx0 + Math.round(cw * 0.1), cy0 - Math.round(4.5 * sc)],
-      [cx0 + Math.round(cw * 0.9), cy0 - Math.round(4.5 * sc)],
+      [cx0 + Math.round(cw * 0.08), cy0 - Math.round(5.5 * sc)],
+      [cx0 + Math.round(cw * 0.92), cy0 - Math.round(5.5 * sc)],
       [cx0 + cw, cy0],
       [cx0, cy0],
     ]);
-    // Pantograph on roof
-    ctx.strokeStyle = '#8896ac';
-    ctx.lineWidth = Math.max(0.8, 1.1 * sc);
+    // Diamond pantograph on roof
+    ctx.strokeStyle = '#92a2ba';
+    ctx.lineWidth = Math.max(1.0, 1.3 * sc);
     ctx.beginPath();
-    ctx.moveTo(tcx - Math.round(6 * sc), cy0 - Math.round(4.5 * sc));
-    ctx.lineTo(tcx, cy0 - Math.round(9 * sc));
-    ctx.lineTo(tcx + Math.round(6 * sc), cy0 - Math.round(4.5 * sc));
+    ctx.moveTo(tcx - Math.round(8 * sc), cy0 - Math.round(5.5 * sc));
+    ctx.lineTo(tcx, cy0 - Math.round(11 * sc));
+    ctx.lineTo(tcx + Math.round(8 * sc), cy0 - Math.round(5.5 * sc));
     ctx.stroke();
 
     // Main steel rear carriage body
-    rect('#1e2636', cx0, cy0, cw, ch - Math.round(3 * sc));
-    strokeRect('#7e8fa8', cx0, cy0, cw, ch - Math.round(3 * sc));
+    rect('#1e2636', cx0, cy0, cw, ch - Math.round(4 * sc));
+    strokeRect('#8698b2', cx0, cy0, cw, ch - Math.round(4 * sc));
 
     // Silver & warm-gold waist stripes
     const stripeY = cy0 + Math.round(ch * 0.58);
-    rect('#dce4f0', cx0 + 1, stripeY, cw - 2, Math.max(1.2, Math.round(3 * sc)));
-    rect('#d8b05c', cx0 + 1, stripeY + Math.max(1.5, Math.round(3.2 * sc)), cw - 2, Math.max(0.8, Math.round(1.6 * sc)));
+    rect('#dce4f0', cx0 + 1, stripeY, cw - 2, Math.max(2, Math.round(3.8 * sc)));
+    rect('#d8b05c', cx0 + 1, stripeY + Math.max(2.2, Math.round(4.2 * sc)), cw - 2, Math.max(1.2, Math.round(2 * sc)));
 
     // Central rear gangway door & dual rear windows
-    const doorW = Math.round(cw * 0.26);
+    const doorW = Math.round(cw * 0.25);
     const doorH = Math.round(ch * 0.72);
-    rect('#151b26', tcx - Math.round(doorW / 2), cy0 + Math.round(ch * 0.16), doorW, doorH);
-    strokeRect('#627288', tcx - Math.round(doorW / 2), cy0 + Math.round(ch * 0.16), doorW, doorH);
-    rect('#d8cfb8', tcx - Math.round(doorW * 0.28), cy0 + Math.round(ch * 0.22), Math.round(doorW * 0.56), Math.round(ch * 0.20));
+    rect('#151b26', tcx - Math.round(doorW / 2), cy0 + Math.round(ch * 0.15), doorW, doorH);
+    strokeRect('#687890', tcx - Math.round(doorW / 2), cy0 + Math.round(ch * 0.15), doorW, doorH);
+    rect('#e6d8be', tcx - Math.round(doorW * 0.28), cy0 + Math.round(ch * 0.21), Math.round(doorW * 0.56), Math.round(ch * 0.22));
 
-    const winW = Math.round(cw * 0.22);
+    const winW = Math.round(cw * 0.23);
     const winH = Math.round(ch * 0.26);
-    const winY = cy0 + Math.round(ch * 0.20);
-    rect('#f5dfb2', cx0 + Math.round(cw * 0.09), winY, winW, winH);
-    rect('#f5dfb2', cx0 + Math.round(cw * 0.69), winY, winW, winH);
+    const winY = cy0 + Math.round(ch * 0.19);
+    rect('#ffefd0', cx0 + Math.round(cw * 0.08), winY, winW, winH);
+    strokeRect('#7a8ca6', cx0 + Math.round(cw * 0.08), winY, winW, winH);
+    rect('#ffefd0', cx0 + Math.round(cw * 0.69), winY, winW, winH);
+    strokeRect('#7a8ca6', cx0 + Math.round(cw * 0.69), winY, winW, winH);
 
     // Twin Red Tail-Lights with HDR crimson glow
     const tailY = cy0 + Math.round(ch * 0.72);
     const tailLX = cx0 + Math.round(cw * 0.16);
     const tailRX = cx0 + Math.round(cw * 0.84);
-    const tailR = Math.max(1.5, 3.2 * sc);
-    radialGlow(tailLX, tailY, 0.5, 16 * sc, `rgba(255, 72, 52, ${0.78 * (1 - depth * 0.35)})`);
-    radialGlow(tailRX, tailY, 0.5, 16 * sc, `rgba(255, 72, 52, ${0.78 * (1 - depth * 0.35)})`);
+    const tailR = Math.max(2.2, 4.0 * sc);
+    radialGlow(tailLX, tailY, 1, 20 * sc, `rgba(255, 72, 52, ${0.82 * (1 - depth * 0.3)})`);
+    radialGlow(tailRX, tailY, 1, 20 * sc, `rgba(255, 72, 52, ${0.82 * (1 - depth * 0.3)})`);
     circle('#ff5a44', tailLX, tailY, tailR);
     circle('#ff5a44', tailRX, tailY, tailR);
-    circle('#ffd2c8', tailLX, tailY, tailR * 0.45);
-    circle('#ffd2c8', tailRX, tailY, tailR * 0.45);
+    circle('#ffd8ce', tailLX, tailY, tailR * 0.48);
+    circle('#ffd8ce', tailRX, tailY, tailR * 0.48);
   }
 
   // Render Hands-Free Cinematic Story Cutscenes (320x180 logical space scaled 2x to 640x360)
@@ -3110,29 +3222,35 @@
       ctx.stroke();
 
       // Perspective rails & wooden sleepers approaching from the tunnel bore
+      const lanRailL = (y) => 70 - ((y - 110) / 38) * 16;
+      const lanRailR = (y) => 106 + ((y - 110) / 38) * 16;
       for (let r = 0; r < 6; r++) {
         const frac = Math.pow(r / 5, 1.35);
-        const ry = 108 + frac * 38;
-        const spread = 14 + frac * 30;
-        rect('#28221e', 88 - spread, ry, spread * 2, 2.2);
+        const ry = 110 + frac * 36;
+        const rL = lanRailL(ry);
+        const rR = lanRailR(ry);
+        rect('#28221e', rL - 8, ry, (rR - rL) + 16, 2.2);
       }
-      shape('#7e8ea6', [[75, 106], [77, 106], [52, 148], [49, 148]]);
-      shape('#7e8ea6', [[99, 106], [101, 106], [127, 148], [124, 148]]);
+      shape('#7e8ea6', [[69, 110], [71.5, 110], [55.5, 148], [52.5, 148]]);
+      shape('#7e8ea6', [[104.5, 110], [107, 110], [123.5, 148], [120.5, 148]]);
 
-      // Detailed Front Profile of Approaching Commuter Train riding ON the Steel Rails
+      // Full-Scale Front Profile of Approaching Commuter Train riding ON the Steel Rails
       const stageProgress = lanternStage / 3;
-      const trainScale = 0.48 + stageProgress * 0.48;
-      const trainCX = 88;
       const railBaseY = Math.round(118 + stageProgress * 24);
-      const w = Math.round(62 * trainScale);
-      const h = Math.round(62 * trainScale);
+      const rL = lanRailL(railBaseY);
+      const rR = lanRailR(railBaseY);
+      const gauge = rR - rL;
+      const trainCX = 88;
+      const w = Math.round(gauge * 1.56); // 64px at stage 0 -> 88px at stage 3 (fills the 96px tunnel arch!)
+      const h = Math.round(w * 0.96);
+      const trainScale = w / 72;
       const tx0 = trainCX - Math.round(w / 2);
       const ty0 = railBaseY - h;
       const trainCY = ty0 + Math.round(h / 2);
 
-      // Undercarriage bogie wheels resting on the rails
-      circle('#6e7c92', trainCX - Math.round(w * 0.30), railBaseY, Math.max(2, 3.5 * trainScale));
-      circle('#6e7c92', trainCX + Math.round(w * 0.30), railBaseY, Math.max(2, 3.5 * trainScale));
+      // Undercarriage bogie wheels locked directly onto the steel rails
+      circle('#7888a0', rL, railBaseY - Math.round(2 * trainScale), Math.max(2.5, 4 * trainScale));
+      circle('#7888a0', rR, railBaseY - Math.round(2 * trainScale), Math.max(2.5, 4 * trainScale));
 
       // Corrugated roof & main locomotive body
       shape('#4e586a', [
