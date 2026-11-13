@@ -1582,6 +1582,153 @@
     ctx.textAlign = 'start';
   }
 
+  // True 1-Point Perspective Platform, Arched Tunnel Portal & Receding Train on Steel Rails
+  function drawPerspectiveTunnelAndRecedingTrain(p, t, dawnAmount = 0) {
+    // 1. Perspective Track Bed & Ballast on the Right (converging toward tunnel arch at x: 232, y: 104)
+    shape('#070a10', [[194, 104], [274, 104], [320, 162], [128, 162]]);
+
+    // 2. Arched Masonry / Concrete Tunnel Portal at the end of the tracks (x: 180..284, y: 34..108)
+    rect('#1a2230', 180, 36, 104, 72);
+    strokeRect('#3e4c62', 180, 36, 104, 72);
+    rect('#2b3648', 176, 32, 112, 5); // tunnel portal coping cornice
+    // Horizontal stone coursework lines on portal facade
+    for (let py = 46; py < 104; py += 12) {
+      rect('rgba(255, 255, 255, 0.05)', 181, py, 102, 0.8);
+    }
+
+    // Semicircular Arched Tunnel Bore (center: 232, 72, radius: 36)
+    ctx.fillStyle = '#030508';
+    ctx.beginPath();
+    ctx.moveTo(196, 108);
+    ctx.lineTo(196, 72);
+    ctx.arc(232, 72, 36, Math.PI, 0, false);
+    ctx.lineTo(268, 108);
+    ctx.closePath();
+    ctx.fill();
+
+    // Concrete arch ring voussoir highlight
+    ctx.strokeStyle = '#5c6c84';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(196, 108);
+    ctx.lineTo(196, 72);
+    ctx.arc(232, 72, 36, Math.PI, 0, false);
+    ctx.lineTo(268, 108);
+    ctx.stroke();
+
+    // Optional warm daybreak glow deep inside the tunnel bore (for Ending 2)
+    if (dawnAmount > 0) {
+      radialGlow(232, 86, 3, 68, `rgba(255, 224, 168, ${dawnAmount})`);
+    }
+
+    // Overhead catenary contact wire entering the tunnel arch
+    ctx.strokeStyle = 'rgba(150, 172, 200, 0.45)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(240, 18);
+    ctx.lineTo(232, 60);
+    ctx.stroke();
+
+    // 3. Perspective Wooden Sleepers & Converging Steel Rails (y: 106 -> 162)
+    for (let s = 0; s <= 9; s++) {
+      const frac = Math.pow(s / 9, 1.45);
+      const ry = 106 + frac * 54;
+      const rcx = 232 + frac * 10;
+      const halfTie = 12 + frac * 42;
+      const tieH = Math.max(1.2, 1.2 + frac * 2.2);
+      rect('#231e1b', rcx - halfTie, ry, halfTie * 2, tieH);
+    }
+    // Left steel rail & right steel rail converging into the tunnel bore
+    shape('#7e8ea6', [[223, 105], [225, 105], [208, 162], [204, 162]]);
+    shape('#7e8ea6', [[239, 105], [241, 105], [278, 162], [274, 162]]);
+    // Inner rail shadow lines for 3D rail depth
+    shape('#384252', [[225, 105], [226, 105], [210, 162], [208, 162]]);
+    shape('#384252', [[241, 105], [242, 105], [280, 162], [278, 162]]);
+
+    // 4. Perspective Platform Surface, Concrete Drop-Wall & Yellow Tactile Line on the Left
+    // Platform vertical concrete edge wall dropping down to the track bed
+    shape('#161e2b', [[194, 104], [198, 108], [136, 162], [124, 162]]);
+    // Main wet platform floor receding from foreground-left to the tunnel portal
+    shape('#0d131d', [[0, 104], [194, 104], [124, 162], [0, 162]]);
+    // Crisp platform curb coping edge
+    shape('#4e5c70', [[192, 104], [194, 104], [124, 162], [121, 162]]);
+    // Perspective Yellow Safety Line running parallel to the platform edge!
+    shape('#d8b458', [[186, 104], [189, 104], [114, 162], [107, 162]]);
+
+    // 5. Detailed Rear Car of the Commuter Train riding ON the Steel Rails
+    const depth = Math.min(1, Math.max(0, p));
+    const sc = 0.90 - depth * 0.56; // scales smoothly from 0.90 down to 0.34
+    const railY = Math.round(146 - depth * 38); // moves up along the rails from y=146 to y=108
+    const tcx = Math.round(239 - depth * 7); // centered between the two steel rails
+    const cw = Math.round(58 * sc);
+    const ch = Math.round(50 * sc);
+    const cx0 = tcx - Math.round(cw / 2);
+    const cy0 = railY - ch;
+
+    // Crimson tail-light reflection streaks along the wet steel rails behind the train
+    const railLeftX = Math.round(224 - ((railY - 105) / 57) * 18);
+    const railRightX = Math.round(240 + ((railY - 105) / 57) * 36);
+    radialGlow(tcx, railY + 4, 2, 34 * sc, `rgba(255, 78, 58, ${0.48 * (1 - depth * 0.45)})`);
+    rect(`rgba(255, 95, 75, ${0.55 * (1 - depth * 0.4)})`, railLeftX - 1, railY, 2.5, Math.min(28, 162 - railY));
+    rect(`rgba(255, 95, 75, ${0.55 * (1 - depth * 0.4)})`, railRightX - 1, railY, 2.5, Math.min(28, 162 - railY));
+
+    // Undercarriage bogie, wheels on rails & central coupler
+    rect('#0b0e14', cx0 + Math.round(cw * 0.12), railY - Math.round(5 * sc), Math.round(cw * 0.76), Math.round(5 * sc));
+    circle('#68768c', cx0 + Math.round(cw * 0.22), railY - Math.round(1.5 * sc), Math.max(1.5, 3.2 * sc));
+    circle('#68768c', cx0 + Math.round(cw * 0.78), railY - Math.round(1.5 * sc), Math.max(1.5, 3.2 * sc));
+    rect('#28303e', tcx - Math.round(3 * sc), railY - Math.round(4 * sc), Math.round(6 * sc), Math.round(3.5 * sc));
+
+    // Arched corrugated silver roof
+    shape('#4e586a', [
+      [cx0 + Math.round(cw * 0.1), cy0 - Math.round(4.5 * sc)],
+      [cx0 + Math.round(cw * 0.9), cy0 - Math.round(4.5 * sc)],
+      [cx0 + cw, cy0],
+      [cx0, cy0],
+    ]);
+    // Pantograph on roof
+    ctx.strokeStyle = '#8896ac';
+    ctx.lineWidth = Math.max(0.8, 1.1 * sc);
+    ctx.beginPath();
+    ctx.moveTo(tcx - Math.round(6 * sc), cy0 - Math.round(4.5 * sc));
+    ctx.lineTo(tcx, cy0 - Math.round(9 * sc));
+    ctx.lineTo(tcx + Math.round(6 * sc), cy0 - Math.round(4.5 * sc));
+    ctx.stroke();
+
+    // Main steel rear carriage body
+    rect('#1e2636', cx0, cy0, cw, ch - Math.round(3 * sc));
+    strokeRect('#7e8fa8', cx0, cy0, cw, ch - Math.round(3 * sc));
+
+    // Silver & warm-gold waist stripes
+    const stripeY = cy0 + Math.round(ch * 0.58);
+    rect('#dce4f0', cx0 + 1, stripeY, cw - 2, Math.max(1.2, Math.round(3 * sc)));
+    rect('#d8b05c', cx0 + 1, stripeY + Math.max(1.5, Math.round(3.2 * sc)), cw - 2, Math.max(0.8, Math.round(1.6 * sc)));
+
+    // Central rear gangway door & dual rear windows
+    const doorW = Math.round(cw * 0.26);
+    const doorH = Math.round(ch * 0.72);
+    rect('#151b26', tcx - Math.round(doorW / 2), cy0 + Math.round(ch * 0.16), doorW, doorH);
+    strokeRect('#627288', tcx - Math.round(doorW / 2), cy0 + Math.round(ch * 0.16), doorW, doorH);
+    rect('#d8cfb8', tcx - Math.round(doorW * 0.28), cy0 + Math.round(ch * 0.22), Math.round(doorW * 0.56), Math.round(ch * 0.20));
+
+    const winW = Math.round(cw * 0.22);
+    const winH = Math.round(ch * 0.26);
+    const winY = cy0 + Math.round(ch * 0.20);
+    rect('#f5dfb2', cx0 + Math.round(cw * 0.09), winY, winW, winH);
+    rect('#f5dfb2', cx0 + Math.round(cw * 0.69), winY, winW, winH);
+
+    // Twin Red Tail-Lights with HDR crimson glow
+    const tailY = cy0 + Math.round(ch * 0.72);
+    const tailLX = cx0 + Math.round(cw * 0.16);
+    const tailRX = cx0 + Math.round(cw * 0.84);
+    const tailR = Math.max(1.5, 3.2 * sc);
+    radialGlow(tailLX, tailY, 0.5, 16 * sc, `rgba(255, 72, 52, ${0.78 * (1 - depth * 0.35)})`);
+    radialGlow(tailRX, tailY, 0.5, 16 * sc, `rgba(255, 72, 52, ${0.78 * (1 - depth * 0.35)})`);
+    circle('#ff5a44', tailLX, tailY, tailR);
+    circle('#ff5a44', tailRX, tailY, tailR);
+    circle('#ffd2c8', tailLX, tailY, tailR * 0.45);
+    circle('#ffd2c8', tailRX, tailY, tailR * 0.45);
+  }
+
   // Render Hands-Free Cinematic Story Cutscenes (320x180 logical space scaled 2x to 640x360)
   function paintCutscene(name, progress, t) {
     rect('#07070a', 0, 0, 320, 180);
@@ -1654,45 +1801,46 @@
       bgGrad.addColorStop(1, '#131c28');
       rect(bgGrad, 0, 0, 320, 180);
 
-      // Slanted rain streaks falling across the night sky
-      ctx.strokeStyle = 'rgba(185, 216, 255, 0.36)';
-      ctx.lineWidth = 0.9;
-      for (let r = 0; r < 46; r++) {
-        const rx = ((r * 23 - Math.round(t * 36)) % 320 + 320) % 320;
-        const ry = (r * 19 + Math.round(t * 118)) % 146;
-        ctx.beginPath();
-        ctx.moveTo(rx, ry);
-        ctx.lineTo(rx - 2.5, ry + 7.5);
-        ctx.stroke();
-      }
-
-      // Wet reflective platform floor & yellow safety line
-      rect('#0d131c', 0, 140, 320, 24);
-      rect('#d8b458', 0, 141, 320, 1.6);
-
       if (progress < 0.35) {
         // Shot 1: Young traveler walking toward the waiting train in the rain while Father hurries behind under his open black umbrella, offering a second umbrella!
         const p1 = progress / 0.35;
+
+        // Waiting commuter train parked along the background track behind the platform (x: 0..320, y: 38..138)
+        rect('#465062', 0, 36, 320, 6); // corrugated silver roof
+        rect('#1d2534', 0, 42, 320, 96); // steel carriage body
+        rect('#dce4f0', 0, 96, 320, 3.5); // silver waist stripe
+        rect('#d8b05c', 0, 101, 320, 1.8); // gold pinstripe
+        // Passenger windows along the carriage
+        for (const wx of [18, 68, 126, 262]) {
+          rect('#ffefd0', wx, 56, 36, 24);
+          strokeRect('#8a9bb2', wx, 56, 36, 24);
+          rect('#b87e52', wx + 5, 72, 10, 8);
+          rect('#b87e52', wx + 21, 72, 10, 8);
+        }
+        // Open warm carriage doorway on the right (x: 204..244, y: 50..136)
+        rect('#382b22', 204, 50, 40, 86);
+        strokeRect('#9aa8be', 204, 50, 40, 86);
+        rect('#fff4d8', 210, 53, 28, 4);
+        rect('#e6cf9e', 214, 54, 1.6, 78);
+        rect('#e6cf9e', 234, 54, 1.6, 78);
+        radialGlow(224, 82, 4, 54, 'rgba(255, 232, 180, 0.38)');
+
         // Station canopy shelter & warm lamp on the left
         shape('#161f2c', [[0, 18], [132, 18], [116, 34], [0, 34]]);
         rect('#465264', 76, 34, 3, 106);
         circle('#fff2ce', 77.5, 36, 4.5);
         radialGlow(77.5, 38, 3, 85, 'rgba(255, 220, 155, 0.30)');
 
-        // Waiting commuter train on the right edge (x: 218..320)
-        rect('#202836', 218, 44, 102, 96);
-        strokeRect('#7e90a8', 218, 44, 102, 96);
-        rect('#dce4f0', 218, 92, 102, 3.5);
-        rect('#ffefd0', 230, 58, 30, 28); // open warm doorway
-        rect('#ffefd0', 272, 62, 34, 22); // passenger window
-        radialGlow(245, 76, 4, 48, 'rgba(255, 232, 180, 0.35)');
+        // Wet reflective platform floor & yellow safety line in foreground
+        rect('#0d131c', 0, 138, 320, 24);
+        rect('#d8b458', 0, 140, 320, 1.8);
 
-        // Young traveler walking right toward train carrying suitcase
-        const walkX = Math.round(142 + p1 * 54);
+        // Young traveler walking right toward the open train door carrying suitcase
+        const walkX = Math.round(136 + p1 * 56);
         drawTravelerFigure(walkX, 141, 0.92, t * 8);
 
         // Stationmaster Father hurrying after the traveler under his open arched black umbrella + holding out the spare umbrella!
-        const fatherX = Math.round(58 + p1 * 42);
+        const fatherX = Math.round(54 + p1 * 44);
         drawStationmasterFigure(fatherX, 141, 0.96, {
           facing: 1,
           hasUmbrella: true,
@@ -1702,31 +1850,45 @@
       } else if (progress < 0.72) {
         // Shot 2: Close-up at the train door — doors sliding shut while Father stands under his arched black umbrella holding out the spare umbrella!
         const p2 = (progress - 0.35) / 0.37;
-        // Detailed commuter carriage occupying right side (x: 162..320)
-        rect('#3e4756', 162, 34, 158, 8); // corrugated roof
-        rect('#1e2634', 162, 42, 158, 98);
-        strokeRect('#8a9bb2', 162, 42, 158, 98);
-        rect('#dce4f0', 162, 98, 158, 4);
-        rect('#d8b464', 162, 103, 158, 2);
 
-        // Pneumatic double doors closing (x: 174..218, y: 54..136)
-        rect('#2c241e', 174, 54, 44, 82);
-        const doorGap = Math.max(0, Math.round((1 - Math.min(1, p2 * 1.35)) * 18));
-        const leafW = 22 - Math.round(doorGap * 0.5);
-        rect('#323c4e', 174, 54, leafW, 82);
-        strokeRect('#98a8be', 174, 54, leafW, 82);
-        rect('#323c4e', 218 - leafW, 54, leafW, 82);
-        strokeRect('#98a8be', 218 - leafW, 54, leafW, 82);
+        // Detailed commuter carriage spanning the background behind the platform (x: 0..320)
+        rect('#465062', 0, 32, 320, 8); // corrugated roof
+        rect('#1e2634', 0, 40, 320, 98);
+        rect('#dce4f0', 0, 98, 320, 4);
+        rect('#d8b464', 0, 103, 320, 2);
 
-        // Warm lit carriage window with young traveler looking back inside (x: 234..296, y: 58..92)
-        rect('#ffefd0', 234, 58, 62, 34);
-        strokeRect('#98a8be', 234, 58, 62, 34);
-        radialGlow(265, 75, 4, 54, 'rgba(255, 230, 180, 0.38)');
+        // Left carriage windows
+        for (const wx of [18, 92]) {
+          rect('#ffefd0', wx, 58, 56, 34);
+          strokeRect('#98a8be', wx, 58, 56, 34);
+          rect('#b87e52', wx + 8, 80, 16, 12);
+          rect('#b87e52', wx + 32, 80, 16, 12);
+        }
+
+        // Pneumatic double doors closing (x: 168..216, y: 52..136)
+        rect('#2c241e', 168, 52, 48, 84);
+        const doorGap = Math.max(0, Math.round((1 - Math.min(1, p2 * 1.35)) * 20));
+        const leafW = 24 - Math.round(doorGap * 0.5);
+        rect('#323c4e', 168, 52, leafW, 84);
+        strokeRect('#98a8be', 168, 52, leafW, 84);
+        if (leafW > 10) rect('#cfe0f2', 168 + 4, 58, Math.max(4, leafW - 8), 26);
+        rect('#323c4e', 216 - leafW, 52, leafW, 84);
+        strokeRect('#98a8be', 216 - leafW, 52, leafW, 84);
+        if (leafW > 10) rect('#cfe0f2', 216 - leafW + 4, 58, Math.max(4, leafW - 8), 26);
+
+        // Warm lit carriage window with young traveler looking back inside (x: 234..298, y: 58..92)
+        rect('#ffefd0', 234, 58, 64, 34);
+        strokeRect('#98a8be', 234, 58, 64, 34);
+        radialGlow(266, 75, 4, 54, 'rgba(255, 230, 180, 0.38)');
         circle('#262d38', 262, 73, 6);
         shape('#262d38', [[253, 80], [271, 80], [274, 92], [250, 92]]);
 
+        // Wet reflective platform floor & yellow safety line in foreground
+        rect('#0d131c', 0, 138, 320, 24);
+        rect('#d8b458', 0, 140, 320, 1.8);
+
         // Father on the rain-swept platform under his large arched black umbrella, extending the spare umbrella toward the door
-        const fatherX = Math.round(92 + Math.min(1, p2 * 1.2) * 26);
+        const fatherX = Math.round(92 + Math.min(1, p2 * 1.2) * 28);
         radialGlow(72, 42, 4, 95, 'rgba(255, 220, 160, 0.25)');
         drawStationmasterFigure(fatherX, 141, 1.08, {
           facing: 1,
@@ -1735,47 +1897,37 @@
           t,
         });
       } else {
-        // Shot 3: Train tail-lights receding down the tracks into the dark tunnel; Father standing alone under his arched black umbrella beneath the platform lamp
+        // Shot 3: True 1-Point Perspective Platform, Arched Tunnel Portal & Receding Train on Steel Rails!
         const p3 = (progress - 0.72) / 0.28;
-        // Tunnel portal & receding tracks on the right
-        shape('#05070b', [[188, 52], [298, 52], [312, 140], [176, 140]]);
-        ctx.strokeStyle = '#485466';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(176, 140);
-        ctx.lineTo(188, 52);
-        ctx.lineTo(298, 52);
-        ctx.lineTo(312, 140);
-        ctx.stroke();
+        drawPerspectiveTunnelAndRecedingTrain(p3, t, 0);
 
-        // Receding train car with twin red tail-lights
-        const scaleT = Math.max(0.28, 1 - p3 * 0.65);
-        const tx = Math.round(215 + p3 * 36);
-        const ty = Math.round(96 - p3 * 6);
-        const tw = Math.round(64 * scaleT);
-        const th = Math.round(56 * scaleT);
-        rect('#1c222e', tx - Math.round(tw / 2), ty - Math.round(th / 2), tw, th);
-        strokeRect('#68788e', tx - Math.round(tw / 2), ty - Math.round(th / 2), tw, th);
-        const tailR = Math.max(1.6, 3.8 * scaleT);
-        radialGlow(tx, ty + Math.round(th * 0.15), 1, 28 * scaleT, `rgba(255, 85, 65, ${0.72 * (1 - p3 * 0.4)})`);
-        circle('#ff6b57', tx - Math.round(tw * 0.28), ty + Math.round(th * 0.15), tailR);
-        circle('#ff6b57', tx + Math.round(tw * 0.28), ty + Math.round(th * 0.15), tailR);
+        // Warm platform lamp post on the left of the perspective platform
+        rect('#586370', 62, 28, 3, 114);
+        circle('#fff0cc', 63.5, 28, 5);
+        radialGlow(63.5, 32, 4, 108, 'rgba(255, 222, 160, 0.36)');
+        radialGlow(86, 150, 4, 48, 'rgba(255, 220, 160, 0.20)');
 
-        // Warm platform lamp post on the left
-        rect('#586370', 74, 32, 3, 109);
-        circle('#fff0cc', 75.5, 32, 5);
-        radialGlow(75.5, 36, 4, 108, 'rgba(255, 222, 160, 0.36)');
-        radialGlow(98, 152, 4, 48, 'rgba(255, 220, 160, 0.20)');
-
-        // Solitary Stationmaster standing motionless under his large arched black umbrella
-        drawStationmasterFigure(98, 141, 1.06, {
+        // Solitary Stationmaster standing motionless under his large arched black umbrella on the platform
+        drawStationmasterFigure(86, 144, 1.06, {
           facing: 1,
           hasUmbrella: true,
           offerUmbrella: false,
           t,
         });
-        // Puddle ripples around his boots
-        circle('rgba(195, 224, 255, 0.35)', 98, 143, 10 + (t * 8) % 8, true, 0.8);
+        // Puddle ripples around his boots on the platform
+        circle('rgba(195, 224, 255, 0.35)', 86, 146, 10 + (t * 8) % 8, true, 0.8);
+      }
+
+      // Slanted rain streaks falling across the entire frame in foreground
+      ctx.strokeStyle = 'rgba(185, 216, 255, 0.34)';
+      ctx.lineWidth = 0.9;
+      for (let r = 0; r < 46; r++) {
+        const rx = ((r * 23 - Math.round(t * 36)) % 320 + 320) % 320;
+        const ry = (r * 19 + Math.round(t * 118)) % 148;
+        ctx.beginPath();
+        ctx.moveTo(rx, ry);
+        ctx.lineTo(rx - 2.5, ry + 7.5);
+        ctx.stroke();
       }
     } else if (name === 'cutscene-arrival') {
       // Multi-shot architectural train arrival on Platform 404
@@ -1797,9 +1949,8 @@
         const p1 = progress / 0.38;
         const ease1 = 1 - Math.pow(1 - p1, 2.4);
 
-        // Tunnel portal arch on the left
-        shape('#050609', [[0, 18], [82, 18], [82, 136], [0, 136]]);
-        strokeRect('#4a5262', -2, 24, 84, 112);
+        // Dark tunnel bore interior on the left edge
+        rect('#040508', 0, 26, 62, 114);
 
         // Track bed, wooden sleepers & steel rails
         rect('#0b0d12', 0, 126, 320, 18);
@@ -1809,12 +1960,12 @@
         rect('#8a94a6', 0, 131, 320, 1.5);
         rect('#a8b2c4', 0, 137, 320, 1.8);
 
-        // Train body advancing along the rails
-        const frontX = Math.round(56 + ease1 * 178);
-        const carLeft = frontX - 210;
+        // Train body advancing along the rails out of the tunnel
+        const frontX = Math.round(68 + ease1 * 176);
+        const carLeft = frontX - 220;
 
         // Undercarriage bogies & steel wheels on rails
-        for (const bx of [carLeft + 26, carLeft + 148]) {
+        for (const bx of [carLeft + 26, carLeft + 158]) {
           rect('#14171f', bx, 122, 38, 12);
           circle('#788294', bx + 8, 132, 4.5);
           circle('#788294', bx + 30, 132, 4.5);
@@ -1838,9 +1989,9 @@
         ctx.strokeStyle = '#8892a4';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.moveTo(carLeft + 64, 40);
+        ctx.moveTo(carLeft + 74, 40);
+        ctx.lineTo(carLeft + 82, 35);
         ctx.lineTo(carLeft + 72, 35);
-        ctx.lineTo(carLeft + 62, 35);
         ctx.stroke();
 
         // Silver & warm-amber waist stripes
@@ -1849,7 +2000,7 @@
 
         // Glowing passenger windows with interior seats & straps
         for (let w = 0; w < 4; w++) {
-          const wx = carLeft + 16 + w * 40;
+          const wx = carLeft + 22 + w * 42;
           if (wx + 28 < frontX - 18) {
             rect('#ffefd0', wx, 58, 28, 22);
             strokeRect('#9aa6ba', wx, 58, 28, 22);
@@ -1873,6 +2024,11 @@
           [frontX - 4, 130],
           [frontX - 16, 130],
         ]);
+
+        // Foreground Tunnel Portal Masonry Arch Pillar on the left edge (train emerges from behind this portal!)
+        rect('#181e2a', 0, 18, 42, 122);
+        shape('#262e3e', [[42, 18], [54, 26], [54, 140], [42, 140]]); // 3D angled portal reveal
+        shape('#202836', [[0, 18], [64, 18], [54, 34], [0, 34]]); // top portal lintel arch
 
         // Twin HDR Volumetric Headlights piercing the mist
         radialGlow(frontX, 96, 2, 46, 'rgba(255, 250, 232, 0.88)');
@@ -2088,12 +2244,16 @@
       if (progress < 0.35) {
         const p1 = progress / 0.35;
         rect('#0b0e15', 0, 18, 320, 144);
-        const tx = Math.round(20 + p1 * 95);
-        rect('#262e3c', tx, 42, 220, 92);
-        strokeRect('#8896ac', tx, 42, 220, 92);
-        rect('#dce4f0', tx, 94, 220, 4);
-        for (let w = 0; w < 4; w++) {
-          rect('#ffefd0', tx + 18 + w * 48, 56, 32, 24);
+        const tx = Math.round(-40 + p1 * 130);
+        // Full carriage & tail car gliding along the track behind the platform
+        rect('#4a5466', tx, 36, 260, 6);
+        rect('#222a38', tx, 42, 260, 92);
+        strokeRect('#8896ac', tx, 42, 260, 92);
+        rect('#dce4f0', tx, 94, 260, 4);
+        rect('#d8b05c', tx, 99, 260, 2);
+        for (let w = 0; w < 5; w++) {
+          rect('#ffefd0', tx + 16 + w * 48, 56, 34, 24);
+          strokeRect('#9aa8be', tx + 16 + w * 48, 56, 34, 24);
         }
         rect('#181c24', 0, 134, 320, 28);
         rect('#d8b458', 0, 136, 320, 2);
@@ -2102,14 +2262,13 @@
         radialGlow(84, 118, 2, 38, 'rgba(255, 225, 160, 0.5)');
         drawFoldedUmbrella(64, 108, 56, 152);
       } else if (progress < 0.70) {
+        // Shot 2: 1-Point Perspective Platform, Arched Tunnel & Receding Train heading toward Daybreak!
         const p2 = (progress - 0.35) / 0.35;
-        rect('#090c12', 0, 18, 320, 144);
-        radialGlow(248, 86, 4, 85, `rgba(255, 220, 165, ${0.25 + p2 * 0.45})`);
-        const tx = Math.round(180 + p2 * 62);
-        const s = Math.max(0.3, 1 - p2 * 0.6);
-        rect('#1e2430', tx, 72, Math.round(52 * s), Math.round(46 * s));
-        circle('#ff6b57', tx + 8, 96, 3 * s);
-        circle('#ff6b57', tx + Math.round(44 * s), 96, 3 * s);
+        const bgGrad = ctx.createLinearGradient(0, 18, 0, 162);
+        bgGrad.addColorStop(0, '#090d16');
+        bgGrad.addColorStop(1, '#141d2a');
+        rect(bgGrad, 0, 18, 320, 144);
+        drawPerspectiveTunnelAndRecedingTrain(p2, t, 0.25 + p2 * 0.55);
       } else {
         const skyGrad = ctx.createLinearGradient(0, 18, 0, 114);
         skyGrad.addColorStop(0, '#2a3548');
@@ -2260,7 +2419,7 @@
       return;
     }
 
-    // 3. Base Underground Architecture with HDR Depth Shading (Rooms 01-07)
+    // 3. Base Underground Architecture with Perspective-Correct Room Geometry (Rooms 01-07)
     const floorGrad = ctx.createLinearGradient(0, 114, 0, 180);
     floorGrad.addColorStop(0, '#18191e');
     floorGrad.addColorStop(1, '#262830');
@@ -2270,14 +2429,31 @@
       rect('rgba(255,255,255,0.035)', 0, fy, 320, 0.7);
     }
 
-    shape('#23252c', [[0, 0], [114, 49], [114, 118], [0, 180]]);
-    shape('#1c1e24', [[320, 0], [206, 49], [206, 118], [320, 180]]);
-    rect('#14161b', 114, 49, 92, 70);
-    shape('#383b44', [[0, 154], [114, 111], [114, 118], [0, 171]]);
-    shape('#2c2f37', [[320, 154], [206, 111], [206, 118], [320, 171]]);
+    if (room === 'station') {
+      // Long 1-Point Perspective Platform Corridor (back wall x: 114..206, y: 49..118)
+      shape('#23252c', [[0, 0], [114, 49], [114, 118], [0, 180]]);
+      shape('#1c1e24', [[320, 0], [206, 49], [206, 118], [320, 180]]);
+      rect('#14161b', 114, 49, 92, 70);
+      // Right wall baseboard only outside the Waiting Hall doorway (x: 206..236 and 286..320)
+      shape('#2c2f37', [[206, 111], [236, 122.3], [236, 134.3], [206, 118]]);
+      shape('#2c2f37', [[286, 141.2], [320, 154], [320, 180], [286, 161.5]]);
+    } else {
+      // Wide Interior Room Architecture (back wall x: 38..282, y: 28..126) so furniture never clips side walls!
+      shape('#23252c', [[0, 0], [38, 28], [38, 126], [0, 180]]);
+      shape('#1c1e24', [[320, 0], [282, 28], [282, 126], [320, 180]]);
+      rect('#16181f', 38, 28, 244, 98);
+      // Subtle architectural wall wainscoting line & continuous room baseboard
+      rect('rgba(255, 255, 255, 0.03)', 38, 92, 244, 1);
+      rect('#2c2f38', 38, 120, 244, 6);
+      shape('#383b44', [[0, 166], [38, 120], [38, 126], [0, 180]]);
+      shape('#252830', [[320, 166], [282, 120], [282, 126], [320, 180]]);
+    }
 
     // Ceiling Fluorescent Lights & Volumetric Light Cones
-    for (const [i, [x, y, w]] of [[131, 5, 58], [140, 25, 40], [147, 41, 26]].entries()) {
+    const ceilingFixtures = room === 'station'
+      ? [[131, 5, 58], [140, 25, 40], [147, 41, 26]]
+      : [[124, 6, 72], [136, 19, 48]];
+    for (const [i, [x, y, w]] of ceilingFixtures.entries()) {
       const lit = powered && (sceneEffect !== 'power' || progress > (i + 1) * 0.22);
       rect('#2a2c32', x - 3, y - 2, w + 6, 7);
       rect(lit ? '#fff9ee' : '#525560', x, y, w, 2.5);
@@ -2292,24 +2468,46 @@
     }
 
     if (room === 'station') {
-      // Left Wall: Trackside Platform Recess & Tunnel Portal in True 1-Point Perspective
-      shape('#07090e', [[12, 34], [104, 62], [104, 115], [12, 150]]);
-      shape('#5c6270', [[9, 32], [12, 34], [12, 150], [9, 153]]);
-      // Yellow tactile safety line along the left platform edge
-      shape('#d8b458', [[6, 153], [112, 112], [114, 113], [8, 155]]);
+      // Bilinear 1-point perspective helper for the Left Wall (x: 0..114, ceiling: 0->49, floor: 180->118)
+      const lWallY = (x, v) => {
+        const yCeil = (49 / 114) * x;
+        const yFloor = 180 - (62 / 114) * x;
+        return yCeil + v * (yFloor - yCeil);
+      };
+      const lWallQuad = (color, x0, x1, v0, v1) => {
+        shape(color, [
+          [x0, lWallY(x0, v0)],
+          [x1, lWallY(x1, v0)],
+          [x1, lWallY(x1, v1)],
+          [x0, lWallY(x0, v1)],
+        ]);
+      };
+
+      // Left Wall: Trackside Platform Opening flush with the platform floor (v: 0.20..1.00, x: 10..106)
+      lWallQuad('#07090e', 10, 106, 0.20, 1.00);
+      // 3D concrete wall reveal on the left edge (x: 7..10) & top lintel
+      shape('#525866', [
+        [7, lWallY(10, 0.20) - 1],
+        [10, lWallY(10, 0.20)],
+        [10, lWallY(10, 1.00)],
+        [7, lWallY(10, 1.00) + 1],
+      ]);
+      // Platform curb edge & perspective Yellow Tactile Safety Line on the platform floor!
+      shape('#646c7c', [[10, lWallY(10, 1.00)], [106, lWallY(106, 1.00)], [108, lWallY(106, 1.00) + 1], [12, lWallY(10, 1.00) + 2]]);
+      shape('#d8b458', [[18, 176], [112, 121], [115, 122], [23, 178]]);
 
       ctx.save();
       ctx.beginPath();
-      ctx.moveTo(12, 34);
-      ctx.lineTo(104, 62);
-      ctx.lineTo(104, 115);
-      ctx.lineTo(12, 150);
+      ctx.moveTo(10, lWallY(10, 0.20));
+      ctx.lineTo(106, lWallY(106, 0.20));
+      ctx.lineTo(106, lWallY(106, 1.00));
+      ctx.lineTo(10, lWallY(10, 1.00));
       ctx.closePath();
       ctx.clip();
 
       // Perspective rails inside the track recess
-      shape('#485060', [[12, 146], [104, 113], [104, 114.5], [12, 148]]);
-      shape('#363c48', [[12, 138], [104, 110], [104, 111], [12, 140]]);
+      lWallQuad('#485060', 10, 106, 0.94, 0.96);
+      lWallQuad('#363c48', 10, 106, 0.88, 0.90);
 
       if (trainApproaching && !trainArrived && puzzle !== 'lanternGame') {
         const glow = 0.55 + 0.35 * Math.sin(t * 3.5);
@@ -2318,77 +2516,131 @@
         strokeRect('#6e7b90', 74, 76, 24, 32);
         rect('#cfe0f5', 77, 81, 18, 8);
         radialGlow(86, 98, 1, 28, `rgba(255, 242, 200, ${glow * 0.75})`);
-        linearRay(86, 98, 12, 146, [[80, 96], [92, 98], [32, 150], [12, 138]], `rgba(255, 244, 210, ${glow * 0.32})`);
+        linearRay(86, 98, 12, 156, [[80, 96], [92, 98], [32, 162], [12, 148]], `rgba(255, 244, 210, ${glow * 0.32})`);
         circle('#fff9ec', 80, 98, 2.8);
         circle('#fff9ec', 92, 99, 2.5);
       }
 
       if (trainArrived || sceneEffect === 'arrival') {
-        // True 1-Point Perspective Docked Commuter Train along Left Track Wall (x: 12..100)
-        const pLerp = (x, yL, yR) => yL + ((x - 12) / 88) * (yR - yL);
-        const pQuad = (color, x0, x1, yL0, yR0, yL1, yR1) => {
-          shape(color, [
-            [x0, pLerp(x0, yL0, yR0)],
-            [x1, pLerp(x1, yL0, yR0)],
-            [x1, pLerp(x1, yL1, yR1)],
-            [x0, pLerp(x0, yL1, yR1)],
-          ]);
-        };
-
+        // True 1-Point Perspective Docked Commuter Train along Left Track Wall (x: 10..104)
+        // Every horizontal line uses lWallQuad so it converges to the exact room vanishing point!
         // 1. Perspective corrugated silver roof & upper trim
-        pQuad('#505868', 12, 100, 40, 65, 49, 69);
-        pQuad('#9aa4b6', 12, 100, 49, 69, 51, 70);
-        // 2. Perspective steel carriage body
-        pQuad('#252c3a', 12, 100, 51, 70, 148, 114);
+        lWallQuad('#505868', 10, 104, 0.24, 0.30);
+        lWallQuad('#9aa4b6', 10, 104, 0.30, 0.315);
+        // 2. Perspective steel carriage body down to the platform edge
+        lWallQuad('#252c3a', 10, 104, 0.315, 0.98);
         // 3. Perspective silver & warm-gold waist stripes
-        pQuad('#dce4f0', 12, 100, 96, 93, 101, 95);
-        pQuad('#d8b05c', 12, 100, 102, 96, 104, 97);
+        lWallQuad('#dce4f0', 10, 104, 0.64, 0.675);
+        lWallQuad('#d8b05c', 10, 104, 0.685, 0.70);
 
         // 4. Perspective glowing passenger windows (front, mid-back, rear)
-        for (const [wx0, wx1] of [[16, 34], [66, 80], [84, 96]]) {
-          pQuad('#ffefd0', wx0, wx1, 58, 74, 88, 89);
-          pQuad('#b87e52', wx0 + 2, wx1 - 2, 79, 84, 88, 89);
+        for (const [wx0, wx1] of [[14, 34], [66, 82], [86, 100]]) {
+          lWallQuad('#ffefd0', wx0, wx1, 0.37, 0.59);
+          lWallQuad('#b87e52', wx0 + 2, wx1 - 2, 0.52, 0.59);
         }
 
-        // 5. Perspective Open Double Doorway (x: 38..62) glowing with warm interior light
-        pQuad('#3b2d23', 38, 62, 55, 72, 136, 121);
-        pQuad('#fff6de', 40, 60, 56, 73, 60, 75); // interior ceiling light
-        pQuad('#e6cf9e', 49, 51, 58, 74, 132, 122); // interior brass handrail pole
-        pQuad('#281e18', 38, 62, 128, 118, 136, 121); // wooden carriage floor
+        // 5. Perspective Open Double Doorway (x: 38..62) flush with the platform floor!
+        lWallQuad('#3b2d23', 38, 62, 0.35, 0.98);
+        lWallQuad('#fff6de', 40, 60, 0.36, 0.39); // interior ceiling light
+        lWallQuad('#e6cf9e', 49, 51, 0.38, 0.95); // interior brass handrail pole
+        lWallQuad('#281e18', 38, 62, 0.91, 0.98); // wooden carriage floor
       }
       ctx.restore();
 
       // Warm golden light spilling from the open train doorway across the platform floor
       if (trainArrived) {
         linearRay(
-          48, 132, 128, 174,
-          [[36, 140], [64, 129], [142, 162], [72, 179]],
-          'rgba(255, 238, 192, 0.34)',
+          48, 142, 134, 178,
+          [[38, 158], [62, 145], [148, 168], [76, 180]],
+          'rgba(255, 238, 192, 0.36)',
           'rgba(255, 230, 175, 0.02)'
         );
       }
 
       // Back Wall: Service Room Door & Schedule Board
-      rect('#585c66', 143, 61, 34, 56);
-      rect('#14161a', 146, 64, 28, 53);
-      for (let x = 149; x < 174; x += 6) rect('#484c56', x, 65, 2, 51);
+      rect('#585c66', 143, 61, 34, 57);
+      rect('#14161a', 146, 64, 28, 54);
+      for (let x = 149; x < 174; x += 6) rect('#484c56', x, 65, 2, 52);
       rect('#e6dfd3', 156, 82, 7, 9);
       // Schedule plaque on back wall left of door
       rect('#282b32', 120, 74, 16, 22);
       strokeRect('#7a808c', 120, 74, 16, 22);
 
-      // Right Wall: Waiting Hall Door with Warm Amber HDR Glow
-      shape('#525660', [[245, 62], [295, 42], [295, 156], [245, 130]]);
-      shape(powered ? '#ffebb8' : '#181a20', [[248, 65], [291, 47], [291, 151], [248, 128]]);
-      shape('#32353d', [[268, 56], [271, 55], [271, 140], [268, 139]]);
+      // Right Wall: Waiting Hall Double Door in True 1-Point Perspective (flush with floor v=1.00!)
+      const rWallY = (x, v) => {
+        const yCeil = 49 - (49 / 114) * (x - 206);
+        const yFloor = 118 + (62 / 114) * (x - 206);
+        return yCeil + v * (yFloor - yCeil);
+      };
+      const rWallQuad = (color, x0, x1, v0, v1) => {
+        shape(color, [
+          [x0, rWallY(x0, v0)],
+          [x1, rWallY(x1, v0)],
+          [x1, rWallY(x1, v1)],
+          [x0, rWallY(x0, v1)],
+        ]);
+      };
+
+      // Overhead "WAITING HALL" sign plaque above the door (v: 0.14..0.20)
+      rWallQuad('#282c36', 248, 274, 0.14, 0.20);
+      rWallQuad(powered ? '#ffefc4' : '#646a78', 250, 272, 0.155, 0.185);
+
+      // Outer steel door casing reaching all the way down to the floor (v: 0.24..1.00, x: 236..286)
+      rWallQuad('#5a606e', 236, 286, 0.24, 1.00);
+      // 3D recessed right door jamb wall thickness (4.5px deep at x: 282..286) & stone threshold
+      shape('#3a3e48', [
+        [282, rWallY(286, 0.25)],
+        [286, rWallY(286, 0.24)],
+        [286, rWallY(286, 1.00)],
+        [282, rWallY(286, 0.99)],
+      ]);
+      shape('#788090', [
+        [236, rWallY(236, 1.00)],
+        [286, rWallY(286, 1.00)],
+        [282, rWallY(286, 0.99)],
+        [238, rWallY(238, 0.99)],
+      ]);
+
+      // Recessed door leafs background (x: 238..282, v: 0.26..0.99)
+      rWallQuad('#232730', 238, 282, 0.26, 0.99);
+
+      // Upper Transom Window (v: 0.28..0.37)
+      rWallQuad(powered ? '#ffebb8' : '#151922', 240, 280, 0.28, 0.37);
+
+      // Left Door Leaf (x: 240..258) & Right Door Leaf (x: 260..280) Upper Glass Windows (v: 0.41..0.68)
+      rWallQuad(powered ? '#ffebb8' : '#151922', 240, 257, 0.41, 0.68);
+      rWallQuad(powered ? '#ffebb8' : '#151922', 260, 280, 0.41, 0.68);
+      if (!powered) {
+        // Subtle diagonal glass reflections when unpowered so it reads clearly as glass panes
+        rWallQuad('rgba(190, 214, 245, 0.10)', 243, 248, 0.43, 0.66);
+        rWallQuad('rgba(190, 214, 245, 0.10)', 265, 271, 0.43, 0.66);
+      }
+
+      // Lower Solid Recessed Kick-Panels on both door leaves (v: 0.73..0.95)
+      rWallQuad('#181b22', 240, 257, 0.73, 0.95);
+      rWallQuad('#3e4350', 241, 256, 0.75, 0.93);
+      rWallQuad('#181b22', 260, 280, 0.73, 0.95);
+      rWallQuad('#3e4350', 261, 279, 0.75, 0.93);
+
+      // Center vertical meeting stile & twin brass vertical push-handles (v: 0.62..0.72)
+      rWallQuad('#14161c', 257.5, 259.5, 0.39, 0.99);
+      rWallQuad('#e2c892', 254.5, 256, 0.63, 0.71);
+      rWallQuad('#e2c892', 261, 262.5, 0.63, 0.71);
+
       if (powered) {
-        radialGlow(270, 98, 4, 56, 'rgba(255, 215, 140, 0.32)');
-        linearRay(270, 128, 220, 175, [[248, 128], [291, 151], [255, 176], [198, 148]], 'rgba(255, 220, 150, 0.25)');
+        radialGlow(262, 102, 4, 58, 'rgba(255, 215, 140, 0.34)');
+        linearRay(
+          262, 146, 208, 178,
+          [[238, rWallY(238, 1.00)], [282, rWallY(282, 1.00)], [244, 180], [186, 152]],
+          'rgba(255, 220, 150, 0.26)'
+        );
       }
 
       shape('#888d98', [[126, 121], [130, 121], [67, 180], [54, 180]]);
       shape('#888d98', [[191, 121], [195, 121], [266, 180], [253, 180]]);
     } else if (room === 'service') {
+      // Floor shadow under heavy workbench
+      shape('rgba(0, 0, 0, 0.36)', [[74, 126], [246, 126], [254, 168], [66, 168]]);
       rect('#454852', 81, 56, 158, 55);
       rect('#6e7380', 65, 111, 190, 10);
       rect('#32353d', 73, 121, 174, 9);
@@ -2420,90 +2672,156 @@
       // Cool moonlight ray from high left window
       linearRay(60, 15, 155, 150, [[45, 20], [95, 20], [190, 165], [95, 165]], 'rgba(190, 215, 255, 0.10)');
       for (let i = 0; i < 3; i++) {
-        const y = 53 + i * 26;
-        rect('#3d404a', 51, y + 18, 216, 4);
+        const y = 46 + i * 26;
+        rect('#3d404a', 52, y + 18, 216, 4);
         for (let j = 0; j < 19; j++) {
           const height = 8 + (i * 13 + j * 7) % 10;
-          rect(j % 3 ? '#686e7c' : '#444854', 59 + j * 10, y + 18 - height, 7, height);
+          rect(j % 3 ? '#686e7c' : '#444854', 60 + j * 10, y + 18 - height, 7, height);
         }
       }
-      // Foreground Reading Table
-      shape('#3d3530', [[106, 144], [214, 144], [226, 154], [94, 154]]);
-      rect('#28221f', 94, 154, 132, 6);
-      rect('#1e1a18', 104, 160, 8, 20);
-      rect('#1e1a18', 208, 160, 8, 20);
+      // Foreground Reading Table resting on the floor
+      shape('rgba(0, 0, 0, 0.38)', [[102, 164], [218, 164], [228, 178], [92, 178]]);
+      shape('#3d3530', [[106, 140], [214, 140], [226, 150], [94, 150]]);
+      rect('#28221f', 94, 150, 132, 6);
+      rect('#1e1a18', 104, 156, 8, 20);
+      rect('#1e1a18', 208, 156, 8, 20);
       // Warm glowing electric coaster & porcelain teacup
-      radialGlow(174, 146, 2, 28, 'rgba(255, 200, 130, 0.34)');
-      rect('#f0e6d2', 136, 147, 20, 4); // Father's letter
-      rect('#d87a56', 166, 148, 16, 2); // Electric warming coaster
-      rect('#fff9f0', 169, 141, 10, 7);
-      rect('#fff9f0', 179, 143, 2, 3);
+      radialGlow(174, 142, 2, 28, 'rgba(255, 200, 130, 0.34)');
+      rect('#f0e6d2', 136, 143, 20, 4); // Father's letter
+      rect('#d87a56', 166, 144, 16, 2); // Electric warming coaster
+      rect('#fff9f0', 169, 137, 10, 7);
+      rect('#fff9f0', 179, 139, 2, 3);
       for (let s = 0; s < 3; s++) {
         const phase = (t * 1.3 + s * 0.33) % 1;
-        const sy = 138 - Math.round(phase * 14);
+        const sy = 134 - Math.round(phase * 14);
         const sx = 173 + Math.round(Math.sin(phase * 6 + s) * 2);
         ctx.fillStyle = `rgba(255, 248, 235, ${(1 - phase) * 0.55})`;
         ctx.fillRect(sx, sy, 2, 2.5);
       }
     } else if (room === 'lounge') {
-      // High Window with cool silver-blue rain
-      rect('#0d121c', 128, 52, 64, 28);
-      strokeRect('#687282', 128, 52, 64, 28);
+      // 1. High Recessed Window with 3D sill & cool silver-blue rain (x: 124..192, y: 40..72)
+      rect('#0d121c', 124, 40, 68, 32);
+      strokeRect('#687282', 124, 40, 68, 32);
       ctx.save();
       ctx.beginPath();
-      ctx.rect(129, 53, 62, 26);
+      ctx.rect(125, 41, 66, 30);
       ctx.clip();
-      for (let r = 0; r < 12; r++) {
-        const rx = 132 + (r * 13) % 56;
-        const ry = 53 + Math.round((t * 38 + r * 7) % 24);
-        rect('rgba(195, 220, 255, 0.65)', rx, ry, 1, 4);
+      for (let r = 0; r < 14; r++) {
+        const rx = 128 + (r * 13) % 60;
+        const ry = 41 + Math.round((t * 38 + r * 7) % 28);
+        rect('rgba(195, 220, 255, 0.65)', rx, ry, 1, 4.5);
       }
       ctx.restore();
-      rect('#454c58', 159, 52, 2, 28);
-      rect('#454c58', 128, 65, 64, 2);
+      rect('#454c58', 157, 40, 2, 32);
+      rect('#454c58', 124, 55, 68, 2);
+      shape('#525a68', [[122, 72], [194, 72], [197, 75], [119, 75]]); // 3D protruding window sill
 
-      // Upright Piano in Left Corner of the Waiting Hall (54..102, 74..142)
-      rect('#241e1c', 56, 78, 42, 62);
-      strokeRect('#7a6a58', 56, 78, 42, 62);
-      rect('#181412', 60, 82, 34, 20); // upper panel
-      rect('#f5ebd6', 58, 104, 38, 6); // piano keys
-      for (let k = 1; k < 7; k++) rect('rgba(56, 48, 42, 0.35)', 58 + k * 5.4, 104, 0.6, 6);
-      for (const bk of [0, 1, 3, 4, 5]) {
-        rect('#181412', 61.8 + bk * 5.4, 104, 3, 3.6);
+      // 2. 3D Upright Piano standing against the back wall on the left (x: 48..102, y: 60..136)
+      // Floor shadow under the piano
+      shape('rgba(0, 0, 0, 0.42)', [[48, 126], [102, 126], [106, 138], [44, 138]]);
+      // Top overhanging lid & crown molding
+      shape('#3a2e28', [[50, 60], [100, 60], [102, 64], [48, 64]]);
+      // Main upper & lower cabinet body resting on the floor (y: 64..128)
+      rect('#221b18', 50, 64, 50, 64);
+      strokeRect('#6e5c4c', 50, 64, 50, 64);
+      // Recessed upper acoustic panel & tilted music desk with sheet music
+      rect('#161210', 54, 68, 42, 22);
+      strokeRect('#483c32', 54, 68, 42, 22);
+      shape('#cbb48e', [[68, 79], [82, 79], [83, 88], [67, 88]]); // tilted sheet music
+      rect('#524438', 65, 88, 20, 1.8); // music desk ledge
+      radialGlow(75, 86, 2, 34, 'rgba(255, 220, 155, 0.25)');
+
+      // Protruding 3D Keybed (Cheek blocks + Perspective Angled Keyboard + Front Keyslip)
+      rect('#322722', 47, 90, 4, 11); // left cheek block
+      rect('#322722', 99, 90, 4, 11); // right cheek block
+      shape('#f5ebd6', [[51, 92], [99, 92], [101, 98], [49, 98]]); // angled ivory keys
+      for (let k = 1; k < 10; k++) {
+        const kx = 50 + k * 5;
+        rect('rgba(56, 48, 42, 0.35)', kx, 92, 0.6, 6);
       }
-      rect('#d8c398', 71, 92, 12, 8);  // sheet music on stand
-      radialGlow(77, 102, 2, 34, 'rgba(255, 220, 155, 0.22)');
-
-      // Tile Pillar with childhood height mark (202..218, 48..142)
-      rect('#363840', 204, 50, 14, 92);
-      rect('#ffe8b8', 206, 94, 8, 1.5); // Height mark notch
-
-      // Vintage Amber Standing Lamp on Right casting HDR light cone
-      rect('#9a8870', 234, 142, 18, 4);
-      rect('#786a58', 242, 66, 2, 76);
-      shape('#ffefc8', [[232, 66], [254, 66], [260, 78], [226, 78]]);
-      radialGlow(243, 74, 3, 68, 'rgba(255, 215, 140, 0.42)');
-      linearRay(243, 76, 175, 165, [[226, 78], [260, 78], [282, 168], [110, 168]], 'rgba(255, 218, 145, 0.18)');
-
-      // Wooden Waiting Bench & Suitcase (114..198, 104..148)
-      rect('#3d322c', 116, 102, 82, 16);
-      rect('#54463e', 112, 118, 90, 8);
-      rect('#2b231f', 120, 126, 6, 20);
-      rect('#2b231f', 188, 126, 6, 20);
-
-      const openAmt = suitcaseOpen ? 1 : 0;
-      if (openAmt > 0) {
-        rect('#2e2622', 135, 94, 44, 11);
-        strokeRect('#8a7866', 135, 94, 44, 11);
+      for (const bk of [0, 1, 3, 4, 5, 7, 8]) {
+        rect('#161210', 52.8 + bk * 5, 92, 2.6, 3.6);
       }
-      rect('#221c19', 135, 105, 44, 15);
-      strokeRect('#b09a82', 135, 105, 44, 15);
-      if (openAmt > 0) {
-        rect('#fff2d6', 140, 109, 10, 6);
-        rect('#cbb292', 153, 110, 9, 5);
-        rect('#9a8872', 165, 109, 10, 6);
+      rect('#2c221d', 47, 98, 56, 3.5); // front keybed lip
+
+      // Lower kneeboard panel, 3 brass foot pedals & 2 front support legs with toe-blocks on the floor
+      rect('#181311', 55, 104, 40, 19);
+      strokeRect('#44382f', 55, 104, 40, 19);
+      rect('#2e241f', 48, 101, 4, 34); // left front support leg down to y=135
+      rect('#2e241f', 98, 101, 4, 34); // right front support leg down to y=135
+      rect('#42342c', 47, 132, 6, 4);  // left toe block on floor
+      rect('#42342c', 97, 132, 6, 4);  // right toe block on floor
+      for (const px of [71, 75, 79]) {
+        rect('#e2c478', px, 125, 2, 4.5); // 3 brass pedals
+      }
+
+      // 3. 3D Architectural Tile Pillar with childhood height mark (x: 210..228, y: 28..128)
+      rect('#363942', 210, 28, 14, 100);
+      shape('#262830', [[224, 28], [228, 30], [228, 126], [224, 128]]); // 3D right side return
+      for (let ty = 42; ty < 122; ty += 16) {
+        rect('rgba(255, 255, 255, 0.06)', 210, ty, 14, 0.8);
+      }
+      rect('#ffe8b8', 212, 88, 9, 1.6); // Childhood height mark notch
+
+      // 4. Vintage Amber Standing Lamp on Right resting on the floor (x: 244..268, y: 58..138)
+      shape('rgba(0, 0, 0, 0.38)', [[244, 134], [268, 134], [272, 140], [240, 140]]);
+      shape('#9a8870', [[248, 133], [264, 133], [267, 137], [245, 137]]); // 3D lamp base on floor
+      rect('#786a58', 255, 64, 2, 70);
+      shape('#ffefc8', [[245, 60], [267, 60], [273, 72], [239, 72]]);
+      radialGlow(256, 68, 3, 72, 'rgba(255, 215, 140, 0.42)');
+      linearRay(256, 70, 180, 165, [[239, 72], [273, 72], [288, 168], [112, 168]], 'rgba(255, 218, 145, 0.18)');
+
+      // 5. 3D Wooden Waiting Bench & Vintage Leather Suitcase (x: 112..202, y: 94..140)
+      // Floor shadow beneath bench
+      shape('rgba(0, 0, 0, 0.40)', [[116, 126], [198, 126], [204, 141], [110, 141]]);
+      // Rear bench legs against back wall & front bench legs on foreground floor
+      rect('#221b18', 118, 120, 5, 11);
+      rect('#221b18', 191, 120, 5, 11);
+      rect('#2e2520', 113, 123, 6, 17);
+      rect('#2e2520', 195, 123, 6, 17);
+      // Slatted wooden backrest (x: 116..198, y: 96..113)
+      rect('#342a24', 116, 96, 82, 4);
+      rect('#3d322b', 116, 102, 82, 4);
+      rect('#342a24', 116, 108, 82, 5);
+      rect('#4a3c34', 116, 95, 4, 19);
+      rect('#4a3c34', 194, 95, 4, 19);
+      // Perspective trapezoidal wooden seat & front apron
+      shape('#5c4c42', [[116, 113], [198, 113], [204, 121], [110, 121]]);
+      rect('#3d312a', 110, 121, 94, 4);
+      // Sculpted wooden armrests on left & right ends
+      shape('#4e4038', [[112, 106], [117, 106], [115, 121], [110, 121]]);
+      shape('#4e4038', [[197, 106], [202, 106], [204, 121], [199, 121]]);
+
+      // Father's 3D Vintage Leather Suitcase resting on the perspective bench seat (x: 135..181)
+      if (suitcaseOpen) {
+        // Open upper lid tilted back against the bench backrest with burgundy velvet lining
+        shape('#2b221d', [[137, 89], [179, 89], [181, 105], [135, 105]]);
+        strokeRect('#8e7862', 136, 90, 44, 15);
+        rect('#3d2220', 139, 92, 38, 11);
+        // Open lower suitcase tray on the bench seat
+        shape('#332822', [[137, 105], [179, 105], [181, 110], [135, 110]]);
+        rect('#221b17', 135, 110, 46, 9);
+        strokeRect('#9e866e', 135, 110, 46, 9);
+        // Keepsakes inside tray (sepia photo, brass punch, Side-B cassette)
+        rect('#fff2d6', 140, 106, 10, 5);
+        rect('#cbb292', 153, 107, 9, 4);
+        rect('#9a8872', 165, 106, 10, 5);
       } else {
-        for (let d = 0; d < 3; d++) rect('#e6d2b0', 143 + d * 11, 111, 5, 4);
+        // Closed 3D Leather Suitcase: Top perspective lid + Front vertical face + Leather straps + Delicate brass locks
+        shape('#3b2e26', [[138, 103], [178, 103], [181, 108], [135, 108]]);
+        rect('#241c18', 135, 108, 46, 11);
+        strokeRect('#9a826a', 135, 108, 46, 11);
+        // Top leather carrying handle
+        strokeRect('#7a6450', 153, 100, 10, 4);
+        // Two vertical leather cinch straps wrapping over top and front
+        shape('#5c4738', [[142, 103], [145, 103], [144, 119], [141, 119]]);
+        shape('#5c4738', [[171, 103], [174, 103], [175, 119], [172, 119]]);
+        // Three subtle recessed brass combination dial slots in the center
+        for (let d = 0; d < 3; d++) {
+          const dx = 149 + d * 7;
+          rect('#d8be92', dx, 111, 3.5, 4.5);
+          rect('#1c1612', dx + 1, 112, 1.5, 2.5);
+        }
       }
     } else if (room === 'booth' || room === 'radio') {
       rect('#383b44', 69, 56, 182, 78);
@@ -2768,35 +3086,53 @@
       }
       rect('rgba(5, 6, 9, 0.88)', 0, 0, 320, 180);
 
-      // Tunnel Portal Arch & Perspective Steel Rails on the Left (x: 24..152)
-      shape('#06080d', [[28, 148], [46, 36], [130, 36], [148, 148]]);
-      ctx.strokeStyle = '#485264';
-      ctx.lineWidth = 1.5;
+      // Semicircular Arched Masonry Tunnel Portal & Perspective Steel Rails on the Left (x: 28..148)
+      rect('#1a212e', 28, 22, 120, 126);
+      strokeRect('#3e4a5e', 28, 22, 120, 126);
+      rect('#2a3446', 24, 18, 128, 5); // portal cornice
+
+      ctx.fillStyle = '#04060a';
       ctx.beginPath();
-      ctx.moveTo(28, 148);
-      ctx.lineTo(46, 36);
-      ctx.lineTo(130, 36);
-      ctx.lineTo(148, 148);
+      ctx.moveTo(40, 148);
+      ctx.lineTo(40, 76);
+      ctx.arc(88, 76, 48, Math.PI, 0, false);
+      ctx.lineTo(136, 148);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = '#5c6c84';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(40, 148);
+      ctx.lineTo(40, 76);
+      ctx.arc(88, 76, 48, Math.PI, 0, false);
+      ctx.lineTo(136, 148);
       ctx.stroke();
 
-      // Perspective rails & wooden sleepers approaching from the tunnel
-      for (let r = 0; r < 5; r++) {
-        const ry = 114 + r * 8;
-        const spread = 14 + r * 7;
-        rect('#28221e', 88 - spread, ry, spread * 2, 2);
+      // Perspective rails & wooden sleepers approaching from the tunnel bore
+      for (let r = 0; r < 6; r++) {
+        const frac = Math.pow(r / 5, 1.35);
+        const ry = 108 + frac * 38;
+        const spread = 14 + frac * 30;
+        rect('#28221e', 88 - spread, ry, spread * 2, 2.2);
       }
-      shape('#788498', [[74, 108], [76, 108], [52, 148], [49, 148]]);
-      shape('#788498', [[100, 108], [102, 108], [127, 148], [124, 148]]);
+      shape('#7e8ea6', [[75, 106], [77, 106], [52, 148], [49, 148]]);
+      shape('#7e8ea6', [[99, 106], [101, 106], [127, 148], [124, 148]]);
 
-      // Detailed Front Profile of Approaching Commuter Train advancing with lanternStage
+      // Detailed Front Profile of Approaching Commuter Train riding ON the Steel Rails
       const stageProgress = lanternStage / 3;
-      const trainScale = 0.44 + stageProgress * 0.56;
+      const trainScale = 0.48 + stageProgress * 0.48;
       const trainCX = 88;
-      const trainCY = Math.round(84 + stageProgress * 12);
-      const w = Math.round(64 * trainScale);
-      const h = Math.round(68 * trainScale);
+      const railBaseY = Math.round(118 + stageProgress * 24);
+      const w = Math.round(62 * trainScale);
+      const h = Math.round(62 * trainScale);
       const tx0 = trainCX - Math.round(w / 2);
-      const ty0 = trainCY - Math.round(h / 2);
+      const ty0 = railBaseY - h;
+      const trainCY = ty0 + Math.round(h / 2);
+
+      // Undercarriage bogie wheels resting on the rails
+      circle('#6e7c92', trainCX - Math.round(w * 0.30), railBaseY, Math.max(2, 3.5 * trainScale));
+      circle('#6e7c92', trainCX + Math.round(w * 0.30), railBaseY, Math.max(2, 3.5 * trainScale));
 
       // Corrugated roof & main locomotive body
       shape('#4e586a', [
@@ -2818,12 +3154,12 @@
       // Silver & amber waist stripes
       rect('#dce4f0', tx0, ty0 + Math.round(h * 0.56), w, Math.max(1.5, Math.round(3.5 * trainScale)));
       rect('#d8b05c', tx0, ty0 + Math.round(h * 0.62), w, Math.max(1, Math.round(2 * trainScale)));
-      // Lower skirt / cowcatcher
+      // Lower skirt / cowcatcher resting just above the rails
       shape('#151922', [
-        [tx0 - 2, ty0 + h],
-        [tx0 + w + 2, ty0 + h],
-        [tx0 + w - 4, ty0 + h + Math.round(7 * trainScale)],
-        [tx0 + 4, ty0 + h + Math.round(7 * trainScale)],
+        [tx0 - 2, ty0 + h - Math.round(3 * trainScale)],
+        [tx0 + w + 2, ty0 + h - Math.round(3 * trainScale)],
+        [tx0 + w - 4, ty0 + h + Math.round(3 * trainScale)],
+        [tx0 + 4, ty0 + h + Math.round(3 * trainScale)],
       ]);
 
       // Twin HDR Headlights & mist glow
