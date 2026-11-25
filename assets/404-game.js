@@ -109,6 +109,97 @@
   let lanternPulse = 0;
   let lanternBeamTime = 0;
 
+  // Global Traveler Completion Counter (with localStorage persistence & graceful fallback)
+  let completionRank = null;
+  let completionCountedThisRun = false;
+  try {
+    const savedRank = Number(localStorage.getItem('makotolab_404_clear_rank'));
+    if (Number.isFinite(savedRank) && savedRank > 0) completionRank = savedRank;
+  } catch {}
+
+  function ordinalEn(n) {
+    const s = ['th', 'st', 'nd', 'rd'];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  function updateEpilogueCounterDOM() {
+    const counterEl = get('epilogue-counter');
+    if (!counterEl) return;
+    if (!ending || activeCutscene) {
+      counterEl.hidden = true;
+      return;
+    }
+    counterEl.hidden = false;
+    const rankNum = completionRank && completionRank > 0 ? completionRank : 1;
+    const serialStr = `404 · NO.${String(rankNum).padStart(4, '0')}`;
+    const poeticLine = ending === 'board'
+      ? say(
+          `在名為 404 的迷途之地，你是第 ${rankNum} 位接通失落訊號、尋回歸途的旅人。`,
+          `In this limbo called 404, you are the ${ordinalEn(rankNum)} lost traveler to reconnect the signal and find the way home.`
+        )
+      : (ending === 'send'
+        ? say(
+            `在名為 404 的迷途月台，你是第 ${rankNum} 位在長夜盡頭尋獲訊號、替老站長送別黎明的旅人。`,
+            `On Platform 404 for the lost, you are the ${ordinalEn(rankNum)} traveler to find the signal at night’s end and send off the dawn.`
+          )
+        : say(
+            `在名為 404 的迷途之夜，你是第 ${rankNum} 位誤入此地、於破曉前走出地下月台的旅人。`,
+            `In the mist of 404, you are the ${ordinalEn(rankNum)} wandering traveler to pass through this hidden station before daybreak.`
+          ));
+    counterEl.replaceChildren();
+    const badge = document.createElement('span');
+    badge.className = 'epilogue-counter-serial';
+    badge.textContent = serialStr;
+    const textSpan = document.createElement('span');
+    textSpan.textContent = poeticLine;
+    counterEl.append(badge, textSpan);
+  }
+
+  function recordEndingCompletion(endingType) {
+    if (completionCountedThisRun) {
+      updateEpilogueCounterDOM();
+      return;
+    }
+    completionCountedThisRun = true;
+    if (!completionRank || completionRank < 1) {
+      completionRank = 1;
+    }
+    updateEpilogueCounterDOM();
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', '404_game_complete', { ending_type: endingType });
+      }
+    } catch {}
+    try {
+      if (typeof fetch === 'function') {
+        fetch('https://abacus.jasoncameron.dev/hit/makotolab.cc/404-lost-signal-clear', {
+          mode: 'cors',
+          cache: 'no-store',
+        })
+          .then((res) => (res && res.ok ? res.json() : null))
+          .then((data) => {
+            const val = Number(data && data.value);
+            if (Number.isFinite(val) && val > 0) {
+              completionRank = val;
+              try {
+                localStorage.setItem('makotolab_404_clear_rank', String(val));
+              } catch {}
+              updateEpilogueCounterDOM();
+            }
+          })
+          .catch(() => {
+            try {
+              const prev = Number(localStorage.getItem('makotolab_404_clear_rank')) || 0;
+              completionRank = prev + 1;
+              localStorage.setItem('makotolab_404_clear_rank', String(completionRank));
+            } catch {}
+            updateEpilogueCounterDOM();
+          });
+      }
+    } catch {}
+  }
+
   function shuffle(array) {
     const copy = [...array];
     for (let i = copy.length - 1; i > 0; i--) {
@@ -2753,22 +2844,47 @@
     } else if (room === 'service') {
       // Floor shadow under heavy workbench
       shape('rgba(0, 0, 0, 0.36)', [[74, 126], [246, 126], [254, 168], [66, 168]]);
-      rect('#454852', 81, 56, 158, 55);
-      rect('#6e7380', 65, 111, 190, 10);
+      // Back wall tool pegboard & hanging wrench/pliers silhouettes
+      rect('#2f323a', 81, 56, 98, 48);
+      strokeRect('#525662', 81, 56, 98, 48);
+      for (let py = 62; py < 100; py += 8) {
+        for (let px = 88; px < 174; px += 10) {
+          rect('rgba(15, 17, 22, 0.55)', px, py, 1.5, 1.5);
+        }
+      }
+      // Hanging tools on pegboard (wrench, screwdriver, calibration gauge)
+      rect('#9aa2b0', 96, 66, 3, 20);
+      circle('#9aa2b0', 97.5, 65, 3.5, true);
+      rect('#c8824e', 114, 65, 3.5, 8);
+      rect('#a2aab8', 115, 73, 1.5, 14);
+      circle('#22262e', 142, 74, 8);
+      circle('#8a92a0', 142, 74, 8, true);
+      rect('#ffefc4', 141, 69, 1.5, 6);
+
+      // 3D Perspective Workbench Top, Front Apron, Heavy Bench Vise & Legs
+      shape('#787e8c', [[72, 106], [248, 106], [255, 113], [65, 113]]);
+      rect('#5c616e', 65, 113, 190, 8);
       rect('#32353d', 73, 121, 174, 9);
       rect('#525660', 76, 130, 9, 37);
       rect('#525660', 234, 130, 9, 37);
-      // Warm work lamp glow over bench
-      radialGlow(115, 86, 3, 62, 'rgba(255, 226, 170, 0.22)');
+      // Heavy steel bench vise on left corner of workbench
+      rect('#424854', 78, 99, 14, 9);
+      rect('#8a92a2', 75, 97, 18, 3);
+      rect('#abb4c4', 72, 102, 6, 2);
+      // Warm articulated work lamp & glow over bench
+      rect('#484e5a', 102, 84, 2, 24);
+      shape('#cbb694', [[104, 82], [116, 82], [120, 89], [100, 89]]);
+      radialGlow(112, 92, 3, 62, 'rgba(255, 226, 170, 0.25)');
 
       // Wall Cabinet (188, 61, 47, 44) - Properly layered
       rect('#32353d', 188, 61, 47, 44);
+      strokeRect('#686e7c', 188, 61, 47, 44);
       rect('#121317', 191, 64, 41, 38);
       rect('#2c2f36', 191, 89, 41, 2);
       if (!hasFuse && !powered) {
         rect('#fff4d8', 202, 82, 18, 6);
         rect('#7c8290', 205, 82, 12, 6);
-        radialGlow(211, 85, 1, 14, 'rgba(255, 240, 200, 0.35)');
+        radialGlow(211, 85, 1, 14, 'rgba(255, 240, 200, 0.38)');
       }
       const openAmt = sceneEffect === 'unlock' ? progress : (lockerOpen ? 1 : 0);
       if (openAmt < 1) {
@@ -2797,6 +2913,9 @@
       rect('#28221f', 94, 150, 132, 6);
       rect('#1e1a18', 104, 156, 8, 20);
       rect('#1e1a18', 208, 156, 8, 20);
+      // Bound manual ledger on left side of reading table
+      shape('#523a2e', [[108, 142], [126, 142], [128, 147], [106, 147]]);
+      rect('#e6dcc8', 107, 147, 21, 1.5);
       // Warm glowing electric coaster & porcelain teacup
       radialGlow(174, 142, 2, 28, 'rgba(255, 200, 130, 0.34)');
       rect('#f0e6d2', 136, 143, 20, 4); // Father's letter
@@ -2875,7 +2994,31 @@
       }
       rect('#ffe8b8', 212, 88, 9, 1.6); // Childhood height mark notch
 
-      // 4. Vintage Amber Standing Lamp on Right resting on the floor (x: 244..268, y: 58..138)
+      // 4. Right-Wall Perspective Corridor Side Door to Broadcast Room (x: 286..312, flush with right wall floor!)
+      const loungeRWallY = (x, v) => {
+        const tX = (x - 282) / 38;
+        const yCeil = 28 * (1 - tX);
+        const yFloor = 126 + 54 * tX;
+        return yCeil + v * (yFloor - yCeil);
+      };
+      const loungeRQuad = (color, x0, x1, v0, v1) => {
+        shape(color, [
+          [x0, loungeRWallY(x0, v0)],
+          [x1, loungeRWallY(x1, v0)],
+          [x1, loungeRWallY(x1, v1)],
+          [x0, loungeRWallY(x0, v1)],
+        ]);
+      };
+      loungeRQuad('#484e5c', 289, 312, 0.30, 1.00);
+      loungeRQuad('#1b1f27', 291, 310, 0.32, 0.99);
+      loungeRQuad(suitcaseOpen ? '#ffebb8' : '#141820', 293, 308, 0.36, 0.62);
+      loungeRQuad('#262b35', 293, 308, 0.66, 0.95);
+      loungeRQuad('#e2c892', 293.5, 295, 0.63, 0.69);
+      if (suitcaseOpen) {
+        radialGlow(300, 92, 2, 36, 'rgba(255, 220, 150, 0.28)');
+      }
+
+      // 5. Vintage Amber Standing Lamp on Right resting on the floor (x: 244..268, y: 58..138)
       shape('rgba(0, 0, 0, 0.38)', [[244, 134], [268, 134], [272, 140], [240, 140]]);
       shape('#9a8870', [[248, 133], [264, 133], [267, 137], [245, 137]]); // 3D lamp base on floor
       rect('#786a58', 255, 64, 2, 70);
@@ -2883,7 +3026,7 @@
       radialGlow(256, 68, 3, 72, 'rgba(255, 215, 140, 0.42)');
       linearRay(256, 70, 180, 165, [[239, 72], [273, 72], [288, 168], [112, 168]], 'rgba(255, 218, 145, 0.18)');
 
-      // 5. 3D Wooden Waiting Bench & Vintage Leather Suitcase (x: 112..202, y: 94..140)
+      // 6. 3D Wooden Waiting Bench & Vintage Leather Suitcase (x: 112..202, y: 94..140)
       // Floor shadow beneath bench
       shape('rgba(0, 0, 0, 0.40)', [[116, 126], [198, 126], [204, 141], [110, 141]]);
       // Rear bench legs against back wall & front bench legs on foreground floor
@@ -2936,44 +3079,84 @@
         }
       }
     } else if (room === 'booth' || room === 'radio') {
-      rect('#383b44', 69, 56, 182, 78);
-      rect('#121418', 80, 64, 160, 46);
+      // 3D Floor shadow & heavy steel console cabinet resting on the floor
+      shape('rgba(0, 0, 0, 0.38)', [[66, 128], [254, 128], [262, 152], [58, 152]]);
+      rect('#383b44', 69, 52, 182, 82);
+      strokeRect('#5e6472', 69, 52, 182, 82);
+      rect('#121418', 80, 60, 160, 48);
+      strokeRect('#484e5a', 80, 60, 160, 48);
+      // 3D Angled Console Desk Shelf & Lower Cabinet Panels
+      shape('#4e5360', [[69, 108], [251, 108], [258, 116], [62, 116]]);
+      rect('#282b32', 62, 116, 196, 18);
+      strokeRect('#454a56', 68, 119, 88, 12);
+      strokeRect('#454a56', 164, 119, 88, 12);
       if (room === 'booth') {
         for (let i = 0; i < 3; i++) {
           const x = 98 + i * 55;
           const lit = powered && (sceneEffect !== 'power' || progress > (i + 1) * 0.22);
-          rect(lit ? '#ffefc4' : '#585c66', x, 74, 11, 5);
+          circle('#0d0f14', x + 5.5, 69, 5);
+          circle(lit ? '#ffefc4' : '#525660', x + 5.5, 69, 5, true);
+          rect(lit ? '#ffefc4' : '#585c66', x, 77, 11, 4);
           if (lit) radialGlow(x + 5.5, 76.5, 1, 18, 'rgba(255, 230, 170, 0.38)');
-          rect('#888d98', x + 3, lit ? 81 : 87, 5, 16);
+          rect('#888d98', x + 3, lit ? 83 : 89, 5, 15);
+          rect(lit ? '#fff2d0' : '#9aa0ac', x + 1, lit ? 83 : 99, 9, 3);
         }
       } else {
         const spin = (sideBPlayed ? 0 : t * 2.2) + (sceneEffect === 'tapeB' ? progress * 8 : 0);
-        for (const [idx, x] of [104, 154].entries()) {
-          rect('#484c56', x, 71, 27, 27);
-          rect('#9a9fa8', x + 3, 74, 21, 21);
-          rect('#1e2026', x + 10, 81, 7, 7);
-          const angle = spin + idx * 1.2;
-          const sx = x + 13 + Math.round(Math.cos(angle) * 6);
-          const sy = 84 + Math.round(Math.sin(angle) * 6);
-          rect('#1e2026', sx, sy, 2, 2);
+        for (const [idx, x] of [102, 150].entries()) {
+          rect('#484c56', x, 67, 27, 27);
+          circle('#9a9fa8', x + 13.5, 80.5, 10.5);
+          circle('#1e2026', x + 13.5, 80.5, 3.5);
+          for (let sp = 0; sp < 3; sp++) {
+            const angle = spin + idx * 1.2 + (sp * Math.PI * 2) / 3;
+            const sx = x + 13.5 + Math.cos(angle) * 6.5;
+            const sy = 80.5 + Math.sin(angle) * 6.5;
+            circle('#1e2026', sx, sy, 1.4);
+          }
         }
-        rect('#b8bcc6', 131, 93, 23, 2);
+        rect('#b8bcc6', 129, 89, 21, 1.8);
+        // Dual Warm Analog VU Meters below tape reels
+        for (const vx of [104, 152]) {
+          rect('#221e1a', vx, 96, 23, 8);
+          rect('#ffefc4', vx + 2, 98, 19, 4);
+          const vNeedle = vx + 11 + Math.round(Math.sin(t * 5 + vx) * (sideBPlayed ? 2 : 6));
+          rect('#b84a38', vNeedle, 98, 1.2, 4);
+        }
         // Phosphor-warm Oscilloscope Monitor
-        rect('#0a0d10', 194, 71, 38, 27);
-        strokeRect('#78808e', 194, 71, 38, 27);
-        radialGlow(213, 84, 2, 26, 'rgba(255, 230, 175, 0.24)');
-        for (let wx = 0; wx < 32; wx += 2) {
+        rect('#0a0d10', 192, 67, 40, 29);
+        strokeRect('#78808e', 192, 67, 40, 29);
+        radialGlow(212, 81, 2, 26, 'rgba(255, 230, 175, 0.24)');
+        for (let wx = 0; wx < 34; wx += 2) {
           const amp = sceneEffect === 'tapeB' ? 8 : (sideBPlayed ? 2 : 5);
-          const wy = 84 + Math.round(Math.sin(t * 7 + wx * 0.45) * amp * Math.sin((wx / 32) * Math.PI));
-          rect('#fff0cc', 197 + wx, wy, 2, 2);
+          const wy = 81 + Math.round(Math.sin(t * 7 + wx * 0.45) * amp * Math.sin((wx / 34) * Math.PI));
+          rect('#fff0cc', 195 + wx, wy, 2, 2);
         }
+        // Vintage Gooseneck Broadcast Microphone on Desk Left
+        shape('#2c3038', [[80, 113], [90, 113], [92, 116], [78, 116]]);
+        rect('#78808e', 84, 96, 1.8, 17);
+        rect('#9aa4b4', 82, 91, 6, 7);
       }
     } else if (room === 'gate') {
       rect('#525660', 94, 37, 130, 111);
-      rect('#181a20', 99, 42, 120, 106);
-      for (let y = 74; y < 143; y += 9) rect('#3e424c', 109, y, 100, 3);
+      rect('#0e1218', 99, 42, 120, 106);
+      // Perspective ascending stone staircase visible behind the iron gate
+      for (let st = 0; st < 8; st++) {
+        const sy = 140 - st * 11;
+        const inset = st * 3.5;
+        rect(st % 2 === 0 ? '#282d38' : '#20242e', 102 + inset, sy, 114 - inset * 2, 6);
+        rect('rgba(200, 220, 255, 0.08)', 102 + inset, sy, 114 - inset * 2, 1.2);
+      }
+      if (powered) {
+        // Cool pre-dawn street mist & distant amber streetlamp glow at the top of the stairs
+        radialGlow(159, 54, 4, 64, 'rgba(185, 212, 255, 0.22)');
+        radialGlow(172, 48, 2, 24, 'rgba(255, 224, 165, 0.28)');
+      }
       const gateHeight = powered ? Math.round(106 * (1 - progress)) : 106;
       if (gateHeight > 0) {
+        rect('rgba(18, 20, 26, 0.88)', 99, 42, 120, gateHeight);
+        for (let y = 50; y < 42 + gateHeight - 6; y += 9) {
+          rect('#3e424c', 104, y, 110, 3);
+        }
         for (let x = 106; x < 220; x += 13) rect('#888d98', x, 42, 4, gateHeight);
         rect('#888d98', 99, 42 + gateHeight - 4, 120, 4);
       }
@@ -2994,9 +3177,10 @@
       for (let i = 0; i < 5; i++) {
         const bx = 42 + i * 48;
         const used = input.includes(i);
-        const bg = used ? '#2e2b26' : '#111216';
+        const hovered = !used && mouseX >= bx && mouseX <= bx + 42 && mouseY >= 44 && mouseY <= 96;
+        const bg = used ? '#2e2b26' : (hovered ? '#1d1f26' : '#111216');
         rect(bg, bx, 44, 42, 52);
-        strokeRect(used ? '#fff0cc' : '#787268', bx, 44, 42, 52);
+        strokeRect(used ? '#fff0cc' : (hovered ? '#d8c8a8' : '#787268'), bx, 44, 42, 52);
         if (used) radialGlow(bx + 21, 70, 2, 24, 'rgba(255, 230, 175, 0.25)');
         drawSymbolIcon(i, bx + 21, 70, used ? '#fff4d8' : '#d0ccc4', bg);
       }
@@ -3014,14 +3198,15 @@
       for (let i = 0; i < 4; i++) {
         const bx = 46 + i * 58;
         const engaged = input.includes(i);
+        const hovered = !engaged && mouseX >= bx && mouseX <= bx + 44 && mouseY >= 40 && mouseY <= 134;
         circle('#0e1014', bx + 22, 54, 13);
-        circle(engaged ? '#ffefc4' : '#525660', bx + 22, 54, 13, true);
+        circle(engaged ? '#ffefc4' : (hovered ? '#9aa2b0' : '#525660'), bx + 22, 54, 13, true);
         if (engaged) radialGlow(bx + 22, 54, 2, 18, 'rgba(255, 230, 170, 0.3)');
         const needleX = bx + 22 + (engaged ? 6 : -5);
         rect(engaged ? '#fff6dc' : '#787c86', needleX, 46, 2, 9);
 
         rect('#22252c', bx + 6, 76, 32, 52);
-        strokeRect('#626670', bx + 6, 76, 32, 52);
+        strokeRect(hovered ? '#b8c0cc' : '#626670', bx + 6, 76, 32, 52);
         rect(engaged ? '#ffefc4' : '#3e424a', bx + 18, 82, 8, 4);
         const handleY = engaged ? 92 : 112;
         rect('#888d98', bx + 20, 94, 4, 22);
@@ -3081,8 +3266,9 @@
       rect('#9a8468', 244, 22, 18, 10);
       for (let i = 0; i < 3; i++) {
         const dx = 68 + i * 68;
+        const hovered = mouseX >= dx && mouseX <= dx + 48 && mouseY >= 48 && mouseY <= 130;
         rect('#110e0c', dx, 50, 48, 76);
-        strokeRect('#e6d2b0', dx, 50, 48, 76);
+        strokeRect(hovered ? '#fff2d0' : '#e6d2b0', dx, 50, 48, 76);
         radialGlow(dx + 24, 88, 2, 32, 'rgba(255, 225, 165, 0.18)');
         // 5-position scale indicator bar inside each brass wheel
         for (let p = 0; p < 5; p++) {
@@ -3151,39 +3337,73 @@
       strokeRect('#b8c0cc', 28, 18, 264, 144);
 
       const scrX = 42, scrY = 30, scrW = 158, scrH = 98;
-      rect('#080b0e', scrX, scrY, scrW, scrH);
+      rect('#070a0d', scrX, scrY, scrW, scrH);
       strokeRect('#687280', scrX, scrY, scrW, scrH);
-      radialGlow(scrX + scrW / 2, scrY + scrH / 2, 4, 80, 'rgba(255, 228, 170, 0.16)');
+      radialGlow(scrX + scrW / 2, scrY + scrH / 2, 4, 84, 'rgba(255, 228, 170, 0.18)');
 
-      for (let x = 4; x < scrW - 4; x += 4) {
+      // CRT Graticule Grid & Center Crosshair Ticks
+      for (let gx = scrX + 26; gx < scrX + scrW - 10; gx += 26) {
+        rect('rgba(160, 185, 210, 0.08)', gx, scrY + 2, 0.7, scrH - 4);
+      }
+      for (let gy = scrY + 24; gy < scrY + scrH - 10; gy += 24) {
+        rect('rgba(160, 185, 210, 0.08)', scrX + 2, gy, scrW - 4, 0.7);
+      }
+      rect('rgba(255, 232, 185, 0.16)', scrX + 2, scrY + scrH / 2, scrW - 4, 0.8);
+
+      // Reference Target Waveform (Warm Amber Continuous Sine Curve)
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255, 216, 148, 0.46)';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      for (let x = 3; x <= scrW - 3; x += 2) {
         const norm = x / scrW;
         const env = Math.sin(norm * Math.PI);
         const yTarget = scrY + scrH / 2 + Math.sin(norm * (tunerTargetFreq + 1.5) * Math.PI * 2 + tunerTargetPhase * 0.9 + t * 2.2) * 30 * env;
-        rect('rgba(255, 220, 160, 0.38)', scrX + x, yTarget, 2, 2);
+        if (x === 3) ctx.moveTo(scrX + x, yTarget);
+        else ctx.lineTo(scrX + x, yTarget);
       }
+      ctx.stroke();
 
+      // Live Tuned Waveform (Crisp Phosphor Curve with Dynamic Static Jitter)
       const lockPct = getTunerLockPercent();
-      const noiseAmt = (100 - lockPct) * 0.14;
-      for (let x = 2; x < scrW - 2; x += 2) {
+      const noiseAmt = (100 - lockPct) * 0.12;
+      ctx.strokeStyle = lockPct === 100 ? '#fff9e8' : '#e6e2d8';
+      ctx.lineWidth = lockPct === 100 ? 2.4 : 1.8;
+      ctx.beginPath();
+      for (let x = 3; x <= scrW - 3; x += 2) {
         const norm = x / scrW;
         const env = Math.sin(norm * Math.PI);
         const jitter = noiseAmt ? Math.sin(x * 13.7 + t * 35) * noiseAmt : 0;
         const yLive = scrY + scrH / 2 + Math.sin(norm * (tunerFreq + 1.5) * Math.PI * 2 + tunerPhase * 0.9 + t * 2.2) * 30 * env + jitter;
-        rect(lockPct === 100 ? '#fff8e6' : '#e0dcd4', scrX + x, yLive, 2, lockPct === 100 ? 3 : 2);
+        if (x === 3) ctx.moveTo(scrX + x, yLive);
+        else ctx.lineTo(scrX + x, yLive);
       }
+      ctx.stroke();
+      ctx.restore();
 
+      // Signal Lock Meter Bar below CRT Screen
       rect('#22252c', scrX, 136, scrW, 10);
+      strokeRect('#484e5a', scrX, 136, scrW, 10);
       rect(lockPct === 100 ? '#ffefc4' : '#9a9fa8', scrX + 2, 138, Math.round((scrW - 4) * (lockPct / 100)), 6);
 
+      // Two Rotary Knobs (Frequency & Phase) with 5 Scale Ticks & Hover Feedback
       const knobs = [
         { cx: 244, cy: 58, val: tunerFreq, target: tunerTargetFreq },
         { cx: 244, cy: 118, val: tunerPhase, target: tunerTargetPhase },
       ];
       knobs.forEach(({ cx, cy, val, target }) => {
         const matched = val === target;
+        const hovered = Math.hypot(mouseX - cx, mouseY - cy) <= 26;
+        // 5 scale position ticks around each rotary dial
+        for (let p = 0; p < 5; p++) {
+          const tickAng = (-0.75 + p * 0.375) * Math.PI;
+          const tx = cx + Math.round(Math.cos(tickAng) * 24);
+          const ty = cy + Math.round(Math.sin(tickAng) * 24);
+          circle(p === val ? '#ffefc4' : '#58606e', tx, ty, p === val ? 2.2 : 1.4);
+        }
         circle('#0d0f13', cx, cy, 20);
-        circle(matched ? '#ffefc4' : '#78808e', cx, cy, 20, true);
-        if (matched) radialGlow(cx, cy, 2, 26, 'rgba(255, 230, 175, 0.3)');
+        circle(matched ? '#ffefc4' : (hovered ? '#c8d0de' : '#78808e'), cx, cy, 20, true);
+        if (matched) radialGlow(cx, cy, 2, 26, 'rgba(255, 230, 175, 0.32)');
         circle('#22262e', cx, cy, 14);
         const angle = (-0.75 + val * 0.375) * Math.PI;
         const ix = cx + Math.round(Math.cos(angle) * 11);
@@ -3316,41 +3536,70 @@
       }
     }
 
-    // 5. Centered Item Inspection Modal
+    // 5. Centered Item Inspection Modal (Detailed Keepsake Illustrations)
     if (inspectedItem && !puzzle && !activeCutscene) {
-      rect('rgba(5, 6, 8, 0.80)', 0, 0, 320, 180);
-      rect('#16171b', 92, 42, 136, 96);
-      strokeRect('#cbb292', 92, 42, 136, 96);
-      radialGlow(160, 90, 4, 58, 'rgba(255, 230, 180, 0.18)');
+      rect('rgba(5, 6, 8, 0.82)', 0, 0, 320, 180);
+      rect('#16171b', 88, 38, 144, 104);
+      strokeRect('#cbb292', 88, 38, 144, 104);
+      strokeRect('rgba(203, 178, 146, 0.32)', 91, 41, 138, 98);
+      radialGlow(160, 90, 4, 62, 'rgba(255, 230, 180, 0.20)');
       if (inspectedItem === 'ticket') {
-        rect('#f2eadc', 112, 66, 96, 48);
-        strokeRect('#38322c', 115, 69, 90, 42);
-        rect('#222222', 124, 77, 52, 3);
-        rect('#666666', 124, 85, 36, 2);
+        rect('#f2eadc', 108, 62, 104, 56);
+        strokeRect('#38322c', 111, 65, 98, 50);
+        rect('#222222', 118, 71, 54, 3);
+        rect('#8c4638', 180, 71, 20, 3); // vintage red serial stamp
+        rect('#787066', 118, 78, 38, 2);
+        for (let b = 0; b < 5; b++) {
+          const bx = 117 + b * 17;
+          rect('#e6dcc8', bx, 87, 14, 14);
+          strokeRect('#786e62', bx, 87, 14, 14);
+        }
         if (ticketPunched) {
-          for (let p = 0; p < 3; p++) circle('#16171b', 136 + p * 22, 101, 3.5);
+          for (let p = 0; p < 3; p++) {
+            const hIdx = lockerTarget[p];
+            circle('#16171b', 124 + hIdx * 17, 94, 3.5);
+          }
         }
       } else if (inspectedItem === 'fuse') {
-        rect('#999999', 122, 82, 14, 16);
-        rect('#fff6e0', 136, 85, 48, 10);
-        rect('#777777', 142, 89, 36, 2);
-        rect('#999999', 184, 82, 14, 16);
+        // Ceramic cylinder with ridged brass end-caps & sight window
+        rect('#b89b72', 118, 81, 16, 18);
+        rect('#d8be92', 120, 81, 4, 18);
+        rect('#fff6e0', 134, 83, 52, 14);
+        strokeRect('#8a8278', 134, 83, 52, 14);
+        rect('#24262c', 148, 87, 24, 6);
+        rect('#ffefc4', 148, 89.5, 24, 1.2);
+        rect('#b89b72', 186, 81, 16, 18);
+        rect('#d8be92', 196, 81, 4, 18);
       } else if (inspectedItem === 'punch') {
-        shape('#cbb28c', [[142, 82], [156, 72], [184, 102], [172, 112]]);
+        // Two-jawed brass conductor's ticket punch with pivot screw & return spring
+        shape('#cbb28c', [[128, 76], [146, 68], [188, 100], [174, 110]]);
+        shape('#9e8664', [[134, 86], [150, 74], [194, 90], [182, 102]]);
+        rect('#16171b', 128, 79, 9, 3); // punch jaw slot
+        circle('#383028', 148, 80, 3);  // brass pivot screw
+        rect('#786852', 166, 92, 14, 2); // leaf spring
       } else if (inspectedItem === 'photo') {
-        rect('#e6dfd3', 112, 58, 66, 62);
-        rect('#222226', 117, 63, 56, 46);
-        circle('#dcd4c6', 136, 82, 5);
-        rect('#dcd4c6', 131, 89, 10, 20);
-        circle('#b8b0a2', 154, 85, 4.5);
-        rect('#b8b0a2', 149, 91, 9, 18);
-        drawFoldedUmbrella(192, 66, 204, 122);
+        rect('#e6dfd3', 108, 56, 68, 66);
+        rect('#22242a', 113, 61, 58, 48);
+        // Subtle diagonal glass highlight across the photo
+        shape('rgba(255, 250, 235, 0.08)', [[113, 61], [132, 61], [113, 88]]);
+        // Father in stationmaster cap & child beside him
+        rect('#383028', 128, 73, 12, 3);
+        circle('#dcd4c6', 134, 79, 5);
+        rect('#dcd4c6', 129, 86, 10, 22);
+        circle('#b8b0a2', 152, 83, 4.5);
+        rect('#b8b0a2', 147, 89, 9, 19);
+        drawFoldedUmbrella(194, 64, 206, 122);
       } else if (inspectedItem === 'tapeB') {
-        rect('#32302e', 116, 64, 88, 52);
-        strokeRect('#d8c8b0', 116, 64, 88, 52);
-        rect('#f0e6d2', 124, 71, 72, 12);
-        circle('#111111', 140, 96, 8);
-        circle('#111111', 180, 96, 8);
+        rect('#2c2a28', 112, 62, 96, 56);
+        strokeRect('#d8c8b0', 112, 62, 96, 56);
+        rect('#f0e6d2', 120, 68, 80, 14);
+        rect('#8c4638', 124, 72, 18, 2.5);
+        rect('#38322c', 146, 72, 46, 2);
+        rect('#18191d', 124, 86, 72, 20);
+        strokeRect('#58544e', 124, 86, 72, 20);
+        circle('#d8c8b0', 140, 96, 6.5, true);
+        circle('#d8c8b0', 180, 96, 6.5, true);
+        rect('#3d2c24', 148, 91, 24, 10);
       }
     }
 
@@ -3548,6 +3797,7 @@
         'B 面磁帶播放完畢 · 父親留下的最後訊號已送達',
         'Side B finished playing · Father’s final signal received'
       ], 1450);
+      render();
       return true;
     }
     return false;
@@ -3583,13 +3833,25 @@
     render();
   }
 
-  // Track mouse/pointer coordinates in 320x180 logical space for the cursor-following ticket punch
+  // Track mouse/pointer coordinates in 320x180 logical space for interactive hover & cursor-following ticket punch
   canvas.addEventListener('pointermove', (event) => {
     const rectBounds = canvas.getBoundingClientRect();
     if (!rectBounds.width || !rectBounds.height) return;
     mouseX = ((event.clientX - rectBounds.left) / rectBounds.width) * 320;
     mouseY = ((event.clientY - rectBounds.top) / rectBounds.height) * 180;
-    if (puzzle === 'punchGame' && !effect) {
+    const isInteractiveHover = Boolean(
+      activeCutscene ||
+      inspectedItem ||
+      puzzle === 'punchGame' ||
+      puzzle === 'lanternGame' ||
+      (puzzle === 'tunerGame' && (Math.hypot(mouseX - 244, mouseY - 58) <= 26 || Math.hypot(mouseX - 244, mouseY - 118) <= 26)) ||
+      (puzzle === 'locker' && mouseY >= 44 && mouseY <= 96 && mouseX >= 42 && mouseX <= 278) ||
+      (puzzle === 'circuits' && mouseY >= 40 && mouseY <= 134 && mouseX >= 46 && mouseX <= 264) ||
+      (puzzle === 'pianoGame' && mouseY >= 68 && mouseY <= 148 && mouseX >= 50 && mouseX <= 267) ||
+      (puzzle === 'suitcase' && mouseY >= 48 && mouseY <= 130 && mouseX >= 68 && mouseX <= 252)
+    );
+    canvas.dataset.interactive = String(isInteractiveHover);
+    if ((puzzle === 'punchGame' || puzzle === 'locker' || puzzle === 'circuits' || puzzle === 'suitcase') && !effect) {
       paint('', 1, performance.now());
     }
   });
@@ -3721,6 +3983,7 @@
       if (Math.hypot(x - 244, y - 58) <= 26) {
         tunerFreq = (tunerFreq + 1) % 5;
         playSFX('click');
+        playSFX('tune');
         if (!checkTunerSuccess()) {
           feedback = [
             `頻率波段已轉至第${cnNums[tunerFreq + 1]}道，目前訊號契合度為 ${getTunerLockPercent()}%。`,
@@ -3731,6 +3994,7 @@
       } else if (Math.hypot(x - 244, y - 118) <= 26) {
         tunerPhase = (tunerPhase + 1) % 5;
         playSFX('click');
+        playSFX('tune');
         if (!checkTunerSuccess()) {
           feedback = [
             `相位微調已轉至第${cnNums[tunerPhase + 1]}相，目前訊號契合度為 ${getTunerLockPercent()}%。`,
@@ -3815,6 +4079,7 @@
     lanternStage = 0;
     pianoSolved = false;
     activeCutscene = '';
+    completionCountedThisRun = false;
     delete document.body.dataset.ending;
     clues.clear();
     randomizePuzzles();
@@ -3875,6 +4140,7 @@
                 '終章 · 破曉歸途',
                 'FINALE · HOMEWARD AT DAYBREAK'
               ];
+              recordEndingCompletion('board');
               updateAmbience();
               startCutscene('cutscene-ending-board', 15000);
             },
@@ -3891,6 +4157,7 @@
               '終章 · 目送黎明',
               'FINALE · SENDING OFF THE DAWN'
             ];
+            recordEndingCompletion('send');
             updateAmbience();
             startCutscene('cutscene-ending-send', 13500);
           },
@@ -4113,6 +4380,7 @@
                 '終章 · 未竟之夜',
                 'EPILOGUE · THE UNFINISHED NIGHT'
               ];
+              recordEndingCompletion('early');
               updateAmbience();
               startCutscene('cutscene-ending-early', 9500);
             },
@@ -4273,8 +4541,10 @@
               });
         get('epilogue-eyebrow').textContent = say(...epilogueMeta.eyebrow);
         get('epilogue-title').textContent = say(...epilogueMeta.title);
+        updateEpilogueCounterDOM();
       } else {
         epilogueBanner.hidden = true;
+        updateEpilogueCounterDOM();
       }
     }
 
@@ -4327,6 +4597,11 @@
       seqEl.textContent = say(
         `已剪下驗票孔：第${cnNums[punchStep]}枚`,
         `Emblems clipped: ${punchStep} of 3`
+      );
+    } else if (puzzle === 'tunerGame') {
+      seqEl.textContent = say(
+        `目前調頻：第${cnNums[tunerFreq + 1]}道 · 第${cnNums[tunerPhase + 1]}相 · 訊號契合度 ${getTunerLockPercent()}%`,
+        `Tuner: Channel ${tunerFreq + 1} · Phase ${tunerPhase + 1} · Lock ${getTunerLockPercent()}%`
       );
     } else {
       seqEl.textContent = '';
@@ -4610,6 +4885,7 @@
         initAudio();
         tunerFreq = (tunerFreq + 1) % 5;
         playSFX('click');
+        playSFX('tune');
         if (!checkTunerSuccess()) {
           feedback = [
             `頻率波段已切換至第${cnNums[tunerFreq + 1]}道，目前訊號契合度為 ${getTunerLockPercent()}%。`,
@@ -4630,6 +4906,7 @@
         initAudio();
         tunerPhase = (tunerPhase + 1) % 5;
         playSFX('click');
+        playSFX('tune');
         if (!checkTunerSuccess()) {
           feedback = [
             `相位微調已切換至第${cnNums[tunerPhase + 1]}相，目前訊號契合度為 ${getTunerLockPercent()}%。`,

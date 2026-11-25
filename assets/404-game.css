@@ -544,6 +544,32 @@ h2:focus { outline: none; }
   color: #ffffff;
   text-shadow: 0 0 24px var(--hdr-glow);
 }
+.epilogue-counter {
+  margin-top: .45rem;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .55rem;
+  width: fit-content;
+  padding: .42rem .78rem;
+  border: 1px solid rgba(255, 244, 218, 0.36);
+  background: linear-gradient(90deg, rgba(255, 244, 218, 0.09) 0%, rgba(255, 244, 218, 0.02) 100%);
+  font: 500 .76rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .08em;
+  color: #e6e2d8;
+  font-variant-numeric: tabular-nums;
+}
+.epilogue-counter-serial {
+  display: inline-flex;
+  align-items: center;
+  padding: .14rem .46rem;
+  border: 1px solid rgba(255, 244, 218, 0.55);
+  background: #0b0b0e;
+  color: var(--hdr-warm);
+  font-weight: 700;
+  letter-spacing: .12em;
+  box-shadow: 0 0 12px rgba(255, 236, 190, 0.16);
+}
 body[data-ending="board"] .scene-shell,
 body[data-ending="send"] .scene-shell,
 body[data-ending="early"] .scene-shell {
