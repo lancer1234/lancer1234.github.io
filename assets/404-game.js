@@ -109,11 +109,14 @@
   let lanternPulse = 0;
   let lanternBeamTime = 0;
 
-  // Global Traveler Completion Counter (with localStorage persistence & graceful fallback)
+  // Global Traveler Completion Counter (reset to 0; with localStorage persistence & graceful fallback)
+  const COUNTER_STORAGE_KEY = 'makotolab_404_traveler_rank_v1';
+  const COUNTER_API_URL = 'https://abacus.jasoncameron.dev/hit/makotolab.cc/404-lost-signal-travelers';
   let completionRank = null;
   let completionCountedThisRun = false;
   try {
-    const savedRank = Number(localStorage.getItem('makotolab_404_clear_rank'));
+    localStorage.removeItem('makotolab_404_clear_rank');
+    const savedRank = Number(localStorage.getItem(COUNTER_STORAGE_KEY));
     if (Number.isFinite(savedRank) && savedRank > 0) completionRank = savedRank;
   } catch {}
 
@@ -173,7 +176,7 @@
     } catch {}
     try {
       if (typeof fetch === 'function') {
-        fetch('https://abacus.jasoncameron.dev/hit/makotolab.cc/404-lost-signal-clear', {
+        fetch(COUNTER_API_URL, {
           mode: 'cors',
           cache: 'no-store',
         })
@@ -183,16 +186,16 @@
             if (Number.isFinite(val) && val > 0) {
               completionRank = val;
               try {
-                localStorage.setItem('makotolab_404_clear_rank', String(val));
+                localStorage.setItem(COUNTER_STORAGE_KEY, String(val));
               } catch {}
               updateEpilogueCounterDOM();
             }
           })
           .catch(() => {
             try {
-              const prev = Number(localStorage.getItem('makotolab_404_clear_rank')) || 0;
+              const prev = Number(localStorage.getItem(COUNTER_STORAGE_KEY)) || 0;
               completionRank = prev + 1;
-              localStorage.setItem('makotolab_404_clear_rank', String(completionRank));
+              localStorage.setItem(COUNTER_STORAGE_KEY, String(completionRank));
             } catch {}
             updateEpilogueCounterDOM();
           });
