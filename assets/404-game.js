@@ -2063,135 +2063,115 @@
           circle('rgba(255, 242, 210, 0.78)', mx, my, 1.5);
         }
       } else if (progress < 0.72) {
-        // Shot 2: Father kneeling in front of the child standing against the tile pillar, leveling the top of the child's head and marking the height with a pencil!
+        // Shot 2: Father kneeling beside the tile pillar marking the child's height with a pencil (natural proportions, no stretched arms!)
         const p2 = (progress - 0.36) / 0.36;
         const hText = dialOptions[1][dialTarget[1]][0];
-        radialGlow(156, 84, 12, 145, 'rgba(255, 228, 175, 0.34)');
+        radialGlow(160, 84, 12, 145, 'rgba(255, 228, 175, 0.34)');
 
         // Waiting hall floor & baseboard
         rect('#181311', 0, 144, 320, 36);
         rect('#382e26', 0, 141, 320, 3);
 
-        // 3D Station Tile Pillar on the right (x: 164..206, y: 12..144) with ruler scale ticks
-        rect('#3e3936', 164, 12, 34, 132);
-        shape('#292523', [[198, 12], [208, 16], [208, 142], [198, 144]]); // 3D side depth
-        strokeRect('rgba(255, 235, 200, 0.42)', 164, 12, 34, 132);
+        // 3D Station Tile Pillar in center (x: 144..176, y: 12..144) with ruler scale ticks
+        rect('#3e3936', 144, 12, 32, 132);
+        shape('#292523', [[176, 12], [182, 15], [182, 142], [176, 144]]); // 3D side depth
+        strokeRect('rgba(255, 235, 200, 0.42)', 144, 12, 32, 132);
         for (let y = 26; y < 140; y += 16) {
-          rect('rgba(255, 255, 255, 0.11)', 165, y, 32, 1);
+          rect('rgba(255, 255, 255, 0.11)', 145, y, 30, 1);
         }
-        // Graduated height ruler ticks along left edge of pillar
-        for (let ry = 44; ry <= 128; ry += 6) {
-          const isMajor = (ry - 44) % 18 === 0;
-          rect('rgba(255, 236, 195, 0.38)', 165, ry, isMajor ? 7 : 3.5, 1);
+        // Graduated height ruler ticks along right edge of pillar (next to child)
+        for (let ry = 46; ry <= 130; ry += 6) {
+          const isMajor = (ry - 46) % 18 === 0;
+          rect('rgba(255, 236, 195, 0.35)', 175 - (isMajor ? 6 : 3), ry, isMajor ? 6 : 3, 1);
         }
 
-        // Young child standing up straight on the left face of the pillar (x: 152, back resting against pillar x=164!)
-        // Child's crown of head is at exact y = 84!
-        const childX = 152;
-        const crownY = 84;
+        // Young child standing tall against the right side of the pillar (x: 186, back touching pillar, crown at y = 86)
+        const childX = 186;
+        const crownY = 86;
         // Legs & shoes standing on floor y=144
-        rect('#322b26', childX - 4, 124, 3.8, 18);
-        rect('#322b26', childX + 1, 124, 3.8, 18);
-        rect('#181412', childX - 6, 141, 6, 3);
-        rect('#181412', childX, 141, 6, 3);
-        // Child's warm sweater & collar
+        rect('#322b26', childX - 4, 125, 3.6, 17);
+        rect('#322b26', childX + 1, 125, 3.6, 17);
+        rect('#181412', childX - 5.5, 141, 5.5, 3);
+        rect('#181412', childX + 0.5, 141, 5.5, 3);
+        // Child's warm sweater & shorts
         shape('#e6d4b8', [
-          [childX - 6.5, 98],
-          [childX + 7.5, 98],
-          [childX + 8.5, 125],
-          [childX - 6.5, 125],
+          [childX - 6, 99],
+          [childX + 6.5, 99],
+          [childX + 7.5, 125],
+          [childX - 6, 125],
         ]);
-        rect('#cbb08a', childX - 6, 114, 14, 11);
-        // Child's arm hanging naturally at side
-        rect('#dfd0b4', childX - 2, 101, 3.5, 17);
-        circle('#f5e6cc', childX - 0.5, 119, 2);
-        // Child's head (facing left toward father, back of head touching pillar at x=161)
-        circle('#f5e6cc', childX, crownY + 7, 6.8);
-        // Child's dark hair cap (top of hair at exact y = crownY = 84)
+        rect('#cbb08a', childX - 5.5, 115, 12.5, 10);
+        // Child's arm resting naturally at side
+        rect('#dfd0b4', childX + 1, 102, 3.2, 15);
+        circle('#f5e6cc', childX + 2.5, 118, 1.8);
+        // Child's head & dark hair cap (top of head at y = crownY = 86)
+        circle('#f5e6cc', childX, crownY + 6.5, 6.4);
         shape('#28201b', [
-          [childX - 6.8, crownY + 5],
-          [childX - 5.5, crownY],
-          [childX + 6.5, crownY],
-          [childX + 7.2, crownY + 8],
-          [childX + 2, crownY + 4],
+          [childX - 6.4, crownY + 5],
+          [childX - 5, crownY],
+          [childX + 6, crownY],
+          [childX + 6.6, crownY + 7.5],
+          [childX + 1.5, crownY + 4],
         ]);
-        circle('#221a16', childX - 3.5, crownY + 6.5, 1); // child's eye looking at father
+        circle('#221a16', childX - 3.2, crownY + 6.2, 0.9);
 
-        // Stationmaster Father kneeling on one knee on the left (x: 108, facing right toward child & pillar)
-        const fx = 108;
+        // Stationmaster Father kneeling right beside the left edge of the pillar (x: 120, only 24px from pillar!)
+        const fx = 120;
         // Kneeling legs & boots on the floor (y=144)
-        shape('#2b231d', [[fx - 12, 126], [fx + 4, 126], [fx + 2, 142], [fx - 14, 142]]); // kneeling back leg
-        shape('#382e26', [[fx + 2, 122], [fx + 16, 122], [fx + 16, 142], [fx + 8, 142]]); // bent front knee
-        rect('#15110e', fx + 8, 141, 11, 3); // front boot
-        rect('#15110e', fx - 16, 138, 6, 6); // back boot toe
-        // Father's warm coat torso leaning slightly forward
+        shape('#2b231d', [[fx - 11, 126], [fx + 3, 126], [fx + 1, 142], [fx - 13, 142]]);
+        shape('#382e26', [[fx + 1, 122], [fx + 14, 122], [fx + 14, 142], [fx + 7, 142]]);
+        rect('#15110e', fx + 7, 141, 10, 3);
+        rect('#15110e', fx - 15, 138, 5, 6);
+        // Father's warm coat torso
         shape('#c4ad8d', [
-          [fx - 9, 88],
-          [fx + 10, 88],
-          [fx + 13, 126],
-          [fx - 11, 126],
+          [fx - 8, 88],
+          [fx + 8, 88],
+          [fx + 11, 126],
+          [fx - 10, 126],
         ]);
-        // Brass buttons on coat
-        for (let b = 0; b < 3; b++) circle('#e8c878', fx + 7, 96 + b * 7, 1.1);
+        for (let b = 0; b < 3; b++) circle('#e8c878', fx + 5, 96 + b * 7, 1);
         // Father's head & stationmaster peaked cap
-        circle('#e6d2b5', fx + 2, 77, 7.6);
-        circle('#241c18', fx + 6, 77, 1.1); // father's gentle eye
-        shape('#2b221c', [[fx - 6, 73], [fx - 5, 67], [fx + 10, 67], [fx + 10, 73]]);
-        rect('#e6c478', fx - 5.5, 71.5, 15.5, 1.5);
-        shape('#161210', [[fx + 6, 71.5], [fx + 15, 73], [fx + 14, 74.5], [fx + 5, 73]]); // cap visor
+        circle('#e6d2b5', fx + 1, 77, 7.2);
+        circle('#241c18', fx + 5, 77, 1);
+        shape('#2b221c', [[fx - 6, 73], [fx - 5, 67], [fx + 9, 67], [fx + 9, 73]]);
+        rect('#e6c478', fx - 5.5, 71.5, 14.5, 1.5);
+        shape('#161210', [[fx + 5, 71.5], [fx + 13, 73], [fx + 12, 74.5], [fx + 4, 73]]);
 
-        // Father's LEFT ARM reaching up to rest his palm flat on top of the child's head (leveling height at y = crownY = 84)
-        ctx.strokeStyle = '#b49c7c';
-        ctx.lineWidth = 4.2;
+        // Father's single, naturally proportioned right arm (upper arm 8px, forearm 10px) holding pencil to the pillar
+        const drawSlide = Math.min(1, p2 * 1.45);
+        const handX = fx + 16; // x = 136
+        const handY = crownY + 3; // y = 89
+        const pencilTipX = 148 + drawSlide * 11;
+        const pencilTipY = crownY;
+        ctx.strokeStyle = '#b8a080';
+        ctx.lineWidth = 3.6;
         ctx.lineCap = 'round';
         ctx.beginPath();
-        ctx.moveTo(fx + 5, 92);
-        ctx.lineTo(130, 81);
-        ctx.lineTo(childX - 2, crownY - 1);
-        ctx.stroke();
-        // Father's flat leveling palm resting gently atop the child's head
-        rect('#e6d2b5', childX - 6, crownY - 2.5, 13, 2.6);
-
-        // Father's RIGHT ARM holding the pencil to mark the pillar at y = crownY = 84!
-        const drawSlide = Math.min(1, p2 * 1.45);
-        const pencilTipX = 165 + drawSlide * 14;
-        const pencilTipY = crownY;
-        const handX = pencilTipX - 11;
-        const handY = pencilTipY + 6;
-        ctx.strokeStyle = '#c4ad8d';
-        ctx.lineWidth = 4.5;
-        ctx.beginPath();
-        ctx.moveTo(fx + 7, 96);
-        ctx.lineTo(136, 95);
+        ctx.moveTo(fx + 3, 93);
+        ctx.lineTo(fx + 10, 96);
         ctx.lineTo(handX, handY);
         ctx.stroke();
         ctx.lineCap = 'butt';
-        circle('#e6d2b5', handX, handY, 2.8); // Father's hand gripping pencil
+        circle('#e6d2b5', handX, handY, 2.2);
 
-        // Detailed Wooden Pencil angled from Father's hand to the pillar notch (pencilTipX, pencilTipY)
-        ctx.strokeStyle = '#e8ba54'; // yellow wooden pencil shaft
-        ctx.lineWidth = 2.4;
+        // Short yellow pencil held in Father's hand touching the pillar at (pencilTipX, crownY)
+        ctx.strokeStyle = '#e8ba54';
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(handX - 5, handY + 3);
-        ctx.lineTo(pencilTipX - 2, pencilTipY + 1);
+        ctx.moveTo(handX - 2, handY + 1);
+        ctx.lineTo(pencilTipX, pencilTipY);
         ctx.stroke();
-        circle('#e08a80', handX - 5.5, handY + 3.3, 1.4); // pink eraser at end
-        // Exposed wood cone & dark graphite tip touching the tile pillar
-        shape('#f2dec0', [
-          [pencilTipX - 3, pencilTipY],
-          [pencilTipX - 2, pencilTipY + 2.2],
-          [pencilTipX, pencilTipY],
-        ]);
-        circle('#1a1614', pencilTipX, pencilTipY, 0.9);
+        circle('#1a1614', pencilTipX, pencilTipY, 0.8);
 
-        // Glowing Height Notch Line actively being drawn on the tile pillar + Height Label
-        const markW = Math.max(2, Math.round(drawSlide * 14));
-        radialGlow(165 + markW * 0.5, crownY, 1, 22, 'rgba(255, 244, 210, 0.72)');
-        rect('#fff6dc', 165, crownY - 1, markW, 2.2);
+        // Subtle level guide line across the pillar from child's head crown (x=176..182) & glowing height mark
+        rect('rgba(255, 244, 210, 0.28)', 162, crownY - 0.4, 20, 0.8);
+        const markW = Math.max(2, Math.round(drawSlide * 12));
+        radialGlow(148 + markW * 0.5, crownY, 1, 20, 'rgba(255, 244, 210, 0.72)');
+        rect('#fff6dc', 148, crownY - 1, markW, 2);
         if (drawSlide > 0.35) {
           ctx.fillStyle = '#fff4d4';
           ctx.font = '600 7px ui-monospace, SFMono-Regular, Menlo, monospace';
-          ctx.fillText(hText, 167, crownY - 4);
+          ctx.fillText(hText, 148, crownY - 4);
         }
       } else {
         // Shot 3: Detailed 3D Close-Up of the Piano's Music Stand & Keyboard as the Hidden Wooden Drawer Slides Open with a Handwritten Note Inside!
@@ -3230,18 +3210,20 @@
       // Bound manual ledger on left side of reading table
       shape('#523a2e', [[108, 142], [126, 142], [128, 147], [106, 147]]);
       rect('#e6dcc8', 107, 147, 21, 1.5);
-      // Warm glowing electric coaster & porcelain teacup
-      radialGlow(174, 142, 2, 28, 'rgba(255, 200, 130, 0.34)');
+      // Porcelain teacup & coaster (unlit white without glow/steam before power is restored; warm & steaming once powered!)
       rect('#f0e6d2', 136, 143, 20, 4); // Father's letter
-      rect('#d87a56', 166, 144, 16, 2); // Electric warming coaster
-      rect('#fff9f0', 169, 137, 10, 7);
-      rect('#fff9f0', 179, 139, 2, 3);
-      for (let s = 0; s < 3; s++) {
-        const phase = (t * 1.3 + s * 0.33) % 1;
-        const sy = 134 - Math.round(phase * 14);
-        const sx = 173 + Math.round(Math.sin(phase * 6 + s) * 2);
-        ctx.fillStyle = `rgba(255, 248, 235, ${(1 - phase) * 0.55})`;
-        ctx.fillRect(sx, sy, 2, 2.5);
+      rect(powered ? '#d87a56' : '#525660', 166, 144, 16, 2); // Coaster (glows warm orange only when powered)
+      rect(powered ? '#fff9f0' : '#dce0e8', 169, 137, 10, 7);
+      rect(powered ? '#fff9f0' : '#dce0e8', 179, 139, 2, 3);
+      if (powered) {
+        radialGlow(174, 142, 2, 28, 'rgba(255, 200, 130, 0.34)');
+        for (let s = 0; s < 3; s++) {
+          const phase = (t * 1.3 + s * 0.33) % 1;
+          const sy = 134 - Math.round(phase * 14);
+          const sx = 173 + Math.round(Math.sin(phase * 6 + s) * 2);
+          ctx.fillStyle = `rgba(255, 248, 235, ${(1 - phase) * 0.55})`;
+          ctx.fillRect(sx, sy, 2, 2.5);
+        }
       }
     } else if (room === 'lounge') {
       // 1. High Recessed Window with 3D sill & cool silver-blue rain (x: 124..192, y: 40..72)
