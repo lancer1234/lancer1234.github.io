@@ -1609,6 +1609,7 @@
       offerUmbrella = false,
       salute = false,
       sepia = false,
+      stride = 0,
       t = 0,
     } = opts;
     const coatCol = sepia ? '#382f28' : '#222c3c';
@@ -1617,64 +1618,105 @@
     const capCol = sepia ? '#28201b' : '#18202c';
     const goldCol = '#e8c67a';
 
-    const headY = footY - 46 * scale;
-    const shoulderY = footY - 38 * scale;
-    const hemY = footY - 11 * scale;
+    const isRunning = Math.abs(stride) > 0.001;
+    const bob = isRunning ? Math.abs(Math.sin(stride)) * 1.8 * scale : 0;
+    const lean = isRunning ? facing * 1.6 * scale : 0;
+    const legSwing = isRunning ? Math.sin(stride) * 6.5 * scale : 0;
+
+    const headY = footY - 46 * scale - bob;
+    const shoulderY = footY - 38 * scale - bob;
+    const hemY = footY - 11 * scale - bob * 0.6;
 
     // 1. If holding open umbrella overhead, draw canopy & shaft behind/above head
-    const umbX = x + facing * 2 * scale;
+    const umbX = x + lean + facing * 2 * scale;
     const umbY = headY - 9 * scale;
     if (hasUmbrella) {
       drawOpenUmbrella(umbX, umbY, 24 * scale, 13.5 * scale, 22 * scale, t, facing);
     }
 
-    // 2. Boots & trousers
-    rect('#12161e', x - 5 * scale, hemY, 4 * scale, 11 * scale);
-    rect('#1a202c', x + 1.5 * scale, hemY, 4 * scale, 11 * scale);
-    rect('#0b0d12', x - 6 * scale, footY - 2.5 * scale, 6 * scale, 2.5 * scale);
-    rect('#0b0d12', x + 1 * scale, footY - 2.5 * scale, 6 * scale, 2.5 * scale);
+    // 2. Animated Striding Legs, Knees & Boots (when running/walking vs standing)
+    if (isRunning) {
+      const leg1FootX = x - 1.5 * scale - legSwing;
+      const leg2FootX = x + 1.5 * scale + legSwing;
+      const leg1Lift = Math.max(0, -Math.cos(stride)) * 2.8 * scale;
+      const leg2Lift = Math.max(0, Math.cos(stride)) * 2.8 * scale;
 
-    // 3. Tailored long stationmaster overcoat
+      // Back leg & boot
+      ctx.strokeStyle = '#12161e';
+      ctx.lineWidth = 3.8 * scale;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x - 2 * scale, hemY - 1 * scale);
+      ctx.lineTo((x - 2 * scale + leg1FootX) * 0.5 + facing * 1.5 * scale, (hemY + footY - leg1Lift) * 0.5);
+      ctx.lineTo(leg1FootX, footY - 1.5 * scale - leg1Lift);
+      ctx.stroke();
+      rect('#0b0d12', leg1FootX - (facing > 0 ? 1.5 : 4.5) * scale, footY - 2.6 * scale - leg1Lift, 6 * scale, 2.5 * scale);
+
+      // Front leg & boot
+      ctx.strokeStyle = '#1c2330';
+      ctx.lineWidth = 3.8 * scale;
+      ctx.beginPath();
+      ctx.moveTo(x + 2 * scale, hemY - 1 * scale);
+      ctx.lineTo((x + 2 * scale + leg2FootX) * 0.5 + facing * 1.8 * scale, (hemY + footY - leg2Lift) * 0.5);
+      ctx.lineTo(leg2FootX, footY - 1.5 * scale - leg2Lift);
+      ctx.stroke();
+      rect('#0b0d12', leg2FootX - (facing > 0 ? 1.5 : 4.5) * scale, footY - 2.6 * scale - leg2Lift, 6 * scale, 2.5 * scale);
+      ctx.lineCap = 'butt';
+
+      // Water splash droplets kicked up behind boots on the wet platform
+      const splashX = Math.min(leg1FootX, leg2FootX) - facing * 4 * scale;
+      circle('rgba(195, 224, 255, 0.45)', splashX, footY - 2 * scale - ( bob * 0.8 ), 1.2 * scale);
+      circle('rgba(195, 224, 255, 0.35)', splashX - facing * 3 * scale, footY - 4 * scale, 0.9 * scale);
+    } else {
+      rect('#12161e', x - 5 * scale, hemY, 4 * scale, 11 * scale);
+      rect('#1a202c', x + 1.5 * scale, hemY, 4 * scale, 11 * scale);
+      rect('#0b0d12', x - 6 * scale, footY - 2.5 * scale, 6 * scale, 2.5 * scale);
+      rect('#0b0d12', x + 1 * scale, footY - 2.5 * scale, 6 * scale, 2.5 * scale);
+    }
+
+    // 3. Tailored long stationmaster overcoat (swaying with stride when running)
+    const hemFlare = isRunning ? Math.abs(legSwing) * 0.35 : 0;
     shape(coatCol, [
-      [x - 7.5 * scale, shoulderY],
-      [x + 7.5 * scale, shoulderY],
-      [x + 9.5 * scale, hemY],
-      [x - 9.5 * scale, hemY],
+      [x + lean - 7.5 * scale, shoulderY],
+      [x + lean + 7.5 * scale, shoulderY],
+      [x + 9.5 * scale + hemFlare, hemY],
+      [x - 9.5 * scale - hemFlare, hemY],
     ]);
     ctx.strokeStyle = coatEdge;
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(x - 7.5 * scale, shoulderY);
-    ctx.lineTo(x - 9.5 * scale, hemY);
-    ctx.moveTo(x + 7.5 * scale, shoulderY);
-    ctx.lineTo(x + 9.5 * scale, hemY);
+    ctx.moveTo(x + lean - 7.5 * scale, shoulderY);
+    ctx.lineTo(x - 9.5 * scale - hemFlare, hemY);
+    ctx.moveTo(x + lean + 7.5 * scale, shoulderY);
+    ctx.lineTo(x + 9.5 * scale + hemFlare, hemY);
     ctx.stroke();
 
     // Brass coat buttons & warm scarf at collar
-    rect('#c8a87e', x - 4.5 * scale, shoulderY - 1.5 * scale, 9 * scale, 3 * scale);
+    rect('#c8a87e', x + lean - 4.5 * scale, shoulderY - 1.5 * scale, 9 * scale, 3 * scale);
     for (let b = 0; b < 3; b++) {
-      circle(goldCol, x + facing * 2 * scale, shoulderY + (6 + b * 6) * scale, 0.9 * scale);
+      circle(goldCol, x + lean + facing * 2 * scale, shoulderY + (6 + b * 6) * scale, 0.9 * scale);
     }
 
     // 4. Head & silver-gray hair
-    circle(skinCol, x, headY, 5.8 * scale);
-    rect('#c8d4e4', x - facing * 5.5 * scale, headY - 2 * scale, 3 * scale, 4 * scale);
+    const hx = x + lean;
+    circle(skinCol, hx, headY, 5.8 * scale);
+    rect('#c8d4e4', hx - facing * 5.5 * scale, headY - 2 * scale, 3 * scale, 4 * scale);
 
     // 5. Peaked Stationmaster Cap (Crown, gold band, badge & visor brim)
     shape(capCol, [
-      [x - 6.5 * scale, headY - 3 * scale],
-      [x - 5.5 * scale, headY - 8.5 * scale],
-      [x + 6.5 * scale, headY - 8.5 * scale],
-      [x + 6.5 * scale, headY - 3 * scale],
+      [hx - 6.5 * scale, headY - 3 * scale],
+      [hx - 5.5 * scale, headY - 8.5 * scale],
+      [hx + 6.5 * scale, headY - 8.5 * scale],
+      [hx + 6.5 * scale, headY - 3 * scale],
     ]);
-    rect(goldCol, x - 6 * scale, headY - 4.2 * scale, 12 * scale, 1.4 * scale);
-    circle('#fff2c8', x + facing * 2 * scale, headY - 6 * scale, 1.1 * scale);
+    rect(goldCol, hx - 6 * scale, headY - 4.2 * scale, 12 * scale, 1.4 * scale);
+    circle('#fff2c8', hx + facing * 2 * scale, headY - 6 * scale, 1.1 * scale);
     // Visor brim
     shape('#0d1118', [
-      [x + facing * 2 * scale, headY - 3.2 * scale],
-      [x + facing * 10 * scale, headY - 1.8 * scale],
-      [x + facing * 9 * scale, headY - 0.5 * scale],
-      [x + facing * 1 * scale, headY - 1.8 * scale],
+      [hx + facing * 2 * scale, headY - 3.2 * scale],
+      [hx + facing * 10 * scale, headY - 1.8 * scale],
+      [hx + facing * 9 * scale, headY - 0.5 * scale],
+      [hx + facing * 1 * scale, headY - 1.8 * scale],
     ]);
 
     // 6. Arm gripping the open umbrella's J-handle
@@ -1684,7 +1726,7 @@
       ctx.strokeStyle = coatEdge;
       ctx.lineWidth = 3.2 * scale;
       ctx.beginPath();
-      ctx.moveTo(x - facing * 2 * scale, shoulderY + 4 * scale);
+      ctx.moveTo(hx - facing * 2 * scale, shoulderY + 4 * scale);
       ctx.lineTo(handX, handY);
       ctx.stroke();
       circle(skinCol, handX, handY, 1.8 * scale);
@@ -1692,12 +1734,13 @@
 
     // 7. Second arm: offering the spare folded umbrella OR saluting cap brim
     if (offerUmbrella) {
-      const extX = x + facing * 16 * scale;
-      const extY = shoulderY + 5 * scale;
+      const armWave = isRunning ? Math.sin(stride) * 1.5 * scale : 0;
+      const extX = hx + facing * 16 * scale;
+      const extY = shoulderY + 5 * scale + armWave;
       ctx.strokeStyle = coatCol;
       ctx.lineWidth = 3.4 * scale;
       ctx.beginPath();
-      ctx.moveTo(x + facing * 4 * scale, shoulderY + 4 * scale);
+      ctx.moveTo(hx + facing * 4 * scale, shoulderY + 4 * scale);
       ctx.lineTo(extX, extY);
       ctx.stroke();
       circle(skinCol, extX, extY, 2 * scale);
@@ -1706,11 +1749,11 @@
       ctx.strokeStyle = coatEdge;
       ctx.lineWidth = 3 * scale;
       ctx.beginPath();
-      ctx.moveTo(x + facing * 4 * scale, shoulderY + 4 * scale);
-      ctx.lineTo(x + facing * 10 * scale, headY - 1 * scale);
-      ctx.lineTo(x + facing * 7 * scale, headY - 3 * scale);
+      ctx.moveTo(hx + facing * 4 * scale, shoulderY + 4 * scale);
+      ctx.lineTo(hx + facing * 10 * scale, headY - 1 * scale);
+      ctx.lineTo(hx + facing * 7 * scale, headY - 3 * scale);
       ctx.stroke();
-      circle(skinCol, x + facing * 7 * scale, headY - 3 * scale, 1.7 * scale);
+      circle(skinCol, hx + facing * 7 * scale, headY - 3 * scale, 1.7 * scale);
     }
   }
 
@@ -1947,55 +1990,323 @@
         radialGlow(160, 75, 10, 145, 'rgba(255, 224, 165, 0.34)');
         linearRay(90, 0, 180, 170, [[70, 0], [135, 0], [230, 180], [95, 180]], 'rgba(255, 236, 195, 0.22)');
 
-        // Upright Piano body with warm wood paneling, brass pedals & music stand
+        // Waiting hall wooden floor & baseboard
+        rect('#1a1412', 0, 140, 320, 40);
+        rect('#362b24', 0, 137, 320, 3);
+
+        // Upright Piano body with warm wood paneling, 3D cheek blocks, brass pedals & music stand
+        shape('#3a2e28', [[84, 44], [200, 44], [202, 48], [86, 48]]); // top crown lid
         rect('#231d1a', 88, 48, 108, 92);
         strokeRect('rgba(255, 225, 175, 0.48)', 88, 48, 108, 92);
         rect('#181311', 96, 54, 92, 28);
-        rect('#f2e6ce', 130, 66, 24, 14); // sheet music on stand
-        rect('#f5ebd6', 94, 92, 96, 8); // ivory keyboard
-        for (let k = 1; k < 16; k++) rect('rgba(56, 48, 42, 0.35)', 94 + k * 6, 92, 0.8, 8);
-        for (const bk of [0, 1, 3, 4, 5, 7, 8, 10, 11, 12]) {
-          rect('#181412', 98 + bk * 6, 92, 3.5, 4.8);
+        strokeRect('#4a3c32', 96, 54, 92, 28);
+        // Sheet music on stand with staff lines
+        rect('#f5ead2', 128, 63, 28, 17);
+        for (let sl = 0; sl < 4; sl++) rect('#786a58', 131, 66 + sl * 3, 22, 0.7);
+        rect('#5c4a3c', 124, 80, 36, 2); // music stand ledge
+
+        // Ivory & ebony keyboard with 3D cheek blocks
+        rect('#342822', 85, 88, 5, 13);
+        rect('#342822', 194, 88, 5, 13);
+        rect('#f5ebd6', 90, 91, 104, 8);
+        for (let k = 1; k < 17; k++) rect('rgba(56, 48, 42, 0.35)', 90 + k * 6, 91, 0.8, 8);
+        for (const bk of [0, 1, 3, 4, 5, 7, 8, 10, 11, 12, 14]) {
+          rect('#181412', 94 + bk * 6, 91, 3.5, 4.8);
         }
-        // Father in stationmaster cap seated on bench guiding the child's hands
-        circle('#e6d4b8', 124, 68, 8);
-        rect('#2b221c', 116, 59, 16, 5);
-        rect('#e6c478', 116, 63, 16, 1.5);
-        shape('#cbb292', [[111, 77], [137, 77], [141, 138], [107, 138]]);
-        // Child seated beside him
-        circle('#f5e6cc', 158, 80, 6.2);
-        shape('#e8d5b5', [[149, 87], [167, 87], [169, 126], [147, 126]]);
-        rect('#3a2e26', 102, 122, 74, 5); // piano bench
+        rect('#2c221c', 85, 99, 114, 3); // keybed lip
+        // 3 brass pedals at base of piano
+        for (const px of [136, 142, 148]) rect('#e8c878', px, 133, 2.5, 5);
+
+        // Father in stationmaster cap seated on left of bench, reaching his hand over the child's hand on the keys
+        rect('#1a1614', 110, 122, 6, 19); // father's left leg
+        rect('#221c18', 122, 122, 6, 19); // father's right leg
+        shape('#cbb292', [[108, 77], [134, 77], [137, 122], [105, 122]]); // father's coat
+        circle('#e6d4b8', 121, 67, 7.8);
+        rect('#2b221c', 113, 58, 16, 5);
+        rect('#e6c478', 113, 62, 16, 1.5);
+        // Father's right arm gently guiding the child's hand on the keyboard
+        const keyBounce = Math.sin(t * 7) * 1.2;
+        ctx.strokeStyle = '#d8c0a0';
+        ctx.lineWidth = 3.6;
+        ctx.beginPath();
+        ctx.moveTo(132, 84);
+        ctx.lineTo(148, 92 + keyBounce);
+        ctx.stroke();
+
+        // Young child seated on right of bench, feet dangling in the air unable to reach the pedals!
+        const legSwing = Math.sin(t * 3.5) * 2;
+        rect('#2b2522', 152 + legSwing * 0.4, 122, 4.5, 11); // dangling left leg
+        rect('#2b2522', 160 - legSwing * 0.4, 122, 4.5, 11); // dangling right leg
+        rect('#141110', 151 + legSwing * 0.4, 132, 6, 3);    // child's left shoe above floor
+        rect('#141110', 159 - legSwing * 0.4, 132, 6, 3);    // child's right shoe above floor
+        shape('#e8d5b5', [[148, 86], [166, 86], [168, 122], [146, 122]]);
+        circle('#f5e6cc', 157, 78, 6.2);
+        // Child's dark hair
+        shape('#2b231e', [[151, 77], [153, 71], [162, 71], [163, 78]]);
+        // Child's left arm reaching to the piano keys beneath father's guiding hand
+        ctx.strokeStyle = '#f0dec2';
+        ctx.lineWidth = 2.8;
+        ctx.beginPath();
+        ctx.moveTo(150, 90);
+        ctx.lineTo(147, 93 + keyBounce);
+        ctx.stroke();
+        circle('#f5e6cc', 148, 92.5 + keyBounce, 2.2);
+
+        // Wooden piano bench with legs
+        rect('#42332a', 98, 121, 78, 5);
+        rect('#2b211b', 102, 126, 5, 16);
+        rect('#2b211b', 167, 126, 5, 16);
+
         for (let m = 0; m < 12; m++) {
           const mx = 100 + ((m * 19) % 92);
           const my = 86 - ((t * 18 + m * 11) % 58);
           circle('rgba(255, 242, 210, 0.78)', mx, my, 1.5);
         }
       } else if (progress < 0.72) {
-        // Shot 2: Father kneeling by the tile pillar marking the child's height with a pencil
-        radialGlow(160, 82, 12, 140, 'rgba(255, 228, 175, 0.32)');
-        rect('#383432', 138, 18, 36, 144);
-        strokeRect('rgba(255, 235, 200, 0.42)', 138, 18, 36, 144);
-        for (let y = 30; y < 158; y += 16) rect('rgba(255,255,255,0.12)', 139, y, 34, 1);
-        rect('#fff5dc', 162, 86, 12, 2);
-        radialGlow(168, 87, 1, 18, 'rgba(255, 245, 215, 0.65)');
-        // Child standing tall against the pillar
-        circle('#f5e6cc', 184, 93, 6.2);
-        shape('#e6d4b8', [[177, 100], [191, 100], [193, 144], [175, 144]]);
-        // Father kneeling on the left holding the pencil to the mark
-        circle('#d8c3a5', 114, 82, 7.8);
-        rect('#2b221c', 106, 73, 16, 4.5);
-        rect('#e6c478', 106, 77, 16, 1.3);
-        shape('#c4ad8d', [[102, 91], [126, 91], [132, 144], [98, 144]]);
-        rect('#fff0c8', 124, 86, 38, 2.5);
+        // Shot 2: Father kneeling in front of the child standing against the tile pillar, leveling the top of the child's head and marking the height with a pencil!
+        const p2 = (progress - 0.36) / 0.36;
+        const hText = dialOptions[1][dialTarget[1]][0];
+        radialGlow(156, 84, 12, 145, 'rgba(255, 228, 175, 0.34)');
+
+        // Waiting hall floor & baseboard
+        rect('#181311', 0, 144, 320, 36);
+        rect('#382e26', 0, 141, 320, 3);
+
+        // 3D Station Tile Pillar on the right (x: 164..206, y: 12..144) with ruler scale ticks
+        rect('#3e3936', 164, 12, 34, 132);
+        shape('#292523', [[198, 12], [208, 16], [208, 142], [198, 144]]); // 3D side depth
+        strokeRect('rgba(255, 235, 200, 0.42)', 164, 12, 34, 132);
+        for (let y = 26; y < 140; y += 16) {
+          rect('rgba(255, 255, 255, 0.11)', 165, y, 32, 1);
+        }
+        // Graduated height ruler ticks along left edge of pillar
+        for (let ry = 44; ry <= 128; ry += 6) {
+          const isMajor = (ry - 44) % 18 === 0;
+          rect('rgba(255, 236, 195, 0.38)', 165, ry, isMajor ? 7 : 3.5, 1);
+        }
+
+        // Young child standing up straight on the left face of the pillar (x: 152, back resting against pillar x=164!)
+        // Child's crown of head is at exact y = 84!
+        const childX = 152;
+        const crownY = 84;
+        // Legs & shoes standing on floor y=144
+        rect('#322b26', childX - 4, 124, 3.8, 18);
+        rect('#322b26', childX + 1, 124, 3.8, 18);
+        rect('#181412', childX - 6, 141, 6, 3);
+        rect('#181412', childX, 141, 6, 3);
+        // Child's warm sweater & collar
+        shape('#e6d4b8', [
+          [childX - 6.5, 98],
+          [childX + 7.5, 98],
+          [childX + 8.5, 125],
+          [childX - 6.5, 125],
+        ]);
+        rect('#cbb08a', childX - 6, 114, 14, 11);
+        // Child's arm hanging naturally at side
+        rect('#dfd0b4', childX - 2, 101, 3.5, 17);
+        circle('#f5e6cc', childX - 0.5, 119, 2);
+        // Child's head (facing left toward father, back of head touching pillar at x=161)
+        circle('#f5e6cc', childX, crownY + 7, 6.8);
+        // Child's dark hair cap (top of hair at exact y = crownY = 84)
+        shape('#28201b', [
+          [childX - 6.8, crownY + 5],
+          [childX - 5.5, crownY],
+          [childX + 6.5, crownY],
+          [childX + 7.2, crownY + 8],
+          [childX + 2, crownY + 4],
+        ]);
+        circle('#221a16', childX - 3.5, crownY + 6.5, 1); // child's eye looking at father
+
+        // Stationmaster Father kneeling on one knee on the left (x: 108, facing right toward child & pillar)
+        const fx = 108;
+        // Kneeling legs & boots on the floor (y=144)
+        shape('#2b231d', [[fx - 12, 126], [fx + 4, 126], [fx + 2, 142], [fx - 14, 142]]); // kneeling back leg
+        shape('#382e26', [[fx + 2, 122], [fx + 16, 122], [fx + 16, 142], [fx + 8, 142]]); // bent front knee
+        rect('#15110e', fx + 8, 141, 11, 3); // front boot
+        rect('#15110e', fx - 16, 138, 6, 6); // back boot toe
+        // Father's warm coat torso leaning slightly forward
+        shape('#c4ad8d', [
+          [fx - 9, 88],
+          [fx + 10, 88],
+          [fx + 13, 126],
+          [fx - 11, 126],
+        ]);
+        // Brass buttons on coat
+        for (let b = 0; b < 3; b++) circle('#e8c878', fx + 7, 96 + b * 7, 1.1);
+        // Father's head & stationmaster peaked cap
+        circle('#e6d2b5', fx + 2, 77, 7.6);
+        circle('#241c18', fx + 6, 77, 1.1); // father's gentle eye
+        shape('#2b221c', [[fx - 6, 73], [fx - 5, 67], [fx + 10, 67], [fx + 10, 73]]);
+        rect('#e6c478', fx - 5.5, 71.5, 15.5, 1.5);
+        shape('#161210', [[fx + 6, 71.5], [fx + 15, 73], [fx + 14, 74.5], [fx + 5, 73]]); // cap visor
+
+        // Father's LEFT ARM reaching up to rest his palm flat on top of the child's head (leveling height at y = crownY = 84)
+        ctx.strokeStyle = '#b49c7c';
+        ctx.lineWidth = 4.2;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(fx + 5, 92);
+        ctx.lineTo(130, 81);
+        ctx.lineTo(childX - 2, crownY - 1);
+        ctx.stroke();
+        // Father's flat leveling palm resting gently atop the child's head
+        rect('#e6d2b5', childX - 6, crownY - 2.5, 13, 2.6);
+
+        // Father's RIGHT ARM holding the pencil to mark the pillar at y = crownY = 84!
+        const drawSlide = Math.min(1, p2 * 1.45);
+        const pencilTipX = 165 + drawSlide * 14;
+        const pencilTipY = crownY;
+        const handX = pencilTipX - 11;
+        const handY = pencilTipY + 6;
+        ctx.strokeStyle = '#c4ad8d';
+        ctx.lineWidth = 4.5;
+        ctx.beginPath();
+        ctx.moveTo(fx + 7, 96);
+        ctx.lineTo(136, 95);
+        ctx.lineTo(handX, handY);
+        ctx.stroke();
+        ctx.lineCap = 'butt';
+        circle('#e6d2b5', handX, handY, 2.8); // Father's hand gripping pencil
+
+        // Detailed Wooden Pencil angled from Father's hand to the pillar notch (pencilTipX, pencilTipY)
+        ctx.strokeStyle = '#e8ba54'; // yellow wooden pencil shaft
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(handX - 5, handY + 3);
+        ctx.lineTo(pencilTipX - 2, pencilTipY + 1);
+        ctx.stroke();
+        circle('#e08a80', handX - 5.5, handY + 3.3, 1.4); // pink eraser at end
+        // Exposed wood cone & dark graphite tip touching the tile pillar
+        shape('#f2dec0', [
+          [pencilTipX - 3, pencilTipY],
+          [pencilTipX - 2, pencilTipY + 2.2],
+          [pencilTipX, pencilTipY],
+        ]);
+        circle('#1a1614', pencilTipX, pencilTipY, 0.9);
+
+        // Glowing Height Notch Line actively being drawn on the tile pillar + Height Label
+        const markW = Math.max(2, Math.round(drawSlide * 14));
+        radialGlow(165 + markW * 0.5, crownY, 1, 22, 'rgba(255, 244, 210, 0.72)');
+        rect('#fff6dc', 165, crownY - 1, markW, 2.2);
+        if (drawSlide > 0.35) {
+          ctx.fillStyle = '#fff4d4';
+          ctx.font = '600 7px ui-monospace, SFMono-Regular, Menlo, monospace';
+          ctx.fillText(hText, 167, crownY - 4);
+        }
       } else {
-        // Shot 3: Memory dissolving into the present-day hall with glowing open music stand
-        const fade = (progress - 0.72) / 0.28;
-        radialGlow(160, 90, 8, 130, `rgba(255, 230, 180, ${0.35 * (1 - fade * 0.4)})`);
-        rect('#1d1918', 104, 58, 112, 82);
-        strokeRect('rgba(255, 230, 185, 0.5)', 104, 58, 112, 82);
-        rect('#fff4d8', 142, 68, 36, 22);
-        radialGlow(160, 79, 4, 38, 'rgba(255, 240, 200, 0.6)');
+        // Shot 3: Detailed 3D Close-Up of the Piano's Music Stand & Keyboard as the Hidden Wooden Drawer Slides Open with a Handwritten Note Inside!
+        const p3 = (progress - 0.72) / 0.28;
+        const slide = Math.min(1, p3 * 1.65); // smooth drawer slide-out animation (0 -> 1)
+        const hText = dialOptions[1][dialTarget[1]][0];
+
+        radialGlow(160, 92, 10, 145, 'rgba(255, 228, 175, 0.32)');
+
+        // 1. Close-Up Upright Piano Mahogany Upper Body (x: 52..268, y: 14..166)
+        rect('#221a16', 52, 14, 216, 152);
+        strokeRect('#7a6452', 52, 14, 216, 152);
+        // Recessed acoustic upper panel (x: 66..254, y: 22..84)
+        rect('#16110e', 66, 22, 188, 62);
+        strokeRect('#4d3e33', 66, 22, 188, 62);
+
+        // 2. Tilted Wooden Music Stand & Vintage Sheet Music Score at Top Center (x: 106..214, y: 26..80)
+        shape('#332720', [[102, 26], [218, 26], [222, 80], [98, 80]]);
+        strokeRect('#6e5a48', 102, 26, 116, 54);
+        // Open double-page sheet music with 5-line staffs & notes
+        shape('#f2e5cc', [[112, 30], [159, 30], [159, 76], [110, 76]]);
+        shape('#eadbc0', [[161, 30], [208, 30], [210, 76], [161, 76]]);
+        for (let st = 0; st < 4; st++) {
+          const sy = 38 + st * 9;
+          rect('#786a58', 116, sy, 38, 0.7);
+          rect('#786a58', 166, sy, 38, 0.7);
+          circle('#382e26', 122 + (st * 9) % 26, sy + 1, 1.3);
+          circle('#382e26', 172 + (st * 11) % 26, sy - 1, 1.3);
+        }
+        // Horizontal wooden music stand ledge (x: 92..228, y: 80..85)
+        rect('#584638', 92, 80, 136, 5);
+        strokeRect('#8c725c', 92, 80, 136, 5);
+
+        // 3. Close-Up 3D Piano Keyboard in Lower Foreground (x: 60..260, y: 122..162) so viewer clearly sees the piano context
+        shape('#f5ebd6', [[68, 122], [252, 122], [260, 152], [60, 152]]);
+        rect('#d8cbb4', 60, 152, 200, 7); // front vertical faces of white keys
+        for (let k = 0; k <= 14; k++) {
+          const kxTop = 68 + (k / 14) * 184;
+          const kxBot = 60 + (k / 14) * 200;
+          ctx.strokeStyle = 'rgba(56, 46, 38, 0.45)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(kxTop, 122);
+          ctx.lineTo(kxBot, 152);
+          ctx.lineTo(kxBot, 159);
+          ctx.stroke();
+        }
+        // 3D Raised Ebony Black Keys
+        for (const bk of [0, 1, 3, 4, 5, 7, 8, 10, 11, 12]) {
+          const bx = 76 + bk * 13.1;
+          shape('#161210', [[bx, 122], [bx + 7.5, 122], [bx + 8, 140], [bx - 0.5, 140]]);
+          rect('#2e2622', bx + 1, 123, 5.5, 14);
+        }
+
+        // 4. Hidden Compartment Cavity & Sliding 3D Wooden Drawer Beneath the Music Stand (x: 114..206, y: 86..120)
+        // Dark recessed slot in the piano front panel
+        rect('#0b0807', 116, 86, 88, 18);
+        strokeRect('#4a3b30', 116, 86, 88, 18);
+
+        // Animated 3D Drawer sliding outward & downward toward the keyboard (slide: 0 -> 1)
+        const pullY = Math.round(slide * 15);
+        const pullW = Math.round(slide * 6);
+        const dLeft = 116 - pullW;
+        const dRight = 204 + pullW;
+        const dFrontY = 92 + pullY;
+
+        // Drawer 3D wooden side walls & burgundy velvet interior tray
+        shape('#4a392e', [[116, 86], [120, 86], [dLeft + 5, dFrontY], [dLeft, dFrontY]]);
+        shape('#4a392e', [[200, 86], [204, 86], [dRight, dFrontY], [dRight - 5, dFrontY]]);
+        shape('#2b1716', [[120, 86], [200, 86], [dRight - 5, dFrontY], [dLeft + 5, dFrontY]]);
+
+        // 5. Father's Yellowed Handwritten Note Popping Up from Inside the Open Drawer!
+        if (slide > 0.15) {
+          const noteRise = Math.min(1, (slide - 0.15) / 0.85);
+          const noteTopY = Math.round(92 - noteRise * 14);
+          const noteBotY = dFrontY + 2;
+          radialGlow(160, noteTopY + 12, 3, 46, `rgba(255, 240, 195, ${0.65 * noteRise})`);
+
+          // Slightly angled physical paper note sticking out of the drawer
+          shape('#fff6e0', [
+            [134, noteTopY + 2],
+            [188, noteTopY],
+            [192, noteBotY],
+            [130, noteBotY],
+          ]);
+          ctx.strokeStyle = '#cbb48e';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(134, noteTopY + 2);
+          ctx.lineTo(188, noteTopY);
+          ctx.lineTo(192, noteBotY);
+          ctx.lineTo(130, noteBotY);
+          ctx.closePath();
+          ctx.stroke();
+
+          // Handwritten ink lines, red seal stamp & clearly readable height measurement clue on the note
+          rect('#5c4c3e', 138, noteTopY + 6, 34, 1.4);
+          rect('#5c4c3e', 137, noteTopY + 11, 42, 1.4);
+          rect('#9e4436', 178, noteTopY + 5, 6, 6); // vintage red stamp
+          if (noteRise > 0.45) {
+            ctx.fillStyle = '#3a2b20';
+            ctx.font = '700 7.5px ui-monospace, SFMono-Regular, Menlo, monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(hText, 161, noteTopY + 21);
+            ctx.textAlign = 'start';
+          }
+        }
+
+        // Front Wooden Faceplate of the Drawer & Round Brass Pull Knob (drawn in front of the note bottom!)
+        rect('#3b2d24', dLeft, dFrontY, dRight - dLeft, 13);
+        strokeRect('#9e8266', dLeft, dFrontY, dRight - dLeft, 13);
+        // Brass pull handle plate & round knob in the center of the drawer face
+        rect('#786048', 152, dFrontY + 4, 16, 5);
+        circle('#f0d286', 160, dFrontY + 6.5, 3.2);
+        circle('#fff6dc', 159, dFrontY + 5.8, 1.1);
       }
     } else if (name === 'cutscene-rain') {
       // Cool slate-blue rainy night on Platform 404 with detailed arched black umbrella
@@ -2048,10 +2359,11 @@
           facing: 1,
           hasUmbrella: true,
           offerUmbrella: true,
+          stride: t * 11,
           t,
         });
       } else if (progress < 0.72) {
-        // Shot 2: Close-up at the train door — doors sliding shut while Father stands under his arched black umbrella holding out the spare umbrella!
+        // Shot 2: Close-up at the train door — doors sliding shut while Father hurries up under his arched black umbrella holding out the spare umbrella!
         const p2 = (progress - 0.35) / 0.37;
 
         // Detailed commuter carriage spanning the background behind the platform (x: 0..320)
@@ -2090,13 +2402,15 @@
         rect('#0d131c', 0, 138, 320, 24);
         rect('#d8b458', 0, 140, 320, 1.8);
 
-        // Father on the rain-swept platform under his large arched black umbrella, extending the spare umbrella toward the door
-        const fatherX = Math.round(92 + Math.min(1, p2 * 1.2) * 28);
+        // Father running up to the closing doors (while p2 * 1.2 < 1) and stopping at the platform edge
+        const runPhase = Math.min(1, p2 * 1.2);
+        const fatherX = Math.round(92 + runPhase * 28);
         radialGlow(72, 42, 4, 95, 'rgba(255, 220, 160, 0.25)');
         drawStationmasterFigure(fatherX, 141, 1.08, {
           facing: 1,
           hasUmbrella: true,
           offerUmbrella: true,
+          stride: runPhase < 1 ? t * 11 : 0,
           t,
         });
       } else {
